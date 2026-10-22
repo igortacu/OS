@@ -1,0 +1,482 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    backgroundcolor=\color{gray!10},
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    showstringspaces=false,
+    frame=single,
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=false,
+    language=Python
+}
+
+\linespread{1.25}
+\setlength{\parindent}{0.8cm}
+\setlength{\parskip}{0em}
+\renewcommand{\headrulewidth}{0pt}
+\geometry{a4paper, portrait, margin=1in}
+\setlength{\headheight}{14.49998pt}
+\graphicspath{{Lab7/charts/}}
+
+\begin{document}
+
+% ─── TITLE PAGE ───────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \begin{center}
+    \textbf{\large Ministry of Education of Republic of Moldova}\\[0.1cm]
+    \textbf{\large Technical University of Moldova}\\[0.1cm]
+    \textbf{\large Faculty of Computers, Informatics and Microelectronics}\\[1.2cm]
+
+    \vspace{40mm}
+
+    \textsc{\Large Laboratory Work 7:}\\[0.2cm]
+    \textsc{\Large Empirical Analysis of Greedy Algorithms}\\[0.2cm]
+    \textsc{\large Prim and Kruskal Minimum Spanning Tree Algorithms}\\[0.4cm]
+
+    \vspace{65mm}
+
+    \begin{minipage}[t]{0.4\textwidth}
+      \begin{flushleft}\large
+        \emph{Author:}\\
+        st. gr. FAF-242\\[0.4cm]
+        \emph{Verified:}\\
+        asist. univ.
+      \end{flushleft}
+    \end{minipage}
+    ~
+    \begin{minipage}[t]{0.4\textwidth}
+      \begin{flushright}\large
+        \emph{}\\
+        Tacu Igor\\[0.4cm]
+        \emph{}\\
+        Fi\c{s}tic Cristofor
+      \end{flushright}
+    \end{minipage}\\[2cm]
+
+    \vspace{5mm}
+    \large Chi\c{s}in\u{a}u -- 2026
+
+    \vfill
+  \end{center}
+\end{titlepage}
+
+% ─── TABLE OF CONTENTS ────────────────────────────────────────────────────────
+\clearpage
+\thispagestyle{empty}
+\tableofcontents
+
+\clearpage
+\setcounter{page}{2}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+
+% ─── 1. OBJECTIVE ─────────────────────────────────────────────────────────────
+\section*{OBJECTIVE}
+\addcontentsline{toc}{section}{OBJECTIVE}
+
+\hspace{0.8cm} The objective of this laboratory work is to study the greedy algorithm
+design technique and apply it to the Minimum Spanning Tree (MST) problem.
+Specifically, the goals are:
+
+\begin{enumerate}
+  \item Study the greedy algorithm design technique.
+  \item Implement Prim's and Kruskal's MST algorithms in Python.
+  \item Conduct empirical analysis of both algorithms.
+  \item Investigate how increasing the number of nodes affects execution time
+        across sparse, medium, and dense graph types.
+  \item Present the results graphically and draw conclusions.
+\end{enumerate}
+
+% ─── 2. THEORETICAL BACKGROUND ────────────────────────────────────────────────
+\section*{THEORETICAL BACKGROUND}
+\addcontentsline{toc}{section}{THEORETICAL BACKGROUND}
+
+\subsection*{Greedy Algorithms}
+\addcontentsline{toc}{subsection}{Greedy Algorithms}
+
+\hspace{0.8cm} A \textbf{greedy algorithm} builds a solution incrementally by always
+making the locally optimal choice at each step, hoping that these local choices will
+lead to a globally optimal solution. Greedy algorithms are characterised by:
+
+\begin{itemize}
+  \item \textbf{Greedy choice property:} a globally optimal solution can be assembled
+        from locally optimal choices made independently.
+  \item \textbf{Optimal substructure:} an optimal solution to the problem contains
+        optimal solutions to its sub-problems.
+  \item \textbf{No backtracking:} once a choice is made it is never reconsidered.
+\end{itemize}
+
+\hspace{0.8cm} Classical examples include activity selection, fractional knapsack,
+Huffman coding, and MST algorithms. Not every problem admits a greedy solution;
+correctness must be proved via exchange arguments or matroid theory.
+
+\subsection*{Minimum Spanning Tree}
+\addcontentsline{toc}{subsection}{Minimum Spanning Tree}
+
+\hspace{0.8cm} Given a connected, undirected, weighted graph $G = (V, E, w)$, a
+\textbf{spanning tree} is an acyclic subgraph that connects every vertex.
+A \textbf{Minimum Spanning Tree (MST)} is a spanning tree whose total edge weight
+
+\[
+  W(T) = \sum_{(u,v) \in T} w(u,v)
+\]
+
+is minimised. Every connected graph has at least one MST; it is unique when all
+edge weights are distinct. The MST has exactly $|V| - 1$ edges.
+
+\subsection*{Prim's Algorithm}
+\addcontentsline{toc}{subsection}{Prim's Algorithm}
+
+\hspace{0.8cm} Prim's algorithm grows the MST one vertex at a time, starting from
+an arbitrary source. At each step the cheapest edge crossing the cut between the
+current MST and the remaining vertices is added. Using a binary min-heap (priority
+queue) the algorithm achieves $O((V + E)\log V)$ time.
+
+\begin{enumerate}
+  \item Initialise a key array: $\text{key}[s] = 0$, $\text{key}[v] = \infty$ for all $v \neq s$.
+  \item Insert $(0, s)$ into the min-heap.
+  \item While the heap is non-empty:
+  \begin{enumerate}
+    \item Extract the vertex $u$ with the minimum key.
+    \item Mark $u$ as in the MST; record the edge from its parent.
+    \item For each neighbour $v$ of $u$ not yet in the MST: if $w(u,v) < \text{key}[v]$,
+          update $\text{key}[v]$ and push $(w(u,v), v)$ onto the heap.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Complexity:}
+\begin{itemize}
+  \item Time: $O((V + E)\log V)$ with a binary heap; $O(E + V\log V)$ with a Fibonacci heap.
+  \item Space: $O(V)$ for the key array and heap.
+\end{itemize}
+
+\subsection*{Kruskal's Algorithm}
+\addcontentsline{toc}{subsection}{Kruskal's Algorithm}
+
+\hspace{0.8cm} Kruskal's algorithm takes a global view: it sorts all edges by weight
+and greedily adds each edge to the MST provided it does not create a cycle. The
+cycle check is performed in near-constant time using a \textbf{Union-Find} (disjoint
+set union) data structure with path compression and union by rank.
+
+\begin{enumerate}
+  \item Sort all edges $E$ in non-decreasing order of weight: $O(E \log E)$.
+  \item Initialise a Union-Find structure: each vertex is its own component.
+  \item For each edge $(u, v, w)$ in sorted order:
+  \begin{enumerate}
+    \item If $\text{find}(u) \neq \text{find}(v)$: add $(u, v, w)$ to the MST and call $\text{union}(u, v)$.
+    \item Otherwise: skip (adding would create a cycle).
+  \end{enumerate}
+  \item Stop when $|V| - 1$ edges have been added.
+\end{enumerate}
+
+\textbf{Complexity:}
+\begin{itemize}
+  \item Time: $O(E \log E)$ dominated by the sort; Union-Find operations cost
+        $O(E \cdot \alpha(V)) \approx O(E)$ where $\alpha$ is the inverse Ackermann function.
+  \item Space: $O(E)$ for the sorted edge list plus $O(V)$ for the Union-Find structure.
+\end{itemize}
+
+\subsection*{Comparison of Algorithms}
+\addcontentsline{toc}{subsection}{Comparison of Algorithms}
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  \textbf{Property}      & \textbf{Prim}              & \textbf{Kruskal}         \\
+  \midrule
+  Strategy               & Vertex-centric (grow MST)  & Edge-centric (sort \& add) \\
+  Time complexity        & $O((V+E)\log V)$           & $O(E \log E)$            \\
+  Space complexity       & $O(V)$                     & $O(E)$                   \\
+  Best for               & Dense graphs               & Sparse graphs            \\
+  Handles negative $w$   & Yes                        & Yes                      \\
+  Data structure         & Min-heap                   & Union-Find               \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+% ─── 3. IMPLEMENTATION ────────────────────────────────────────────────────────
+\section*{IMPLEMENTATION}
+\addcontentsline{toc}{section}{IMPLEMENTATION}
+
+\hspace{0.8cm} Both algorithms are implemented in Python using \texttt{networkx}
+undirected graphs. The full source is in \texttt{Lab7/src/}.
+
+\subsection*{Prim's Algorithm}
+\addcontentsline{toc}{subsection}{Prim's Algorithm}
+
+\begin{lstlisting}[caption={Prim's algorithm using a binary min-heap}, label={lst:prim}]
+def prim(graph, source: int = 0) -> dict:
+    in_mst = set()
+    key = {node: math.inf for node in graph.nodes()}
+    key[source] = 0
+    heap = [(0, source, -1)]   # (weight, node, parent)
+    mst_edges = []
+    total_weight = 0.0
+    max_heap = 1
+
+    t0 = time.perf_counter()
+    while heap:
+        w, u, parent = heapq.heappop(heap)
+        if u in in_mst:
+            continue
+        in_mst.add(u)
+        if parent != -1:
+            mst_edges.append((parent, u, w))
+            total_weight += w
+        for v, data in graph[u].items():
+            if v not in in_mst:
+                edge_w = data.get("weight", 1)
+                if edge_w < key[v]:
+                    key[v] = edge_w
+                    heapq.heappush(heap, (edge_w, v, u))
+                    if len(heap) > max_heap:
+                        max_heap = len(heap)
+    elapsed_ms = (time.perf_counter() - t0) * 1_000
+    return {"time_ms": elapsed_ms, "mst_edges": mst_edges,
+            "total_weight": total_weight, "memory_peak": max_heap}
+\end{lstlisting}
+
+\subsection*{Kruskal's Algorithm}
+\addcontentsline{toc}{subsection}{Kruskal's Algorithm}
+
+\begin{lstlisting}[caption={Kruskal's algorithm with Union-Find}, label={lst:kruskal}]
+def kruskal(graph) -> dict:
+    edges = sorted([(data.get("weight", 1), u, v)
+                    for u, v, data in graph.edges(data=True)])
+    parent = {node: node for node in graph.nodes()}
+    rank   = {node: 0    for node in graph.nodes()}
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]  # path halving
+            x = parent[x]
+        return x
+
+    def union(x, y):
+        px, py = find(x), find(y)
+        if px == py:
+            return False
+        if rank[px] < rank[py]:
+            px, py = py, px
+        parent[py] = px
+        if rank[px] == rank[py]:
+            rank[px] += 1
+        return True
+
+    mst_edges = []
+    total_weight = 0.0
+    t0 = time.perf_counter()
+    for w, u, v in edges:
+        if union(u, v):
+            mst_edges.append((u, v, w))
+            total_weight += w
+    elapsed_ms = (time.perf_counter() - t0) * 1_000
+    return {"time_ms": elapsed_ms, "mst_edges": mst_edges,
+            "total_weight": total_weight, "memory_peak": len(edges)}
+\end{lstlisting}
+
+% ─── 4. ALGORITHM ANIMATIONS ──────────────────────────────────────────────────
+\section*{ALGORITHM ANIMATIONS}
+\addcontentsline{toc}{section}{ALGORITHM ANIMATIONS}
+
+\subsection*{Prim's Algorithm Animation}
+\addcontentsline{toc}{subsection}{Prim's Algorithm Animation}
+
+\hspace{0.8cm} The animation runs on a 12-node undirected sparse graph.
+Each frame shows the node just added to the MST (red), nodes already in the
+MST (green), unvisited nodes (grey), and current MST edges (orange).
+Edge weights are displayed on the graph throughout.
+Full animation: \texttt{Lab7/charts/prim.gif}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{prim_step00.png}
+    \caption{Initial state: source node 0 added to MST}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{prim_step04.png}
+    \caption{Mid-traversal: several nodes incorporated}
+  \end{subfigure}
+  \caption{Prim's algorithm on the 12-node demo graph.}
+  \label{fig:prim-steps}
+\end{figure}
+
+\subsection*{Kruskal's Algorithm Animation}
+\addcontentsline{toc}{subsection}{Kruskal's Algorithm Animation}
+
+\hspace{0.8cm} The animation uses the same 12-node graph.
+Each frame highlights the edge currently under consideration: purple if accepted
+into the MST, red if rejected due to forming a cycle. Accepted MST edges remain
+orange. The animation makes the greedy edge-sorting strategy clearly visible.
+Full animation: \texttt{Lab7/charts/kruskal.gif}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{kruskal_step00.png}
+    \caption{First edge considered (lowest weight)}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[width=\textwidth]{kruskal_step05.png}
+    \caption{Mid-run: some edges accepted, some rejected}
+  \end{subfigure}
+  \caption{Kruskal's algorithm on the 12-node demo graph.}
+  \label{fig:kruskal-steps}
+\end{figure}
+
+% ─── 5. RESULTS AND ANALYSIS ──────────────────────────────────────────────────
+\section*{RESULTS AND ANALYSIS}
+\addcontentsline{toc}{section}{RESULTS AND ANALYSIS}
+
+\subsection*{Sparse Graphs}
+\addcontentsline{toc}{subsection}{Sparse Graphs}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{time_sparse.png}
+  \caption{Prim vs Kruskal on sparse graphs (uniform weights).}
+  \label{fig:time-sparse}
+\end{figure}
+
+\hspace{0.8cm} On sparse graphs (Figure~\ref{fig:time-sparse}), both algorithms
+are extremely fast even at $n = 2000$. With $E \approx 3V$, the edge sort in Kruskal
+costs $O(V \log V)$ and Prim's heap also processes $O(V)$ entries, making both
+essentially linear in practice. Kruskal has a slight advantage due to its simpler
+inner loop, while Prim incurs overhead from repeated heap insertions.
+
+\subsection*{Dense Graphs}
+\addcontentsline{toc}{subsection}{Dense Graphs}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{time_dense.png}
+  \caption{Prim vs Kruskal on dense graphs (uniform weights).}
+  \label{fig:time-dense}
+\end{figure}
+
+\hspace{0.8cm} On dense graphs (Figure~\ref{fig:time-dense}), the difference
+becomes more pronounced. With $E \approx 0.35 V^2$ (undirected), Kruskal must sort
+$O(V^2)$ edges, which dominates its runtime. Prim only ever inserts each vertex once
+into the MST and explores at most $E$ edges total, giving it a lower constant factor
+when edge processing is cheap. At $n = 500$, both algorithms slow noticeably but
+Prim maintains a slight edge.
+
+\subsection*{Weight Distribution Effects}
+\addcontentsline{toc}{subsection}{Weight Distribution Effects}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{time_by_weights.png}
+  \caption{Effect of edge-weight distribution on sparse graph performance.}
+  \label{fig:time-weights}
+\end{figure}
+
+\hspace{0.8cm} Figure~\ref{fig:time-weights} shows that the weight distribution
+(uniform, skewed, or negative) has no meaningful effect on execution time for either
+algorithm. Kruskal performs the same number of comparisons during sorting regardless
+of value range, and Prim's heap operations are determined by relative order, not
+magnitude. Both algorithms handle negative weights correctly because MST correctness
+depends only on comparison, not absolute values.
+
+\subsection*{Memory Comparison}
+\addcontentsline{toc}{subsection}{Memory Comparison}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{memory_comparison.png}
+  \caption{Peak memory: Prim's heap size vs Kruskal's sorted edge list.}
+  \label{fig:memory}
+\end{figure}
+
+\hspace{0.8cm} Figure~\ref{fig:memory} highlights a key practical difference.
+Prim's heap holds at most $O(V)$ entries at any point. Kruskal's sorted edge list
+holds all $|E|$ edges simultaneously before processing begins. On sparse graphs the
+two are comparable ($|E| \approx 3V$). On dense graphs, Kruskal requires $O(V^2)$
+memory for the edge list while Prim stays at $O(V)$ — a significant advantage as
+$n$ grows.
+
+\subsection*{Full Comparison Grid}
+\addcontentsline{toc}{subsection}{Full Comparison Grid}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{comparison_all.png}
+  \caption{Prim (top row) vs Kruskal (bottom row) across sparse, medium, and dense graphs.}
+  \label{fig:comparison-all}
+\end{figure}
+
+\hspace{0.8cm} Figure~\ref{fig:comparison-all} provides the complete picture.
+On sparse and medium graphs the two algorithms are essentially equivalent in speed.
+On dense graphs, Kruskal's $O(E \log E)$ sort becomes the bottleneck as $E$ grows
+quadratically, while Prim scales slightly better due to its $O(V)$ memory footprint
+and fewer priority queue operations relative to $|E|$.
+
+% ─── 6. CONCLUSION ────────────────────────────────────────────────────────────
+\section*{CONCLUSION}
+\addcontentsline{toc}{section}{CONCLUSION}
+
+\hspace{0.8cm} Through empirical analysis, Prim and Kruskal were measured across
+three graph densities, three weight distributions, and a range of node counts.
+Key findings:
+
+\begin{itemize}
+  \item \textbf{Both algorithms produce correct MSTs} of equal total weight on all
+        tested graphs, including those with negative edge weights.
+
+  \item \textbf{On sparse graphs} both algorithms are near-linear and effectively
+        equivalent. Kruskal is marginally faster due to simpler loop structure.
+
+  \item \textbf{On dense graphs} Kruskal's upfront $O(E \log E)$ edge sort becomes
+        the bottleneck. Prim's heap-based approach, which processes vertices
+        sequentially, scales slightly better.
+
+  \item \textbf{Memory:} Prim uses $O(V)$ space (heap) at all densities. Kruskal
+        requires $O(E)$ for the sorted edge list, which grows to $O(V^2)$ on dense
+        graphs — a significant disadvantage for large, dense inputs.
+
+  \item \textbf{Weight distribution} has no effect on the execution time of either
+        algorithm, as both rely only on relative edge ordering, not absolute values.
+\end{itemize}
+
+\textbf{Algorithm selection guidance:}
+\begin{itemize}
+  \item Use \textbf{Kruskal} for sparse graphs or when an edge list is already
+        available: sorting is cheap and the Union-Find overhead is negligible.
+  \item Use \textbf{Prim} for dense graphs or when memory is constrained:
+        its $O(V)$ space usage is far more efficient than Kruskal's $O(E) = O(V^2)$
+        on dense inputs. With a Fibonacci heap, Prim achieves the optimal
+        $O(E + V \log V)$ for the MST problem.
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent\textbf{Repository:} \url{https://github.com/igortacu/AA}
+
+\pagebreak
+\end{document}

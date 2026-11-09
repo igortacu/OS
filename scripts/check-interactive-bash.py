@@ -22,7 +22,7 @@ def drain(seconds=0.5):
             except OSError: break
 
 drain()
-for data in [b'cd /usr/sh\t', b'\n', b'pwd\n', b'echo history-marker\n', b'\x12pwd\r', b'\n']:
+for data in [b'ls /usr/sh\t\t', b'\n', b'cd /et\t', b'\n', b'pwd\n', b'echo history-marker\n', b'type echo\n', b'\x12pwd\r', b'\n']:
     os.write(fd, data)
     drain()
 os.write(fd, b'exit\n')
@@ -37,5 +37,5 @@ text = output.decode(errors='replace').replace('\r', '')
 (root/'Lab3-4/evidence/interactive-bash.txt').write_text(text)
 assert '/usr/share' in text
 assert 'reverse-i-search' in text
-assert text.count('\n/usr/share\n') >= 2
+assert text.count('\n/etc\n') >= 2
 print('PASS completion and reverse history search in Bash PTY')

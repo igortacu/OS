@@ -1,0 +1,316 @@
+{
+  "lab3-1.1": {
+    "title": "lab3-1.1",
+    "output": "igor-bash$ ls /usr/share/\u0007\nGConf\t\t     glances\t\t     pam-configs\nPackageKit\t     glib-2.0\t\t     pastebin.d\nX11\t\t     gnupg\t\t     perl\naclocal\t\t     groff\t\t     perl5\nalsa\t\t     grub\t\t     pixmaps\napplications\t     gst-plugins-base\t     pkgconfig\napport\t\t     gstreamer-1.0\t     plymouth\nat\t\t     gtk-3.0\t\t     pmdk\nawk\t\t     i18n\t\t     polkit-1\nbase-files\t     icons\t\t     profile\nbase-passwd\t     ieee-data\t\t     profile.md5sums\nbash-completion      info\t\t     publicsuffix\nbinfmts\t\t     info.dir\t\t     python-apt\nbpfcc-tools\t     initramfs-tools\t     python-babel-localedata\nbtop\t\t     iptables\t\t     python3\nbug\t\t     iso-codes\t\t     qemu\nbuild-essential      java\t\t     readline\nbyobu\t\t     javascript\t\t     rsync\nca-certificates      keyrings\t\t     rsyslog\ncmake\t\t     landscape\t\t     screen\ncommon-licenses      libc-bin\t\t     seabios\nconsole-setup\t     libdebuginfod-common    secureboot\nconsolefonts\t     libdrm\t\t     sensible-utils\nconsoletrans\t     libgcrypt20\t     session-migration\ncryptsetup\t     libthai\t\t     sgml\ndbus-1\t\t     licenses\t\t     sgml-base\ndebconf\t\t     lintian\t\t     snapd\ndebhelper\t     locale\t\t     source-highlight\ndebianutils\t     locales\t\t     staff-group-for-usr-local\ndefaults\t     lto-disabled-list\t     systemd\ndhcpcd\t\t     lxd-installer\t     tabset\ndict\t\t     man\t\t     tcltk\ndistro-info\t     man-db\t\t     terminfo\ndoc\t\t     matplotlib\t\t     themes\ndoc-base\t     maven-repo\t\t     thumbnailers\ndot.bashrc\t     mdadm\t\t     ubuntu-drivers-common\ndot.profile\t     menu\t\t     ubuntu-release-upgrader\ndot.profile.md5sums  metainfo\t\t     ucf\ndpkg\t\t     mime\t\t     ufw\ndrirc.d\t\t     misc\t\t     unattended-upgrades\nfile\t\t     motd\t\t     unicode\nfinalrd\t\t     nano\t\t     update-notifier\nfish\t\t     needrestart\t     upstart\nfontconfig\t     netplan\t\t     util-linux\nfonts\t\t     networks\t\t     vim\ngcc\t\t     nginx\t\t     vulkan\ngdb\t\t     numpy3\t\t     xfsprogs\ngettext\t\t     open-vm-tools\t     xml\ngit-core\t     openssh\t\t     xml-core\ngitweb\t\t     package-data-downloads  zoneinfo\nglade\t\t     pam\t\t     zsh\nigor-bash$ cd /etc/\nigor-bash$ pwd\n/etc\nigor-bash$ echo history-marker\nhistory-marker\nigor-bash$ type echo\necho is a shell builtin\nigor-bash$ (reverse-i-search)`': <BS><BS><BS>p': type echo<BS><BS><BS><BS><BS><BS><BS><BS><BS><BS><BS><BS>w': pwd     <BS><BS><BS><BS><BS><BS><BS><BS><BS><BS><BS>d': pwd<BS><BS><BS>igor-bash$ pwd              igor-bash$ \n/etc\nigor-bash$ \nigor-bash$ exit\nexit\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "f0b62311507c6ef76c907cf9e5b4c651828a342782719a5921b4c6ba79ea4fa6"
+  },
+  "lab3-1.2": {
+    "title": "lab3-1.2",
+    "output": "+ type cd\ncd is a shell builtin\n+ type ls\nls is /usr/bin/ls\n+ type echo\necho is a shell builtin\n+ which ls\n/usr/bin/ls",
+    "source": "Saved SSH execution or source record",
+    "sha256": "6d9e7de17b25f14f8b10833c6ddfe8906df2258d962998b59de537a02063d599"
+  },
+  "lab3-1.3": {
+    "title": "lab3-1.3",
+    "output": "+ printf 'PATH directory count: '\nPATH directory count: + echo /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\n+ awk -F: '{print NF}'\n9\n+ echo /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin\n+ tr : '\\n'\n/usr/local/sbin\n/usr/local/bin\n/usr/sbin\n/usr/bin\n/sbin\n/bin\n/usr/games\n/usr/local/games\n/snap/bin",
+    "source": "Saved SSH execution or source record",
+    "sha256": "f7ddfb778b4992e142dad5f3e7cfeaf3228d465d1ab884ae37d984b8e93227d8"
+  },
+  "lab3-1.4": {
+    "title": "lab3-1.4",
+    "output": "+ nosuchprog\nbash: line 7: nosuchprog: command not found\n+ echo 'exit code: 127'\nexit code: 127",
+    "source": "Saved SSH execution or source record",
+    "sha256": "7edeb1029a106332d8d6e45e5b1e439a8214dba8e26fbd0878875cc7ac932571"
+  },
+  "lab3-2.1": {
+    "title": "lab3-2.1",
+    "output": "a.c\nalfa beta.txt\nb.c\nfile1.txt\nfile2.txt\nnotes.txt\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "03c912d7d6bdc42cc8bf39297acfdf79462493e9a819acf32fb578652001441e"
+  },
+  "lab3-2.2": {
+    "title": "lab3-2.2",
+    "output": "$ echo *.c\na.c b.c\n\n$ echo file?.txt\nfile1.txt file2.txt\n\n$ echo [a-b]*\na.c alfa beta.txt b.c\n\n$ echo *.xyz\n*.xyz\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "66f84b4c6ff71a150bb15e6a950efd6db0f8f79472b1ac500d042821e8b90557"
+  },
+  "lab3-2.3": {
+    "title": "lab3-2.3",
+    "output": "$ ls alfa beta.txt\nls: cannot access 'alfa': No such file or directory\nls: cannot access 'beta.txt': No such file or directory\n\n$ ls \"alfa beta.txt\"\nalfa beta.txt\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "a2ad77846d7e110ad66c0dfa6f42fc0dad6a51d2fe6383915347c4e3a2b7bfae"
+  },
+  "lab3-2.4": {
+    "title": "lab3-2.4",
+    "output": "$ echo '$HOME' \"$HOME\" \\$HOME\n$HOME /root $HOME\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "d04f858f4f51049779e233a8dd85671b98b48331dda0fe39f21fcad3c86d1332"
+  },
+  "lab3-3.1": {
+    "title": "lab3-3.1",
+    "output": "+ ls /etc /nope\n+ wc -l out.txt\n216 out.txt\n+ cat err.txt\nls: cannot access '/nope': No such file or directory\n+ ls /etc /nope",
+    "source": "Saved SSH execution or source record",
+    "sha256": "2685db338dca0618393c168a16a330448d044c81c133013663e7cd0853273c62"
+  },
+  "lab3-3.2": {
+    "title": "lab3-3.2",
+    "output": "+ tail -2 all.txt\nxml\nzsh_command_not_found\n+ ls /etc /nope\nls: cannot access '/nope': No such file or directory\n+ tail -2 all.txt\nxml\nzsh_command_not_found",
+    "source": "Saved SSH execution or source record",
+    "sha256": "9c6ed0102bb0018033ed55185e1f2cfdebb967fbe5902ad58122514852800144"
+  },
+  "lab3-3.3": {
+    "title": "lab3-3.3",
+    "output": "+ false\n+ echo 'semicolon continues'\nsemicolon continues\n+ false\n+ false\n+ echo 'OR fallback'\nOR fallback",
+    "source": "Saved SSH execution or source record",
+    "sha256": "947fe4120c8d7c75f2e5fb3612a28016128dfb7f5331734d92c1403b0917b4d3"
+  },
+  "lab3-3.4": {
+    "title": "lab3-3.4",
+    "output": "+ jobpid=3310639\n+ jobs\n[1]+  Running                 sleep 100 &\n+ kill 3310639\n+ wait 3310639\n+ echo 'job status: 143'\njob status: 143\n+ jobs",
+    "source": "Saved SSH execution or source record",
+    "sha256": "735d090229d8206bd119ca66dc8f47ad3a5952e2b254076e08047d3d0ed61702"
+  },
+  "lab3-4.1": {
+    "title": "lab3-4.1",
+    "output": "Q1 failed requests\n100",
+    "source": "Saved SSH execution or source record",
+    "sha256": "a032d6229a3c6de6b168b00b9dfe166391aa699eb1f7f8e8e015a890b6578556"
+  },
+  "lab3-4.2": {
+    "title": "lab3-4.2",
+    "output": "Q2 distinct pages\n4 distinct pages\n/page0\n/page1\n/page2\n/page3",
+    "source": "Saved SSH execution or source record",
+    "sha256": "16c588a101aefcab5cf9b123ecbc524021cff9cb6a50c81f4c69b22e9a2dddd2"
+  },
+  "lab3-4.3": {
+    "title": "lab3-4.3",
+    "output": "Q3 requests per page\n125 /page0\n125 /page1\n125 /page2\n125 /page3",
+    "source": "Saved SSH execution or source record",
+    "sha256": "22086e29e8998da5cff9de42e9c447b026d5473a8abf98adbc5846779362137d"
+  },
+  "lab3-4.4": {
+    "title": "lab3-4.4",
+    "output": "Q4 most failures\nuser3 15\nuser5 15",
+    "source": "Saved SSH execution or source record",
+    "sha256": "ea59af612d989fa73dae1283754455690e0089f9687271228580634fe6b01395"
+  },
+  "lab3-4.5": {
+    "title": "lab3-4.5",
+    "output": "Q5 user3\nuser3: 72 requests, 15 failed",
+    "source": "Saved SSH execution or source record",
+    "sha256": "04e74107fdf242b65efc4fa9ecccb5758ea3d52311c4eb1dc52f40553a0eada5"
+  },
+  "lab3-4.6": {
+    "title": "lab3-4.6",
+    "output": "Q6 last three failures\n10:10 user0\n10:15 user5\n10:20 user3",
+    "source": "Saved SSH execution or source record",
+    "sha256": "68808b3d92edfeb6f9d8655ceae26f64059dbce4529f2a8c4c6167942aa85cd6"
+  },
+  "lab3-4.7": {
+    "title": "lab3-4.7",
+    "output": "Q7 login shells\n     28 /usr/sbin/nologin\n      3 /bin/false\n      3 /bin/bash\n      1 /bin/sync",
+    "source": "Saved SSH execution or source record",
+    "sha256": "74246f828f11925c63bc4e8daae161723035a1bb7562d82f8381521b9d8e57fe"
+  },
+  "lab3-4.8": {
+    "title": "lab3-4.8",
+    "output": "Q8 directory listing line counts\n215\n216",
+    "source": "Saved SSH execution or source record",
+    "sha256": "03cdeaea4b1b6070f0e00cecc93734fb60a6ac1719a25b656a320d9483cf5c9c"
+  },
+  "lab3-4.9": {
+    "title": "lab3-4.9",
+    "output": "Q1 failed requests\n100\n\nQ2 distinct pages\n4 distinct pages\n/page0\n/page1\n/page2\n/page3\n\nQ3 requests per page\n125 /page0\n125 /page1\n125 /page2\n125 /page3\n\nQ4 most failures\nuser3 15\nuser5 15\n\nQ5 user3\nuser3: 72 requests, 15 failed\n\nQ6 last three failures\n10:10 user0\n10:15 user5\n10:20 user3\n\nQ7 login shells\n     28 /usr/sbin/nologin\n      3 /bin/false\n      3 /bin/bash\n      1 /bin/sync\n\nQ8 directory listing line counts\n215\n216",
+    "source": "Saved SSH execution or source record",
+    "sha256": "39336b98eea960af78c2d028a79380b20a646f0f28b3bd680b03ab54c6182298"
+  },
+  "lab3-5.1": {
+    "title": "lab3-5.1",
+    "output": "#!/bin/bash\nif [ \"$#\" -ne 1 ]; then\n    printf 'usage: %s readable_log\\n' \"$0\" >&2\n    exit 1\nfi\nif [ ! -f \"$1\" ] || [ ! -r \"$1\" ]; then\n    printf 'no such file: %s\\n' \"$1\" >&2\n    exit 1\nfi\nawk '\n  { total++ }\n  $4 == \"FAIL\" { failed++; by_user[$3]++ }\n  END {\n    printf \"%d requests, %d failed\\n\", total, failed\n    for (i=0; i<7; i++) printf \"user%d: %d failures\\n\", i, by_user[\"user\" i]\n  }\n' \"$1\"\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "d61f398259fd4e16f8e51da7cfaff2e2556c37005b7e3c385c85083346900a74"
+  },
+  "lab3-5.2": {
+    "title": "lab3-5.2",
+    "output": "+ chmod 644 report.sh\n+ ./report.sh access.log\nbash: line 38: ./report.sh: Permission denied\n+ echo 'before chmod status: 126'\nbefore chmod status: 126\n+ chmod +x report.sh\n+ ./report.sh access.log\n500 requests, 100 failed\nuser0: 14 failures\nuser1: 14 failures\nuser2: 14 failures\nuser3: 15 failures\nuser4: 14 failures\nuser5: 15 failures\nuser6: 14 failures",
+    "source": "Saved SSH execution or source record",
+    "sha256": "9a23d7962c57ec944747ee6e3f6ef20427a6133b80440faec97f4347e812c615"
+  },
+  "lab3-5.3": {
+    "title": "lab3-5.3",
+    "output": "+ ./report.sh nope.log\nno such file: nope.log\n+ echo 'exit code: 1'\nexit code: 1",
+    "source": "Saved SSH execution or source record",
+    "sha256": "c8156668a761884400a20079b943b43e0ac1ef00f011b96d6f53968532c2b5fa"
+  },
+  "lab4-1.1": {
+    "title": "lab4-1.1",
+    "output": "API\n25:int pause(int);",
+    "source": "Saved SSH execution or source record",
+    "sha256": "33771ecf03460535d1fb14af2f5dac6ac577181a03dc8fb629d645cfbae4bb9c"
+  },
+  "lab4-1.2": {
+    "title": "lab4-1.2",
+    "output": "#include \"kernel/types.h\"\n#include \"user/user.h\"\n\nint\nmain(int argc, char **argv)\n{\n  if(argc != 2 || argv[1][0] == 0){\n    fprintf(2, \"usage: sleep nonnegative_ticks\\n\");\n    exit(1);\n  }\n  int ticks = 0;\n  for(char *p = argv[1]; *p; p++){\n    if(*p < '0' || *p > '9' || ticks > (2147483647 - (*p - '0')) / 10){\n      fprintf(2, \"sleep: invalid tick count\\n\");\n      exit(1);\n    }\n    ticks = ticks * 10 + (*p - '0');\n  }\n  exit(pause(ticks) < 0);\n}\n\nUPROGS\n134:\t$U/_pingpong\\\n135:\t$U/_run\\\n136:\t$U/_find\\\n137:\t$U/_mystat\\\n138:\t$U/_sleep\\\n139:\t$U/_args\\",
+    "source": "Saved SSH execution or source record",
+    "sha256": "5be3aee02e0f3dbf91dc645c622e14546ed217aa8e0fc79d57d1c2236b2dff07"
+  },
+  "lab4-1.3": {
+    "title": "lab4-1.3",
+    "output": "$ sleep 20\n$ sleep\nusage: sleep nonnegative_ticks\n$ sleep -1\nsleep: invalid tick count",
+    "source": "Saved SSH execution or source record",
+    "sha256": "9662f2271ce38a4e1630b60daec9ce0a0aca479ce3fed745668a430e1c4a7de1"
+  },
+  "lab4-2.1": {
+    "title": "lab4-2.1",
+    "output": "$ echo hello > f ; cat < f\nhello\n$ ls | grep READ\nREADME\n$ (echo a; echo b) | wc\n      2       2       4\n$ echo one ; echo two\none\ntwo\n$ echo bg &\nbg\n$ ls *\nREADME\nf\n$ echo $HOME\n/root\n$ echo \"a b\"\na b\n$ mkdir d ; cd d ; ls ..\nREADME\nd\nf\n",
+    "source": "Saved SSH execution or source record",
+    "sha256": "3caadb65de0a6f5e33df2f30f6bc588abd94520f2b976b24a886491dd4281605"
+  },
+  "lab4-2.2": {
+    "title": "lab4-2.2",
+    "output": "$ echo hello > f ; cat < f\nhello\n$ ls | grep READ\nREADME         2 2 2441\n$ (echo a; echo b) | wc\n2 2 4 \n$ echo one ; echo two\none\ntwo\n$ echo bg &\nbg\n$ ls *\nls: cannot open *\n$ echo $HOME\n$HOME\n$ echo \"a b\"\n\"a b\"",
+    "source": "Saved SSH execution or source record",
+    "sha256": "091cd2bba31524f26d86cbf9dbb842616e8c23cbe8a7b9f7da2bc5042d0cdf34"
+  },
+  "lab4-2.3": {
+    "title": "lab4-2.3",
+    "output": "$ mkdir d ; cd d ; ls ..\nexec cd failed\n.              1 1 1024\n..             1 1 1024\nREADME         2 2 2441\npingpong       2 3 35152\nrun            2 4 34744\nfind           2 5 37528\nmystat         2 6 35048\nsleep          2 7 34592\nargs           2 8 34112\ncat            2 9 35456\necho           2 10 34384\nforktest       2 11 17360\ngrep           2 12 42816\ninit           2 13 34848\nkill           2 14 34312\nln             2 15 34120\nls             2 16 41600\nmkdir          2 17 34360\nrm             2 18 34344\nsh             2 19 56208\nstressfs       2 20 35240\nusertests      2 21 200136\ngrind          2 22 50584\nwc             2 23 36416\nzombie         2 24 33728\ntrace          2 25 34304\nlogstress      2 26 36264\nforphan        2 27 35128\n[Middle output omitted here; full recording is committed.]\n.              1 1 1024\n..             1 1 1024\nREADME         2 2 2441\npingpong       2 3 35152\nrun            2 4 34744\nfind           2 5 37528\nmystat         2 6 35048\nsleep          2 7 34592\nargs           2 8 34112\ncat            2 9 35456\necho           2 10 34384\nforktest       2 11 17360\ngrep           2 12 42816\ninit           2 13 34848\nkill           2 14 34312\nln             2 15 34120\nls             2 16 41600\nmkdir          2 17 34360\nrm             2 18 34344\nsh             2 19 56208\nstressfs       2 20 35240\nusertests      2 21 200136\ngrind          2 22 50584\nwc             2 23 36416\nzombie         2 24 33728\ntrace          2 25 34304\nlogstress      2 26 36264\nforphan        2 27 35128\ndorphan        2 28 34576\nsync           2 29 33792\nconsole        3 30 0\nf              2 31 6\nd              1 32 32\n$ cd /\n$",
+    "source": "Saved SSH execution or source record",
+    "sha256": "c0dd141b597dfad83ce358a6f3f04847e00558db69caa144fa36d2182b3b17ec"
+  },
+  "lab4-3.1": {
+    "title": "lab4-3.1",
+    "output": "#include \"kernel/types.h\"\n#include \"user/user.h\"\n\nint\nmain(int argc, char **argv)\n{\n  printf(\"argc=%d\\n\", argc);\n  for(int i = 0; i < argc; i++) printf(\"argv[%d]=[%s]\\n\", i, argv[i]);\n  exit(0);\n}\n\nUPROGS\n134:\t$U/_pingpong\\\n135:\t$U/_run\\\n136:\t$U/_find\\\n137:\t$U/_mystat\\\n138:\t$U/_sleep\\\n139:\t$U/_args\\",
+    "source": "Saved SSH execution or source record",
+    "sha256": "5b88a1a367b9e48733d2528bdd9e0cde76f77615eb1d14318aa7812f971f02b4"
+  },
+  "lab4-3.2": {
+    "title": "lab4-3.2",
+    "output": "$ args one    two three\nargc=4\nargv[0]=[args]\nargv[1]=[one]\nargv[2]=[two]\nargv[3]=[three]\n$ args *.c \"x y\"\nargc=4\nargv[0]=[args]\nargv[1]=[*.c]\nargv[2]=[\"x]\nargv[3]=[y\"]\n$ args $HOME\nargc=2\nargv[0]=[args]\nargv[1]=[$HOME]\n$ args 'single quoted'\nargc=3\nargv[0]=[args]\nargv[1]=['single]\nargv[2]=[quoted']",
+    "source": "Saved SSH execution or source record",
+    "sha256": "e9cd9ca7e8e01103b41cb9ab4bedd02b3bdc9013f2090bb2d3e7124128c3c46a"
+  },
+  "lab4-3.3": {
+    "title": "lab4-3.3",
+    "output": "+ ./args one two three\nargc=4\nargv[0]=[./args]\nargv[1]=[one]\nargv[2]=[two]\nargv[3]=[three]\n+ ./args alpha.c args_linux.c beta.c sample.c 'x y'\nargc=6\nargv[0]=[./args]\nargv[1]=[alpha.c]\nargv[2]=[args_linux.c]\nargv[3]=[beta.c]\nargv[4]=[sample.c]\nargv[5]=[x y]\n+ ./args /root\nargc=2\nargv[0]=[./args]\nargv[1]=[/root]\n+ ./args '$HOME' /root\nargc=3\nargv[0]=[./args]\nargv[1]=[$HOME]\nargv[2]=[/root]\n+ ./args 'single quoted'\nargc=2\nargv[0]=[./args]\nargv[1]=[single quoted]",
+    "source": "Saved SSH execution or source record",
+    "sha256": "472534e7f38e59186f6a2ba96e08da60a5bd6a14e33b4792a07ae755c4d78d4d"
+  },
+  "lab4-4.1": {
+    "title": "lab4-4.1",
+    "output": "SHELL_KINDS\n8:#define EXEC  1\n9:#define REDIR 2\n10:#define PIPE  3\n11:#define LIST  4\n12:#define BACK  5\n14:#define MAXARGS 10",
+    "source": "Saved SSH execution or source record",
+    "sha256": "85336adfa25fecdca7bbcfd1b75ac9fa68c3f5b532695566e533c0b1b89cd6cb"
+  },
+  "lab4-4.2": {
+    "title": "lab4-4.2",
+    "output": "SHELL_CASES\n75:  case EXEC:\n83:  case REDIR:\n93:  case LIST:\n101:  case PIPE:\n125:  case BACK:\n284:  case 0:\n286:  case '|':\n287:  case '(':\n288:  case ')':\n289:  case ';':\n290:  case '&':\n291:  case '<':\n294:  case '>':\n391:    case '<':\n394:    case '>':\n397:    case '+': // >>\n469:  case EXEC:\n475:  case REDIR:\n481:  case PIPE:\n487:  case LIST:\n493:  case BACK:",
+    "source": "Saved SSH execution or source record",
+    "sha256": "c7ff3a10dba706a2e6ea4e8daaebf8be3e3c356e6f51779b3b95fadb4b7fdab9"
+  },
+  "lab4-4.3": {
+    "title": "lab4-4.3",
+    "output": "CD_IMPLEMENTATION\n  while (getcmd(buf, sizeof(buf)) >= 0) {\n    char *cmd = buf;\n    while (*cmd == ' ' || *cmd == '\\t')\n      cmd++;\n    if (*cmd == '\\n') // is a blank command\n      continue;\n    if (cmd[0] == 'c' && cmd[1] == 'd' && cmd[2] == ' ') {\n      // Chdir must be called by the parent, not the child.\n      cmd[strlen(cmd) - 1] = 0; // chop \\n\n      if (chdir(cmd + 3) < 0)\n        fprintf(2, \"cannot cd %s\\n\", cmd + 3);\n    } else {\n      if (fork1() == 0)\n        runcmd(parsecmd(cmd));\n      wait(0);\n    }",
+    "source": "Saved SSH execution or source record",
+    "sha256": "9edb06858baf08b9e65f92eaa6eef0d9d0f3b1f6bf159616b7b18b642f34ae99"
+  },
+  "lab5-permissions": {
+    "title": "lab5-permissions",
+    "source": "scripts/run-lab5.sh",
+    "code": "Identity: unprivileged oslab_igor (UID 1001)\nchmod 000 s.txt; cat s.txt\nchmod u+r s.txt; cat s.txt\nchmod u=r,go= box; ls box; cat box/f\nchmod u=x,go= box; ls box; cat box/f",
+    "output": "+ chmod 600 s.txt\n+ ls -l s.txt\n-rw------- 1 oslab_igor oslab_igor 7 Nov  9 14:10 s.txt\n+ chmod 000 s.txt\n+ cat s.txt\ncat: s.txt: Permission denied\n+ printf 'mode 000 cat status=%d\\n' 1\nmode 000 cat status=1\n+ chmod u+r s.txt\n+ cat s.txt\nsecret\n+ umask\n0022\n+ touch new.txt\n+ mkdir newdir\n+ ls -ld new.txt newdir\n-rw-r--r-- 1 oslab_igor oslab_igor    0 Nov  9 14:10 new.txt\ndrwxr-xr-x 2 oslab_igor oslab_igor 4096 Nov  9 14:10 newdir\n+ mkdir box\n+ echo hi\n+ chmod u=r,go= box\n+ ls box\nf\n+ cat box/f\ncat: box/f: Permission denied\n+ printf 'read-only directory cat status=%d\\n' 1\nread-only directory cat status=1\n+ chmod u=x,go= box\n+ ls box\nls: cannot open directory 'box': Permission denied\n+ printf 'execute-only directory ls status=%d\\n' 2\nexecute-only directory ls status=2\n+ cat box/f\nhi\n+ chmod 755 box",
+    "sha256": "b121dc2e0a18fc3608db01b64ecf413cc976380cb0c0fd266f0ce27f091ab779"
+  },
+  "lab6-mystat": {
+    "title": "lab6-mystat",
+    "source": "xv6/user/mystat.c",
+    "code": "#include \"kernel/types.h\"\n#include \"kernel/stat.h\"\n#include \"user/user.h\"\n\nint\nmain(int argc, char **argv)\n{\n  if(argc < 2){\n    fprintf(2, \"usage: mystat path ...\\n\");\n    exit(1);\n  }\n  int failed = 0;\n  for(int i = 1; i < argc; i++){\n    struct stat st;\n    if(stat(argv[i], &st) < 0){\n      fprintf(2, \"mystat: cannot stat %s\\n\", argv[i]);\n      failed = 1;\n      continue;\n    }\n    char *kind = st.type == T_DIR ? \"directory\" :\n                 st.type == T_FILE ? \"file\" :\n                 st.type == T_DEVICE ? \"device\" : \"unknown\";\n    printf(\"%s: type=%s inode=%d links=%d bytes=%lu\\n\",\n           argv[i], kind, st.ino, st.nlink, st.size);\n  }\n  exit(failed);\n}\n",
+    "output": "$ mystat README . console\nREADME: type=file inode=2 links=1 bytes=2441\n.: type=directory inode=1 links=4 bytes=1024\nconsole: type=device inode=30 links=1 bytes=0\n$ ln README r2\n$ mystat README r2\nREADME: type=file inode=2 links=2 bytes=2441\nr2: type=file inode=2 links=2 bytes=2441\n$ rm README\n$ mystat r2\nr2: type=file inode=2 links=1 bytes=2441\n$ cat r2 | wc\n48 336 2441",
+    "sha256": "402bd1d0f86bc5666150e342e46c6de18a67b0dafcf92463a32cb61fddc1a9b0"
+  },
+  "lab6-find": {
+    "title": "lab6-find",
+    "source": "xv6/user/find.c",
+    "code": "static int\nvisit(char *path, char *target)\n{\n  struct stat st;\n  if(stat(path, &st) < 0){\n    fprintf(2, \"find: cannot stat %s\\n\", path);\n    return 1;\n  }\n  // A directory can match as well as a regular file.\n  if(strcmp(basename(path), target) == 0) printf(\"%s\\n\", path);\n  if(st.type != T_DIR) return 0;",
+    "output": "$ mkdir a/b\n$ echo x > a/b/r2\n$ echo y > a/r2\n$ ln cat r2\n$ find . r2\n./a/b/r2\n./a/r2\n./r2\n$ find a b\na/b",
+    "sha256": "b01da9b91053cc7cdd2ef91b8d7ce9f36a2967c92adf6d0d668a717e3174a67b"
+  },
+  "lab7-run": {
+    "title": "lab7-run",
+    "source": "Lab7-8/linux/run.c",
+    "code": "    printf(\"parent: my PID is %d\\n\", getpid());\n    fflush(stdout);\n\n    pid_t pid = fork();\n    if (pid < 0) {\n        perror(\"fork\");\n        return 1;\n    }\n    if (pid == 0) {\n        printf(\"child: my PID is %d, my parent is %d\\n\", getpid(), getppid());\n        fflush(stdout);\n        if (argc > 1)\n            execvp(program, &argv[1]);\n        else\n            execlp(\"ls\", \"ls\", \"-l\", (char *)NULL);\n        perror(\"exec\");\n        _exit(127);\n    }\n\n    int status;\n    if (waitpid(pid, &status, 0) < 0) {\n        perror(\"waitpid\");\n        return 1;\n    }\n    if (WIFEXITED(status))\n        printf(\"parent: child %d ended with status %d\\n\", pid, WEXITSTATUS(status));",
+    "output": "+ ./run\nparent: my PID is 3310792\nchild: my PID is 3310793, my parent is 3310792\ntotal 80\n-rwxr-xr-x 1 root root 16528 Nov  9 14:21 pipeline\n-rwxr-xr-x 1 root root 16400 Nov  9 14:21 redirect\n-rwxr-xr-x 1 root root 16440 Nov  9 14:21 run\n-rwxr-xr-x 1 root root 16440 Nov  9 14:21 zombie\nparent: child 3310793 ended with status 0\n+ ./run date -u +%Y-%m-%d\nparent: my PID is 3310794\nchild: my PID is 3310795, my parent is 3310794\n2026-11-09\nparent: child 3310795 ended with status 0\n+ ./run no_such_igor_program\nparent: my PID is 3310796\nchild: my PID is 3310797, my parent is 3310796\nexec: No such file or directory\nparent: child 3310797 ended with status 127",
+    "sha256": "df514b5dc31a128774653dd0cbac14d3caeaeecaf83976128aeaa62245eda02c"
+  },
+  "lab7-zombie": {
+    "title": "lab7-zombie",
+    "source": "Lab7-8/linux/zombie.c",
+    "code": "sleep(20);\n    int status;\n    if (waitpid(pid, &status, 0) < 0) {\n        perror(\"waitpid\");\n        return 1;\n    }\n    if (WIFEXITED(status))\n        printf(\"parent: child %d ended with status %d\\n\", pid, WEXITSTATUS(status));",
+    "output": "+ parent_pid=3310798\n+ ./zombie\n+ sleep 1\n+ ps -o pid,ppid,stat,cmd --ppid 3310798\n    PID    PPID STAT CMD\n3310800 3310798 Z    [ls] <defunct>\n+ wait 3310798\n+ ps -o pid,ppid,stat,cmd --ppid 3310798\n    PID    PPID STAT CMD",
+    "sha256": "70257d7a3226da00749d88c8d064454af7d6b3869d50719b1ce3e84dd54c24ba"
+  },
+  "lab7-redirection": {
+    "title": "lab7-redirection",
+    "source": "Lab7-8/linux/redirect.c",
+    "code": "    pid_t pid = fork();\n    if (pid < 0) {\n        perror(\"fork\");\n        return 1;\n    }\n    if (pid == 0) {\n        close(STDOUT_FILENO);\n        int fd = open(\"out.txt\", O_WRONLY | O_CREAT | O_TRUNC, 0644);\n        if (fd < 0) {\n            perror(\"open\");\n            _exit(1);\n        }\n        fprintf(stderr, \"open gave descriptor %d\\n\", fd);\n        execlp(\"ls\", \"ls\", \"-l\", (char *)NULL);\n        perror(\"exec\");\n        _exit(127);\n    }\n\n    int status;\n    if (waitpid(pid, &status, 0) < 0) {\n        perror(\"waitpid\");\n        return 1;",
+    "output": "+ ./redirect\nopen gave descriptor 1\ndone: the listing is in out.txt\n+ head -3 out.txt\ntotal 80\n-rw-r--r-- 1 root root     0 Nov  9 14:21 out.txt\n-rwxr-xr-x 1 root root 16528 Nov  9 14:21 pipeline",
+    "sha256": "4083c440ec9366b443978a59b1db5fbeccd66b8cf304c31f81f69bd1489e40b5"
+  },
+  "lab7-pipeline": {
+    "title": "lab7-pipeline",
+    "source": "Lab7-8/linux/pipeline.c",
+    "code": "        return 1;\n    }\n    if (ls_pid == 0) {\n        close(STDOUT_FILENO);\n        if (dup(p[1]) != STDOUT_FILENO) _exit(1);\n        close(p[0]);\n        close(p[1]);\n        execlp(\"ls\", \"ls\", \"/etc\", (char *)NULL);\n        perror(\"exec ls\");\n        _exit(127);\n    }\n\n    pid_t wc_pid = fork();\n    if (wc_pid < 0) {\n        perror(\"fork\");\n        close(p[0]);\n        close(p[1]);\n        waitpid(ls_pid, NULL, 0);\n        return 1;\n    }\n    if (wc_pid == 0) {\n        close(STDIN_FILENO);\n        if (dup(p[0]) != STDIN_FILENO) _exit(1);\n        close(p[0]);\n        close(p[1]);\n        execlp(\"wc\", \"wc\", \"-l\", (char *)NULL);\n        perror(\"exec wc\");",
+    "output": "+ ./pipeline\n215\n+ ls /etc\n+ wc -l\n215\n+ ./pipeline --delay-eof\nparent keeps the write end open for 3 seconds; wc waits for EOF\n215\n\nreal\t0m3.003s\nuser\t0m0.001s\nsys\t0m0.006s\n+ python3 /tmp/igor-os-review-20261109/scripts/check-broken-pipeline.py /tmp/igor-os-review-20261109\nPart 4.3: pipeline is still running after two seconds\n    PID    PPID STAT CMD\n3310882 3310880 S    wc -l\nInterrupted with SIGINT (Ctrl-C equivalent); return code -2",
+    "sha256": "2c891d5adf5d0135488c811b36390249f46bccb44c15bfd30af2e367ef97b7c7"
+  },
+  "lab8-run": {
+    "title": "lab8-run",
+    "source": "xv6/user/run.c",
+    "code": "#include \"kernel/types.h\"\n#include \"user/user.h\"\n\nint\nmain(int argc, char *argv[])\n{\n  printf(\"parent: my pid is %d\\n\", getpid());\n  int pid = fork();\n  if(pid < 0){\n    printf(\"fork failed\\n\");\n    exit(1);\n  }\n  if(pid == 0){\n    printf(\"child: my pid is %d\\n\", getpid());\n    if(argc > 1){\n      exec(argv[1], &argv[1]);\n    } else {\n      char *args[] = { \"echo\", \"hello\", \"from\", \"the\", \"child\", 0 };\n      exec(\"echo\", args);\n    }\n    printf(\"exec failed\\n\");\n    exit(1);\n  }\n  int status;\n  wait(&status);\n  printf(\"parent: child %d ended with status %d\\n\", pid, status);\n  exit(0);\n}\n",
+    "output": "$ run\nparent: my pid is 87\nchild: my pid is 88\nhello from the child\nparent: child 88 ended with status 0\n$ run no_such_igor_program\nparent: my pid is 91\nchild: my pid is 92\nexec failed\nparent: child 92 ended with status 1",
+    "sha256": "dbd903f460bf63e47866cd0d93a6c2d1e3530d2a6d2397f8b9a9c1dfd85edfb6"
+  },
+  "lab8-pingpong": {
+    "title": "lab8-pingpong",
+    "source": "xv6/user/pingpong.c",
+    "code": "#include \"kernel/types.h\"\n#include \"user/user.h\"\n\nint\nmain(void)\n{\n  int p2c[2], c2p[2];\n  char b = 'x';\n  if(pipe(p2c) < 0 || pipe(c2p) < 0){\n    printf(\"pipe failed\\n\");\n    exit(1);\n  }\n  int pid = fork();\n  if(pid < 0){\n    printf(\"fork failed\\n\");\n    exit(1);\n  }\n  if(pid == 0){\n    close(p2c[1]);\n    close(c2p[0]);\n    if(read(p2c[0], &b, 1) != 1) exit(1);\n    printf(\"%d: received ping\\n\", getpid());\n    if(write(c2p[1], &b, 1) != 1) exit(1);\n    close(p2c[0]);\n    close(c2p[1]);\n    exit(0);\n  }\n  close(p2c[0]);\n  close(c2p[1]);\n  if(write(p2c[1], &b, 1) != 1) exit(1);\n  if(read(c2p[0], &b, 1) != 1) exit(1);\n  printf(\"%d: received pong\\n\", getpid());\n  close(p2c[1]);\n  close(c2p[0]);\n  wait(0);\n  exit(0);\n}\n",
+    "output": "$ pingpong\n94: received ping\n93: received pong\n$",
+    "sha256": "34f3ed2c182621ae9514adbd2873ed3b962576b46a816b592ee0dde30b572eef"
+  },
+  "lab9-file-calls": {
+    "title": "lab9-file-calls",
+    "source": "Lab9-10/syscalls.c",
+    "code": "{\n    const char *msg = \"hello, kernel\\n\";\n    int fd = open(\"note.txt\", O_CREAT | O_WRONLY | O_TRUNC, 0644);\n    if (fd < 0) {\n        perror(\"open for writing\");\n        return 1;\n    }\n\n    printf(\"open returned descriptor %d\\n\", fd);\n    ssize_t n = write(fd, msg, strlen(msg));\n    if (n < 0 || (size_t)n != strlen(msg)) {\n        perror(\"write\");\n        close(fd);\n        return 1;\n    }\n    printf(\"write sent %zd bytes\\n\", n);\n    if (close(fd) < 0) {\n        perror(\"close after writing\");\n        return 1;\n    }\n\n    fd = open(\"note.txt\", O_RDONLY);\n    if (fd < 0) {\n        perror(\"open for reading\");\n        return 1;\n    }\n    char buf[64];\n    n = read(fd, buf, sizeof(buf) - 1);\n    if (n < 0) {\n        perror(\"read\");\n        close(fd);\n        return 1;",
+    "output": "SIX FILE CALLS\n+ awk '/openat.*\"note.txt\"/ {capture=1} capture {print; n++} n==6 {exit}' syscalls.trace\nopenat(AT_FDCWD, \"note.txt\", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 3\nwrite(3, \"hello, kernel\\n\", 14)         = 14\nclose(3)                                = 0\nopenat(AT_FDCWD, \"note.txt\", O_RDONLY)  = 3\nread(3, \"hello, kernel\\n\", 63)          = 14\nclose(3)                                = 0",
+    "sha256": "7af274d92e5acc01bee803292710e23e242469641d3a78951f489ee4e3c289dc"
+  },
+  "lab9-stdout": {
+    "title": "lab9-stdout",
+    "source": "Lab9-10/syscalls.c",
+    "code": "printf prints to fd 1; write(fd, ...) writes to note.txt.",
+    "output": "write(1, \"total 20\\n-rw-r--r-- 1 root root \"..., 111) = 111\nwrite(1, \"open returned descriptor 3\\nwrite sent 14 bytes\\nread got 14 bytes: hello, kernel\\n\", 80) = 80",
+    "sha256": "b0d219e7c8de60890f3eb6f34d3f4b7b93d3328de7ca80a1db79a170dcbeae19"
+  },
+  "lab10-handler": {
+    "title": "lab10-handler",
+    "source": "xv6/kernel/sysproc.c and kernel/proc.c",
+    "code": "uint64\nsys_trace(void)\n{\n  int mask;\n  argint(0, &mask);\n  myproc()->trace_mask = mask;\n  return 0;\n}\nInitialization: p->trace_mask = 0;\nInheritance: np->trace_mask = p->trace_mask;",
+    "output": "$ trace 32 grep hello README\n95: syscall read -> 1023\n95: syscall read -> 965\n95: syscall read -> 453\n95: syscall read -> 0",
+    "sha256": "7e98897ce4683efaf87e79490190bc7b85df475bfdce97441cc91401bdaf706e"
+  },
+  "lab10-masks": {
+    "title": "lab10-masks",
+    "source": "xv6/kernel/syscall.c",
+    "code": "p->trapframe->a0 = syscalls[num]();\n    if (num < 32 && (p->trace_mask & (1U << num)))\n      printk(\"%d: syscall %s -> %ld\\n\", p->pid, syscallnames[num], p->trapframe->a0);",
+    "output": "$ trace 2147483647 grep hello README\n96: syscall trace -> 0\n96: syscall exec -> 3\n96: syscall open -> 3\n96: syscall read -> 1023\n96: syscall read -> 965\n96: syscall read -> 453\n96: syscall read -> 0\n96: syscall close -> 0\n$ trace 65536 echo hi\nhi97: syscall write -> 2\n\n97: syscall write -> 1\n$ trace 2129920 grep hello README\n98: syscall open -> 3\n98: syscall close -> 0",
+    "sha256": "a8f6e3f716304f7e92433d44633ff395183d2f9f6e05a033c6443aaf5287fb6c"
+  },
+  "lab10-fork": {
+    "title": "lab10-fork",
+    "source": "xv6/kernel/proc.c",
+    "code": "np->trace_mask = p->trace_mask;",
+    "output": "103: syscall fork -> 153\n103: syscall fork -> 154\n103: syscall fork -> 155\n102: syscall fork -> 148\n103: syscall fork -> 156\n103: syscall fork -> 157\n103: syscall fork -> 158\n103: syscall fork -> 159\n103: syscall fork -> 160\n103: syscall fork -> -1\nOK\nALL TESTS PASSED\n$ echo tracing-off\ntracing-off\n$ ",
+    "sha256": "ea901d329a4647ffe25b7a745436bde071b3e4f8f6c60d204285bfd33e88cc54"
+  }
+}

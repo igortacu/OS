@@ -1,0 +1,37 @@
+#define T_DIR    1 // Directory
+#define T_FILE   2 // File
+#define T_DEVICE 3 // Device
+
+struct stat {
+  int dev;     // File system's disk device
+  uint ino;    // Inode number
+  short type;  // Type of file
+  short nlink; // Number of links to file
+  uint64 size; // Size of file in bytes
+};
+32:struct dinode {
+33-  short type;              // File type
+34-  short major;             // Major device number (T_DEVICE only)
+35-  short minor;             // Minor device number (T_DEVICE only)
+36-  short nlink;             // Number of links to inode in file system
+37-  uint size;               // Size of file (bytes)
+38-  uint addrs[NDIRECT + 1]; // Data block addresses
+39-};
+40-
+41-// Inodes per block.
+42:#define IPB (BSIZE / sizeof(struct dinode))
+43-
+44-// Block containing inode i
+45-#define IBLOCK(i, sb) ((i) / IPB + sb.inodestart)
+46-
+47-// Bitmap bits per block
+48-#define BPB (BSIZE * 8)
+49-
+50-// Block of free map containing bit for block b
+51-#define BBLOCK(b, sb) ((b) / BPB + sb.bmapstart)
+52-
+5:#define BSIZE   1024 // block size
+26:#define NDIRECT   12
+27:#define NINDIRECT (BSIZE / sizeof(uint))
+54:#define DIRSIZ 14
+nmeta 47 (boot, super, log blocks 31, inode blocks 13, bitmap blocks 1) blocks 1953 total 2000

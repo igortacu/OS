@@ -1,0 +1,58 @@
+API
+25:int pause(int);
+UPROGS
+134:	$U/_pingpong\
+135:	$U/_run\
+136:	$U/_find\
+137:	$U/_mystat\
+138:	$U/_sleep\
+139:	$U/_args\
+SHELL_KINDS
+8:#define EXEC  1
+9:#define REDIR 2
+10:#define PIPE  3
+11:#define LIST  4
+12:#define BACK  5
+14:#define MAXARGS 10
+SHELL_CASES
+75:  case EXEC:
+83:  case REDIR:
+93:  case LIST:
+101:  case PIPE:
+125:  case BACK:
+284:  case 0:
+286:  case '|':
+287:  case '(':
+288:  case ')':
+289:  case ';':
+290:  case '&':
+291:  case '<':
+294:  case '>':
+391:    case '<':
+394:    case '>':
+397:    case '+': // >>
+469:  case EXEC:
+475:  case REDIR:
+481:  case PIPE:
+487:  case LIST:
+493:  case BACK:
+CD
+SHELL_SIZE
+499 xv6/user/sh.c
+CD_IMPLEMENTATION
+  while (getcmd(buf, sizeof(buf)) >= 0) {
+    char *cmd = buf;
+    while (*cmd == ' ' || *cmd == '\t')
+      cmd++;
+    if (*cmd == '\n') // is a blank command
+      continue;
+    if (cmd[0] == 'c' && cmd[1] == 'd' && cmd[2] == ' ') {
+      // Chdir must be called by the parent, not the child.
+      cmd[strlen(cmd) - 1] = 0; // chop \n
+      if (chdir(cmd + 3) < 0)
+        fprintf(2, "cannot cd %s\n", cmd + 3);
+    } else {
+      if (fork1() == 0)
+        runcmd(parsecmd(cmd));
+      wait(0);
+    }

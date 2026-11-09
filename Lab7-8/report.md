@@ -6,6 +6,7 @@ geometry: margin=2cm
 fontsize: 11pt
 colorlinks: true
 header-includes:
+  - \usepackage{graphicx}
   - \usepackage{listings}
   - \lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true}
 ---
@@ -18,7 +19,7 @@ New reproduction on 9 November 2026
 
 ## Question and execution environment
 
-A shell pipeline and a child that replaces itself with another program both depend on state that survives process creation or program replacement. Lab 7 isolates that state under Linux: PIDs, wait status, open descriptors, and pipe endpoints. Lab 8 applies the same ideas to xv6, where the user API and kernel implementation are small enough to inspect together. The revised experiments below were run in Ubuntu 24.04 ARM64 on Docker and in QEMU with the committed xv6 source. The output is from the new run, not the earlier SSH screenshots.
+A shell pipeline and a child that replaces itself with another program both depend on state that survives process creation or program replacement. Lab 7 isolates that state under Linux: PIDs, wait status, open descriptors, and pipe endpoints. Lab 8 applies the same ideas to xv6, where the user API and kernel implementation are small enough to inspect together. The revised experiments below were run in Ubuntu 24.04 x86_64 over SSH and in QEMU with the committed xv6 source. The output is from the new run, not the earlier SSH screenshots.
 
 All six requested programs are present in this repository. Linux sources are in `Lab7-8/linux`; xv6 sources are `xv6/user/run.c` and `xv6/user/pingpong.c`. The complete xv6 tree includes the UPROGS registrations. Raw transcripts are in `Lab7-8/evidence`, and the two runner scripts under `scripts` retain the commands that produced them.
 
@@ -30,24 +31,24 @@ The default listing, a UTC date command, and a deliberately absent program exerc
 
 ```text
 + ./run
-parent: my PID is 6464
-child: my PID is 6465, my parent is 6464
-total 68
--rwxr-xr-x 1 root root 70920 Nov  9 13:53 pipeline
--rwxr-xr-x 1 root root 70800 Nov  9 13:53 redirect
--rwxr-xr-x 1 root root 70840 Nov  9 13:53 run
--rwxr-xr-x 1 root root 70840 Nov  9 13:53 zombie
-parent: child 6465 ended with status 0
+parent: my PID is 3310792
+child: my PID is 3310793, my parent is 3310792
+total 80
+-rwxr-xr-x 1 root root 16528 Nov  9 14:21 pipeline
+-rwxr-xr-x 1 root root 16400 Nov  9 14:21 redirect
+-rwxr-xr-x 1 root root 16440 Nov  9 14:21 run
+-rwxr-xr-x 1 root root 16440 Nov  9 14:21 zombie
+parent: child 3310793 ended with status 0
 + ./run date -u +%Y-%m-%d
-parent: my PID is 6466
-child: my PID is 6467, my parent is 6466
+parent: my PID is 3310794
+child: my PID is 3310795, my parent is 3310794
 2026-11-09
-parent: child 6467 ended with status 0
+parent: child 3310795 ended with status 0
 + ./run no_such_igor_program
-parent: my PID is 6468
-child: my PID is 6469, my parent is 6468
+parent: my PID is 3310796
+child: my PID is 3310797, my parent is 3310796
 exec: No such file or directory
-parent: child 6469 ended with status 127
+parent: child 3310797 ended with status 127
 ```
 
 Successful exec does not create an additional child and does not run the fallback error branch. It replaces the calling child's address space while retaining its PID and inherited descriptors. This is why the listing appears between the child's identification and the parent's completion message. The exact PID values are incidental; the relationship between them is the part under test.
@@ -57,15 +58,15 @@ Successful exec does not create an additional child and does not run the fallbac
 `zombie.c` uses the same exec path but makes the parent sleep before `waitpid`. The child can finish its listing while the parent is still alive. The process query selects children of the saved background parent PID, which avoids mixing this case with unrelated processes on the machine. The first query found a `Z` entry for ls; after waiting for the parent utility, the second query contained only the header.
 
 ```text
-+ parent_pid=6470
++ parent_pid=3310798
 + ./zombie
 + sleep 1
-+ ps -o pid,ppid,stat,cmd --ppid 6470
-  PID  PPID STAT CMD
- 6472  6470 Z    [ls] <defunct>
-+ wait 6470
-+ ps -o pid,ppid,stat,cmd --ppid 6470
-  PID  PPID STAT CMD
++ ps -o pid,ppid,stat,cmd --ppid 3310798
+    PID    PPID STAT CMD
+3310800 3310798 Z    [ls] <defunct>
++ wait 3310798
++ ps -o pid,ppid,stat,cmd --ppid 3310798
+    PID    PPID STAT CMD
 ```
 
 The zombie is not a program still executing the ls instructions. It is the kernel's retained termination information awaiting collection. The delay makes this normally short interval observable. Using `$!` immediately after launching the parent and filtering with `--ppid` ties the observed entry to the experiment rather than to a coincidentally named process.
@@ -74,30 +75,37 @@ The zombie is not a program still executing the ls instructions. It is the kerne
 
 The redirection child closes descriptor 1 before opening `out.txt`. Since open chooses the lowest available descriptor, the new descriptor is 1. The later ls image writes through the standard-output number it always uses, but that number now refers to the file. The diagnostic is deliberately written to stderr and remains visible outside the file. The parent waits and checks the child's status before announcing completion.
 
-The run reported `open gave descriptor 1`; reading the first lines of `out.txt` displayed the saved listing. The listing showed `out.txt` as empty at the moment ls inspected its metadata. That does not mean redirection failed: ls is itself in the process of generating the bytes subsequently read by head.
+The run reported `open gave descriptor 1`; reading the first lines of `out.txt` displayed the saved listing. To redirect errors instead, close descriptor 2 before opening the error file. The listing showed `out.txt` as empty at the moment ls inspected its metadata; ls was itself generating the bytes subsequently read by head.
 
 ## Lab 7 A pipe whose reader needs every writer to close
 
-`pipeline.c` creates one pipe and two children. The ls child duplicates the write endpoint onto stdout. The wc child duplicates the read endpoint onto stdin. Each child closes both original endpoints after duplication, and the parent also closes its copies before collecting both children. The ordinary program and `ls /etc | wc -l` each returned **116** in this environment. This is a measurement of the current container's `/etc`, not a fixed expected value for Ubuntu.
+`pipeline.c` creates one pipe and two children. The ls child duplicates the write endpoint onto stdout. The wc child duplicates the read endpoint onto stdin. Each child closes both original endpoints after duplication, and the parent also closes its copies before collecting both children. The ordinary program and `ls /etc | wc -l` each returned **215** in this environment. This is a measurement of the current server's `/etc`, not a fixed expected value for Ubuntu.
 
 The revised program includes a bounded `--delay-eof` mode. It retains the parent's write endpoint for three seconds, then closes it. This demonstrates the reader's dependence on the last writer without leaving a permanently blocked process behind. The measured elapsed time was about three seconds, and wc eventually returned the same count.
 
 ```text
 + ./pipeline
-116
+215
 + ls /etc
 + wc -l
-116
+215
 + ./pipeline --delay-eof
 parent keeps the write end open for 3 seconds; wc waits for EOF
-116
+215
 
-real	0m3.004s
-user	0m0.000s
-sys	0m0.003s
+real	0m3.003s
+user	0m0.001s
+sys	0m0.006s
++ python3 /tmp/igor-os-review-20261109/scripts/check-broken-pipeline.py /tmp/igor-os-review-20261109
+Part 4.3: pipeline is still running after two seconds
+    PID    PPID STAT CMD
+3310882 3310880 S    wc -l
+Interrupted with SIGINT (Ctrl-C equivalent); return code -2
 ```
 
-The delay does not make ls produce more directory entries. It postpones the EOF condition that lets wc finish. A pipe read can reach EOF only after buffered bytes have been consumed and every descriptor referring to its write end has been closed. Copies inherited through fork count too, which is why closing endpoints only in the producer is insufficient.
+The handout's Part 4.3 was also executed literally: the parent's final `close(p[1])` was omitted in a test variant. After two seconds the parent was still running and ps showed wc waiting. The test then interrupted the process group with SIGINT, the terminal Ctrl-C signal. Its record is included in the block above. The bounded delay mode is an additional experiment, not a replacement for this broken case.
+
+A pipe read can reach EOF only after buffered bytes have been consumed and every descriptor referring to its write end has been closed. Copies inherited through fork count too, which is why closing endpoints only in the producer is insufficient.
 
 ## Lab 8 Reusing the lifecycle inside xv6
 
@@ -105,15 +113,15 @@ The xv6 `run` utility defaults to echo but also accepts a command and its argume
 
 ```text
 $ run
-parent: my pid is 44
-child: my pid is 45
+parent: my pid is 87
+child: my pid is 88
 hello from the child
-parent: child 45 ended with status 0
+parent: child 88 ended with status 0
 $ run no_such_igor_program
-parent: my pid is 48
-child: my pid is 49
+parent: my pid is 91
+child: my pid is 92
 exec failed
-parent: child 49 ended with status 1
+parent: child 92 ended with status 1
 ```
 
 The Linux fallback uses 127 and the xv6 fallback uses 1 because those values are explicitly chosen by the utilities. Exec failure does not force every program or OS to choose the same status. The xv6 wait API also differs from Linux waitpid: it collects a child and writes the status through a pointer without selecting a particular PID in this program.
@@ -124,15 +132,61 @@ The Linux fallback uses 127 and the xv6 fallback uses 1 because those values are
 
 ```text
 $ pingpong
-51: received ping
-50: received pong
+94: received ping
+93: received pong
 $
 ```
 
-The observed ping-before-pong order follows from the data dependency: the parent cannot print pong until the child's reply is read. A single unstructured pipe would not encode the two directions so clearly and would allow processes to compete for the same stream. Two pipes make both ownership and the blocking points explicit.
+The observed ping-before-pong order follows from the data dependency. Specifically, `read(c2p[0], &b, 1)` blocks the parent until a reply byte is available; the later wait collects the terminated child. Two pipes give each direction its own stream and make ownership explicit.
 
 ## Interpretation and source provenance
 
 These tests connect shell behavior to specific lifetime rules. Fork copies descriptor references, exec preserves them, wait collects termination state, and close can determine whether another process is allowed to finish. The delayed EOF experiment is particularly useful because its final count is unchanged while its completion time changes. It distinguishes a communication-lifetime error from an incorrect data-processing result.
 
 The runner checks compilation with `-Wall -Wextra -Werror`, verifies the Linux cases, builds the complete xv6 image, and checks distinctive output for run and pingpong. It does not claim that this limited set proves arbitrary error recovery or all scheduling orders. MIT xv6 remains the upstream teaching system; the added utilities and their test fixtures are identified in `xv6/PROVENANCE.md` rather than presenting the entire kernel as newly authored code.
+
+## Execution captures and code excerpts
+
+The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-run.jpg}
+\caption{Linux run code and execution}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-zombie.jpg}
+\caption{Zombie collection code and process table}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-redirection.jpg}
+\caption{Descriptor redirection code and file output}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-pipeline.jpg}
+\caption{Pipe endpoints and the omitted close experiment}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-run.jpg}
+\caption{xv6 run code and execution}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-pingpong.jpg}
+\caption{Two pipes in the code and the ordered reply}
+\end{figure}

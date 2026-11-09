@@ -4,3 +4,8 @@
 xv6/** whitespace=-blank-at-eol,-blank-at-eof
 # Unified diff context lines must preserve their leading context marker.
 *.patch whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab
+
+# Per-lab copies preserve the integrated MIT Makefile formatting.
+lab4/Makefile whitespace=-blank-at-eol,-blank-at-eof
+lab6/Makefile whitespace=-blank-at-eol,-blank-at-eof
+lab8/Makefile whitespace=-blank-at-eol,-blank-at-eof

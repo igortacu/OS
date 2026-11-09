@@ -1,0 +1,22 @@
+$ echo hello > f ; cat < f
+hello
+$ ls | grep READ
+README
+$ (echo a; echo b) | wc
+      2       2       4
+$ echo one ; echo two
+one
+two
+$ echo bg &
+bg
+$ ls *
+README
+f
+$ echo $HOME
+/root
+$ echo "a b"
+a b
+$ mkdir d ; cd d ; ls ..
+README
+d
+f

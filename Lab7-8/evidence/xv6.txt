@@ -4,13 +4,13 @@ xv6 kernel is booting
 
 init: starting sh
 $ run
-parent: my pid is 44
-child: my pid is 45
+parent: my pid is 87
+child: my pid is 88
 hello from the child
-parent: child 45 ended with status 0
+parent: child 88 ended with status 0
 $ run ls
-parent: my pid is 46
-child: my pid is 47
+parent: my pid is 89
+child: my pid is 90
 .              1 1 1024
 ..             1 1 1024
 README         2 2 2441
@@ -42,17 +42,21 @@ forphan        2 27 35128
 dorphan        2 28 34576
 sync           2 29 33792
 console        3 30 0
-l4note         2 31 6
-l4case         1 32 32
-tree           1 34 80
-alias          2 33 10
-parent: child 47 ended with status 0
+f              2 31 6
+d              1 32 32
+l4note         2 33 6
+l4case         1 34 32
+a              1 35 64
+averyveryveryl 1 36 32
+tree           1 41 80
+alias          2 40 10
+parent: child 90 ended with status 0
 $ run no_such_igor_program
-parent: my pid is 48
-child: my pid is 49
+parent: my pid is 91
+child: my pid is 92
 exec failed
-parent: child 49 ended with status 1
+parent: child 92 ended with status 1
 $ pingpong
-51: received ping
-50: received pong
+94: received ping
+93: received pong
 $ 

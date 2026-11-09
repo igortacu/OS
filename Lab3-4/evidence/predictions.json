@@ -1,0 +1,92 @@
+[
+  {
+    "command": "echo *.c",
+    "prediction": "a.c b.c",
+    "predicted_at": "2026-11-09T14:20:58.806522+00:00",
+    "stdout": "a.c b.c\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.810175+00:00"
+  },
+  {
+    "command": "echo file?.txt",
+    "prediction": "file1.txt file2.txt",
+    "predicted_at": "2026-11-09T14:20:58.810701+00:00",
+    "stdout": "file1.txt file2.txt\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.815987+00:00"
+  },
+  {
+    "command": "echo [a-b]*",
+    "prediction": "a.c alfa beta.txt b.c",
+    "predicted_at": "2026-11-09T14:20:58.816646+00:00",
+    "stdout": "a.c alfa beta.txt b.c\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.820500+00:00"
+  },
+  {
+    "command": "echo *.xyz",
+    "prediction": "literal *.xyz because no match exists",
+    "predicted_at": "2026-11-09T14:20:58.821109+00:00",
+    "stdout": "*.xyz\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.824677+00:00"
+  },
+  {
+    "command": "ls alfa beta.txt",
+    "prediction": "two missing operands and a nonzero status",
+    "predicted_at": "2026-11-09T14:20:58.825691+00:00",
+    "stdout": "",
+    "stderr": "ls: cannot access 'alfa': No such file or directory\nls: cannot access 'beta.txt': No such file or directory\n",
+    "status": 2,
+    "observed_at": "2026-11-09T14:20:58.833646+00:00"
+  },
+  {
+    "command": "ls \"alfa beta.txt\"",
+    "prediction": "one file named alfa beta.txt",
+    "predicted_at": "2026-11-09T14:20:58.834023+00:00",
+    "stdout": "alfa beta.txt\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.840028+00:00"
+  },
+  {
+    "command": "echo '$HOME' \"$HOME\" \\$HOME",
+    "prediction": "$HOME /root $HOME",
+    "predicted_at": "2026-11-09T14:20:58.840593+00:00",
+    "stdout": "$HOME /root $HOME\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.843721+00:00"
+  },
+  {
+    "command": "echo {1..5} ; echo $((7 * 6))",
+    "prediction": "1 2 3 4 5 then 42",
+    "predicted_at": "2026-11-09T14:20:58.844111+00:00",
+    "stdout": "1 2 3 4 5\n42\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.847556+00:00"
+  },
+  {
+    "command": "echo \"today is $(date +%A), I am $(whoami)\"",
+    "prediction": "current weekday and current login identity",
+    "predicted_at": "2026-11-09T14:20:58.848002+00:00",
+    "stdout": "today is Monday, I am root\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.855304+00:00"
+  },
+  {
+    "command": "touch log{1..3}.txt && ls log*",
+    "prediction": "log1.txt, log2.txt, log3.txt",
+    "predicted_at": "2026-11-09T14:20:58.856100+00:00",
+    "stdout": "log1.txt\nlog2.txt\nlog3.txt\n",
+    "stderr": "",
+    "status": 0,
+    "observed_at": "2026-11-09T14:20:58.864613+00:00"
+  }
+]

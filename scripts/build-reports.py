@@ -3,6 +3,7 @@
 from pathlib import Path
 import subprocess
 import tempfile
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 def read(name): return (ROOT/name).read_text()
@@ -12,17 +13,28 @@ def segment(text, start, end=None):
 
 l3, l4 = read('Lab3-4/evidence/linux.txt'), read('Lab3-4/evidence/xv6.txt')
 l6 = read('Lab5-6/evidence/xv6.txt')
+l5 = read('Lab5-6/evidence/linux.txt')
 l7, l8 = read('Lab7-8/evidence/linux.txt'), read('Lab7-8/evidence/xv6.txt')
 l9, l10 = read('Lab9-10/evidence/linux.txt'), read('Lab9-10/evidence/xv6.txt')
 values = {
- 'L3_STATS': segment(l3, 'Q1 failed requests\n', '+ bash /work/Lab3-4/linux/report.sh access.log'),
+ 'L3_STATS': segment(l3, 'Q1 failed requests\n', '+ bash '),
  'L4_ARGS': segment(l4, '$ args *.c', '$ echo hello'),
  'L4_SLEEP': segment(l4, '$ sleep 2', '$ args one'),
  'L6_LINKS': segment(l6, '$ echo igor-file', '$ mkdir tree'),
  'L6_FIND': segment(l6, '$ mkdir tree'),
+ 'L6_EMPTY': segment(l6, '$ mkdir a\n', '$ mystat README'),
+ 'L6_README': segment(l6, '$ mystat README . console', '$ ln r2 README'),
+ 'L6_INODE': re.search(r'specimen: type=file inode=(\d+)',l6).group(1),
+ 'L6_LIMITS': '\n'.join(line for line in read('Lab5-6/evidence/limits.txt').splitlines() if re.match(r'\d+:#define|nmeta',line))+'\n'+'\n'.join(line for line in segment(l6, '$ mkdir averyveryverylongname', '$ mkdir a/b').splitlines() if 'avery' in line or line == '$ ls')+'\n[Other listing entries are retained in the full recording.]',
+ 'L5_ID': segment(l5, '+ whoami', '+ ls /\n'),
+ 'L5_TYPES': segment(l5, '+ ls -ld /etc', '+ echo hello'),
+ 'L5_LINKS': segment(l5, '+ ln notes.txt', '+ mkdir d\n'),
+ 'L5_PERMS': segment(l5, '+ chmod 600', '+ ls -l /usr/bin/passwd'),
+ 'L5_DISK': segment(l5, '+ lsblk', '+ grep -c processor'),
  'L7_RUN': segment(l7, '+ ./run\n', '+ parent_pid='),
  'L7_ZOMBIE': segment(l7, '+ parent_pid=', '+ ./redirect'),
  'L7_PIPE': segment(l7, '+ ./pipeline\n'),
+ 'L7_ETC': re.search(r'\+ ./pipeline\n(\d+)',l7).group(1),
  'L8_RUN': segment(l8, '$ run\n', '$ run ls\n') + '\n' + segment(l8, '$ run no_such', '$ pingpong'),
  'L8_PING': segment(l8, '$ pingpong'),
  'L9_LS_WRITE': '\n'.join(s for s in read('Lab9-10/evidence/ls.trace').splitlines() if s.startswith('write(1,')),
@@ -42,6 +54,7 @@ geometry: margin=2cm
 fontsize: 11pt
 colorlinks: true
 header-includes:
+  - \\usepackage{graphicx}
   - \\usepackage{listings}
   - \\lstset{basicstyle=\\ttfamily\\small,breaklines=true,columns=fullflexible,keepspaces=true}
 ---
@@ -49,6 +62,7 @@ header-includes:
 '''
 targets = [
  ('lab34', 'Lab3-4', 'Lab3-4_TacuIgor_FAF-242.pdf'),
+ ('lab5', 'Lab5-6', 'Lab5_TacuIgor_FAF-242.pdf'),
  ('lab6', 'Lab5-6', 'Lab6_TacuIgor_FAF-242.pdf'),
  ('lab78', 'Lab7-8', 'Lab7-8_TacuIgor_FAF-242.pdf'),
  ('lab910', 'Lab9-10', 'Lab9-10_TacuIgor_FAF-242.pdf'),
@@ -57,18 +71,17 @@ for template, folder, name in targets:
     text = read(f'scripts/report-templates/{template}.md')
     for key, value in values.items(): text = text.replace('@@'+key+'@@', value)
     if '@@' in text: raise RuntimeError('Unresolved report marker')
-    md = ROOT/folder/('report-lab6.md' if template == 'lab6' else 'report.md')
+    md = ROOT/folder/('report-'+template+'.md' if template in ('lab5','lab6') else 'report.md')
     md.write_text('\n'.join(line.rstrip() for line in (header+text).splitlines()).rstrip()+'\n')
     subprocess.run(['pandoc', str(md), '--pdf-engine=xelatex', '--listings',
                     '--lua-filter', str(ROOT/'scripts/keep-code.lua'),
                     '-V', 'mainfont=Arial', '-o', str(ROOT/folder/name)], check=True)
     print('built', folder+'/'+name)
 
-# Preserve the Linux portion of the old joint report and replace its xv6 section.
+# Both parts now derive from the original handouts and the native server runs.
 joint = ROOT/'Lab5-6/Lab5-6_TacuIgor_FAF-242.pdf'
 with tempfile.TemporaryDirectory(prefix='lab5-prefix-') as temp:
-    subprocess.run(['pdfseparate', '-f', '1', '-l', '8', str(joint), temp+'/page-%d.pdf'], check=True)
     merged = Path(temp)/'merged.pdf'
-    subprocess.run(['pdfunite', *[temp+f'/page-{i}.pdf' for i in range(1,9)],
+    subprocess.run(['pdfunite', str(ROOT/'Lab5-6/Lab5_TacuIgor_FAF-242.pdf'),
                     str(ROOT/'Lab5-6/Lab6_TacuIgor_FAF-242.pdf'), str(merged)], check=True)
     joint.write_bytes(merged.read_bytes())

@@ -1,6 +1,10 @@
-#!/usr/bin/env bash
-if [ "$#" -ne 1 ] || [ ! -f "$1" ] || [ ! -r "$1" ]; then
+#!/bin/bash
+if [ "$#" -ne 1 ]; then
     printf 'usage: %s readable_log\n' "$0" >&2
+    exit 1
+fi
+if [ ! -f "$1" ] || [ ! -r "$1" ]; then
+    printf 'no such file: %s\n' "$1" >&2
     exit 1
 fi
 awk '

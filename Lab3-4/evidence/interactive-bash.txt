@@ -1,10 +1,64 @@
-igor-bash$ cd /usr/share/
+igor-bash$ ls /usr/share/
+GConf		     glances		     pam-configs
+PackageKit	     glib-2.0		     pastebin.d
+X11		     gnupg		     perl
+aclocal		     groff		     perl5
+alsa		     grub		     pixmaps
+applications	     gst-plugins-base	     pkgconfig
+apport		     gstreamer-1.0	     plymouth
+at		     gtk-3.0		     pmdk
+awk		     i18n		     polkit-1
+base-files	     icons		     profile
+base-passwd	     ieee-data		     profile.md5sums
+bash-completion      info		     publicsuffix
+binfmts		     info.dir		     python-apt
+bpfcc-tools	     initramfs-tools	     python-babel-localedata
+btop		     iptables		     python3
+bug		     iso-codes		     qemu
+build-essential      java		     readline
+byobu		     javascript		     rsync
+ca-certificates      keyrings		     rsyslog
+cmake		     landscape		     screen
+common-licenses      libc-bin		     seabios
+console-setup	     libdebuginfod-common    secureboot
+consolefonts	     libdrm		     sensible-utils
+consoletrans	     libgcrypt20	     session-migration
+cryptsetup	     libthai		     sgml
+dbus-1		     licenses		     sgml-base
+debconf		     lintian		     snapd
+debhelper	     locale		     source-highlight
+debianutils	     locales		     staff-group-for-usr-local
+defaults	     lto-disabled-list	     systemd
+dhcpcd		     lxd-installer	     tabset
+dict		     man		     tcltk
+distro-info	     man-db		     terminfo
+doc		     matplotlib		     themes
+doc-base	     maven-repo		     thumbnailers
+dot.bashrc	     mdadm		     ubuntu-drivers-common
+dot.profile	     menu		     ubuntu-release-upgrader
+dot.profile.md5sums  metainfo		     ucf
+dpkg		     mime		     ufw
+drirc.d		     misc		     unattended-upgrades
+file		     motd		     unicode
+finalrd		     nano		     update-notifier
+fish		     needrestart	     upstart
+fontconfig	     netplan		     util-linux
+fonts		     networks		     vim
+gcc		     nginx		     vulkan
+gdb		     numpy3		     xfsprogs
+gettext		     open-vm-tools	     xml
+git-core	     openssh		     xml-core
+gitweb		     package-data-downloads  zoneinfo
+glade		     pam		     zsh
+igor-bash$ cd /etc/
 igor-bash$ pwd
-/usr/share
+/etc
 igor-bash$ echo history-marker
 history-marker
-igor-bash$ (reverse-i-search)`': p': pwdw': pwdd': pwdigor-bash$ pwd              igor-bash$ 
-/usr/share
+igor-bash$ type echo
+echo is a shell builtin
+igor-bash$ (reverse-i-search)`': p': type echow': pwd     d': pwdigor-bash$ pwd              igor-bash$ 
+/etc
 igor-bash$ 
 igor-bash$ exit
 exit

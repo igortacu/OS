@@ -6,6 +6,7 @@ geometry: margin=2cm
 fontsize: 11pt
 colorlinks: true
 header-includes:
+  - \usepackage{graphicx}
   - \usepackage{listings}
   - \lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,keepspaces=true}
 ---
@@ -22,7 +23,7 @@ Lab 9 observes calls made by a Linux executable, including the descriptor used f
 
 The source is now in the same `OS` repository as this report. `Lab9-10/syscalls.c` is the Linux utility. The full `xv6` directory contains `user/trace.c`, the assembly-stub generator, the handler, the syscall number and dispatch entry, the per-process mask, and inheritance in process creation. A reader does not need to locate a separate fork to assess the implementation. Upstream MIT code and the changes made for these labs are distinguished in `xv6/PROVENANCE.md`.
 
-The new evidence was collected in an Ubuntu 24.04 ARM64 container on the author's computer and from QEMU booting that source tree. Console blocks in this report are excerpts of real text recordings, not reconstructed SSH screenshots. The complete Linux traces and xv6 console output are included under `Lab9-10/evidence`; the runner scripts are committed alongside them.
+The new evidence was collected in the Ubuntu 24.04 x86_64 server and from QEMU booting that source tree. Console blocks in this report are excerpts of real text recordings, not reconstructed SSH screenshots. The complete Linux traces and xv6 console output are included under `Lab9-10/evidence`; the runner scripts are committed alongside them.
 
 ## Lab 9 Finding the output descriptor of ls
 
@@ -36,7 +37,7 @@ Descriptor 1 is standard output. The return value equals the requested byte coun
 
 The trace also contains file operations unrelated to the file the lab program will create: the dynamic loader and library setup open and read their own files. This matters when interpreting raw strace output. A read on descriptor 3 near process startup does not necessarily read `note.txt`; identifying the pathname at open time is needed to attribute later uses of that descriptor. The complete `ls.trace` is retained so these setup calls can be inspected without reducing the trace to a selected screenshot.
 
-Counting the selected lines in that recording gives 38 calls: 10 openat, 16 close, 11 read, and one write. This is the total for the four traced families, not for every possible syscall; calls excluded by the filter cannot be counted from this recording.
+Counting the selected lines in that recording gives 38 calls: 10 openat, 16 close, 11 read, and 1 write. This is the total for the four traced families; calls excluded by the filter cannot be counted from this recording.
 
 ## Lab 9 Six calls on note.txt
 
@@ -76,12 +77,12 @@ The repeated count used `strace -c -e trace=openat ls -l` with stdout redirected
 ```text
 % time     seconds  usecs/call     calls    errors syscall
 ------ ----------- ----------- --------- --------- ----------------
-100.00    0.000033           3        10           openat
+100.00    0.000125          12        10           openat
 ------ ----------- ----------- --------- --------- ----------------
-100.00    0.000033           3        10           total
+100.00    0.000125          12        10           total
 ```
 
-This run counted ten openat calls without errors. The earlier remote Ubuntu run counted 31 calls and 18 failed lookups. Both are observations of their respective environments: the new run fixes `LC_ALL=C` and uses ARM64 libraries in a container, while the earlier one used another machine and locale configuration. Failed locale-candidate opens need not make ls fail. It would be incorrect to present 31 as the number every ls invocation must make, or to merge a count from one environment with a trace from another.
+This run counted ten openat calls without errors. The earlier remote Ubuntu run counted 31 calls and 18 failed lookups. Both are observations of their respective environments: the new run fixes `LC_ALL=C` and uses the C locale, while the earlier run used a different locale configuration. Failed locale-candidate opens need not make ls fail. It would be incorrect to present 31 as the number every ls invocation must make, or to merge a count from one environment with a trace from another.
 
 The brief lists a counting part without a detailed procedure. The summary command above makes the chosen method explicit. Its timing columns measure this particular instrumented execution; they are not a benchmark comparison, and the single short run does not justify conclusions about system-call performance.
 
@@ -103,10 +104,10 @@ For mask 32, bit five selects SYS_read. The observed command produced:
 
 ```text
 $ trace 32 grep hello README
-52: syscall read -> 1023
-52: syscall read -> 965
-52: syscall read -> 453
-52: syscall read -> 0
+95: syscall read -> 1023
+95: syscall read -> 965
+95: syscall read -> 453
+95: syscall read -> 0
 ```
 
 The three positive results sum to 2441, the README's length in this image, followed by a zero-length read at EOF. PID values identify this run and may change with the number of preceding shell commands. The mask explains the absence of open and close lines; it does not mean grep stopped using those calls.
@@ -119,33 +120,33 @@ For write-only tracing, 65536 sets bit sixteen. Echo wrote two bytes for `hi` an
 
 ```text
 $ trace 2147483647 grep hello README
-53: syscall trace -> 0
-53: syscall exec -> 3
-53: syscall open -> 3
-53: syscall read -> 1023
-53: syscall read -> 965
-53: syscall read -> 453
-53: syscall read -> 0
-53: syscall close -> 0
+96: syscall trace -> 0
+96: syscall exec -> 3
+96: syscall open -> 3
+96: syscall read -> 1023
+96: syscall read -> 965
+96: syscall read -> 453
+96: syscall read -> 0
+96: syscall close -> 0
 $ trace 65536 echo hi
-hi54: syscall write -> 2
+hi97: syscall write -> 2
 
-54: syscall write -> 1
+97: syscall write -> 1
 $ trace 2129920 grep hello README
-55: syscall open -> 3
-55: syscall close -> 0
+98: syscall open -> 3
+98: syscall close -> 0
 ```
 
 The fork-only mask is 2, selecting bit one. `usertests forkforkfork` created enough children to reach the process-table limit, so a return value of minus one was expected at saturation. Multiple PIDs printing lines demonstrate the inherited mask rather than one parent printing all events. The final test result was:
 
 ```text
-59: syscall fork -> 112
-59: syscall fork -> 113
-59: syscall fork -> 114
-59: syscall fork -> 115
-59: syscall fork -> 116
-59: syscall fork -> 117
-59: syscall fork -> -1
+102: syscall fork -> 148
+103: syscall fork -> 156
+103: syscall fork -> 157
+103: syscall fork -> 158
+103: syscall fork -> 159
+103: syscall fork -> 160
+103: syscall fork -> -1
 OK
 ALL TESTS PASSED
 $ echo tracing-off
@@ -158,3 +159,42 @@ The subsequent ordinary `echo tracing-off` produced its text without a syscall t
 ## Limits and conclusion
 
 The Linux and xv6 observations demonstrate two ways to inspect a system-call interface. The Linux trace includes loader and library work outside the explicit C statements. The xv6 facility instead sits directly in the teaching kernel's dispatcher and is intentionally limited to a per-process bit mask, a name, and a return value. It does not decode pointers or copy user buffers like a general strace implementation.
+
+## Execution captures and code excerpts
+
+The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab9-file-calls.jpg}
+\caption{Linux file operations and the six system calls}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab9-stdout.jpg}
+\caption{Writes on standard output}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-handler.jpg}
+\caption{Kernel trace handler and read filtering}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-masks.jpg}
+\caption{Dispatcher code and mask experiments}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-fork.jpg}
+\caption{Mask inheritance and the completed fork test}
+\end{figure}

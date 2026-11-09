@@ -1,0 +1,6 @@
+a.c
+alfa beta.txt
+b.c
+file1.txt
+file2.txt
+notes.txt

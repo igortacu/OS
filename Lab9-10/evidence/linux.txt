@@ -1,10 +1,10 @@
-+ mkdir -p /tmp/os-revision.KRUFSC/l9
-+ cd /tmp/os-revision.KRUFSC/l9
-+ gcc -std=c11 -Wall -Wextra -Werror -o syscalls /work/Lab9-10/syscalls.c
++ mkdir -p /tmp/os-revision.QkrbYh/l9
++ cd /tmp/os-revision.QkrbYh/l9
++ gcc -std=c11 -Wall -Wextra -Werror -o syscalls /tmp/igor-os-review-20261109/Lab9-10/syscalls.c
 + strace -o ls.trace -e trace=openat,read,write,close ls -l
 total 20
--rw-r--r-- 1 root root  1750 Nov  9 13:53 ls.trace
--rwxr-xr-x 1 root root 70672 Nov  9 13:53 syscalls
+-rw-r--r-- 1 root root  1028 Nov  9 14:21 ls.trace
+-rwxr-xr-x 1 root root 16272 Nov  9 14:21 syscalls
 + printf '\nLS STDOUT WRITE\n'
 
 LS STDOUT WRITE
@@ -39,7 +39,7 @@ OPENAT COUNTS
 + strace -c -e trace=openat ls -l
 % time     seconds  usecs/call     calls    errors syscall
 ------ ----------- ----------- --------- --------- ----------------
-100.00    0.000033           3        10           openat
+100.00    0.000125          12        10           openat
 ------ ----------- ----------- --------- --------- ----------------
-100.00    0.000033           3        10           total
-+ cp ls.trace syscalls.trace /work/Lab9-10/evidence/
+100.00    0.000125          12        10           total
++ cp ls.trace syscalls.trace /tmp/igor-os-review-20261109/Lab9-10/evidence/

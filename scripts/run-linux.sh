@@ -13,15 +13,20 @@ mkdir -p "$case_root/l3/play"
 cd "$case_root/l3"
 for ((i=1;i<=500;i++)); do
     status=OK; ((i % 5 == 0)) && status=FAIL
-    printf '2026-11-09 10:%02d user%d %s /page%d\n' "$((i%60))" "$((i%7))" "$status" "$((i%4))"
+    printf '2026-10-05 10:%02d user%d %s /page%d\n' "$((i%60))" "$((i%7))" "$status" "$((i%4))"
 done > access.log
 head -3 access.log
 wc -l access.log
 type cd ls echo
+which ls
 command -v ls
 printf '%s\n' "$PATH" | tr ':' '\n'
 nosuchprog
 printf 'missing command status=%d\n' "$?"
+ls --help | head -10
+man ls | col -b | grep -A2 -- 'sort by modification time' | head -3
+man -k 'list directory' | head -5
+help cd | head -10
 cd play
 touch alpha.c beta.c entry1.txt entry2.txt 'two words.txt'
 printf '<%s>\n' *.c
@@ -55,14 +60,29 @@ bash "$repo/Lab3-4/linux/report.sh" missing.log
 printf 'missing input status=%d\n' "$?"
 printf '2026-11-09 12:00 user0 OK /page0\n' >all-ok.log
 bash "$repo/Lab3-4/linux/report.sh" all-ok.log
+cp "$repo/Lab3-4/linux/report.sh" report.sh
+chmod 644 report.sh
+./report.sh access.log
+printf 'without execute permission status=%d\n' "$?"
+chmod +x report.sh
+./report.sh access.log
+wc -l <access.log
+wc -l access.log
+echo first > notes.md; echo second >>notes.md; cat notes.md
 cp "$repo/Lab3-4/linux/args_linux.c" play/
 cd play
 gcc -std=c11 -Wall -Wextra -Werror -o args args_linux.c
 touch sample.c
+touch README
 ./args one    two three
 ./args *.c 'x y'
+./args "$HOME"
 ./args '$HOME' "$HOME"
 ./args 'single quoted'
+ls | grep READ
+ls *
+echo "$HOME"
+echo "a b"
 echo hello > f; cat <f
 (echo alpha; echo beta) | wc
 mkdir d; cd d; ls ..
@@ -89,6 +109,8 @@ head -3 out.txt
 ./pipeline
 ls /etc | wc -l
 time ./pipeline --delay-eof
+# Run the handout's actual missing-close variant as a bounded test.
+python3 "$repo/scripts/check-broken-pipeline.py" "$repo"
 ) >"$repo/Lab7-8/evidence/linux.txt" 2>&1
 
 (

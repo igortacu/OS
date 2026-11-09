@@ -1,0 +1,5 @@
+PASS Lab3-4/evidence/xv6-comparison.txt
+PASS Lab3-4/evidence/xv6.txt
+PASS Lab5-6/evidence/xv6.txt
+PASS Lab7-8/evidence/xv6.txt
+PASS Lab9-10/evidence/xv6.txt

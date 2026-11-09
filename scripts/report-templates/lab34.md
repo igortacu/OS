@@ -8,13 +8,13 @@ Reproduction performed on 9 November 2026
 
 The central question in these two labs is where a command line acquires its meaning. An argument inspector receives ordinary strings; it does not know whether a string originally contained quotes, a wildcard, or a variable. By running the same inspector under Bash and xv6, I can attribute the different argument arrays to the shell rather than to the inspected program. The other experiments follow the same method: select a small input, predict the observable effect, and check both a successful and a failing case.
 
-The evidence comes from a new Ubuntu 24.04 ARM64 container on the author's computer and from a newly built xv6 image in QEMU. The blocks below are formatted excerpts from saved console transcripts. The complete commands, source files, and unedited output are committed in the repository.
+The evidence comes from the Ubuntu 24.04 x86_64 server accessed over SSH and from a newly built xv6 image in QEMU. The blocks below are formatted excerpts from saved console transcripts. The complete commands, source files, and unedited output are committed in the repository.
 
 ## Lab 3 How Bash selects and expands a command
 
 `type` identified `cd` and `echo` as shell builtins, whereas `ls` was an external executable. This distinction explains why changing directories in a child would not change the shell's own working directory. `command -v ls` supplied a resolved command location; printing PATH one component per line exposed the search order instead of treating PATH as an opaque string. A nonexistent command returned status 127. That status describes failure to locate an executable, not a normal program returning a business result.
 
-Completion and history were tested through a real pseudo terminal running Bash with readline. The input `cd /usr/sh` followed by Tab completed to `/usr/share/`, and `pwd` confirmed the destination. Reverse search selected the previous `pwd` command; executing the selection printed the directory again. The raw PTY recording retains terminal control characters in `evidence/interactive-bash.txt`, so it can be distinguished from a hand-written transcript. The ordinary commands and all subsequent outputs are in `evidence/linux.txt`.
+Completion and history were tested through a real pseudo terminal running Bash with readline. The input `ls /usr/sh` followed by Tab exercised completion; `cd /et` followed by Tab completed `/etc/`, and `pwd` confirmed `/etc`. Reverse search selected the previous `pwd` command; executing the selection printed the directory again. The raw PTY recording retains terminal control characters in `evidence/interactive-bash.txt`, so it can be distinguished from a hand-written transcript. The ordinary commands and all subsequent outputs are in `evidence/linux.txt`.
 
 For pathname expansion I created `alpha.c`, `beta.c`, `entry1.txt`, `entry2.txt`, and `two words.txt`. An unquoted `*.c` became two separate names at that point in the run. Quoting the pattern retained the literal asterisk. The unmatched `*.absent` pattern also remained literal because the Bash session had its default unmatched-pattern behavior. These are different reasons for the same visible string: quoting disables expansion, while an unmatched unquoted pattern survives an attempted expansion.
 
@@ -60,7 +60,7 @@ The directory test showed a separate limitation. After changing to `l4case`, a b
 
 ## Lab 4 Sleep validation and the API boundary
 
-The xv6 header exposes `pause(int)`. The added `xv6/user/sleep.c` accepts one nonnegative decimal tick count, checks integer overflow while accumulating it, and returns failure for invalid text. `sleep 2` returned normally. Omitting the operand printed the usage line, and `sleep -1` printed an invalid-count diagnostic. This makes the shell-facing utility responsible for text validation while leaving the kernel interface responsible for the actual pause.
+The xv6 header exposes `pause(int)`. The added `xv6/user/sleep.c` accepts one nonnegative decimal tick count, checks integer overflow while accumulating it, and returns failure for invalid text. `sleep 20` returned normally. Omitting the operand printed the usage line, and `sleep -1` printed an invalid-count diagnostic. This makes the shell-facing utility responsible for text validation while leaving the kernel interface responsible for the actual pause.
 
 ```text
 @@L4_SLEEP@@
@@ -70,4 +70,4 @@ The xv6 header exposes `pause(int)`. The added `xv6/user/sleep.c` accepts one no
 
 The strongest evidence in these labs is the disagreement between identical argument-inspection logic under two shells. It locates expansion in Bash before execution. The redirection experiment locates output routing in descriptor bindings, and the `cd` experiment locates persistent directory state in the shell process. These observations give different explanations for superficially similar failures and are more useful than memorizing a list of shell features.
 
-Linux sources are in `Lab3-4/linux`. The xv6 sources are `xv6/user/args.c` and `xv6/user/sleep.c`; their registrations are in `xv6/Makefile`. `scripts/run-linux.sh`, `scripts/check-interactive-bash.py`, and `scripts/run-xv6.py` regenerate the evidence. The xv6 kernel and shell derive from the MIT teaching OS; upstream provenance and the source revision are recorded in `xv6/PROVENANCE.md`. Output counts tied to `/etc`, PATH, and account configuration describe the container used for this run, not every Ubuntu installation.
+Linux sources are in `Lab3-4/linux`. The xv6 sources are `xv6/user/args.c` and `xv6/user/sleep.c`; their registrations are in `xv6/Makefile`. `scripts/run-linux.sh`, `scripts/check-interactive-bash.py`, and `scripts/run-xv6.py` regenerate the evidence. The xv6 kernel and shell derive from the MIT teaching OS; upstream provenance and the source revision are recorded in `xv6/PROVENANCE.md`. Output counts tied to `/etc`, PATH, and account configuration describe the server used for this run, not every Ubuntu installation.

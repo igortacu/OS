@@ -107,6 +107,12 @@ trace: failed
 $
 ```
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-check1-terminal.png}
+\caption{Native Terminal screenshot supplied by the author: saved audit output showing the intentionally unregistered syscall and the restored implementation. The sed command displays both matching runs from the audit log.}
+\end{figure}
+
 The test then restored the dispatch entry and rebuilt. Read, open and close masks worked, and `trace 2 usertests forkforkfork` ended with `ALL TESTS PASSED`. The test verifies that the mask field belongs inside `struct proc` through a successful kernel build, and exercises inheritance through real child processes. The complete build and boot record is `evidence/trace-patch-validation.txt`. The reproducible checker is `scripts/check-trace-patch.py`; use it only with a clean disposable checkout because it applies the patch and rebuilds the generated disk.
 
 ## Lab 10 Reporting the completed call

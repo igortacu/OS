@@ -219,3 +219,10 @@ The following screenshots show the read-only console of saved SSH execution reco
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-fork.jpg}
 \caption{Mask inheritance and the completed fork test}
 \end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-patch-pass-terminal.png}
+\caption{Native Terminal screenshot of the saved audit record: verified MIT base, patch application checks, and passing fork inheritance test. The head and tail commands display the beginning and end of the complete committed log.}
+\end{figure}

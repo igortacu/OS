@@ -181,43 +181,45 @@ The subsequent ordinary `echo tracing-off` produced its text without a syscall t
 
 The Linux and xv6 observations demonstrate two ways to inspect a system-call interface. The Linux trace includes loader and library work outside the explicit C statements. The xv6 facility instead sits directly in the teaching kernel's dispatcher and is intentionally limited to a per-process bit mask, a name, and a return value. It does not decode pointers or copy user buffers like a general strace implementation.
 
+The additional native L9 screenshots use direct terminal stdout: the program emits three writes of 27, 20 and 33 bytes (80 in total), whereas the earlier piped recording combined them into one buffered write. The six calls on fd 3 are unchanged. The first fixed-length sed excerpt interleaved stdout writes; the second capture filters these out and shows the complete six-call file sequence.
+
 ## Execution captures and code excerpts
 
-The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+Native Terminal screenshots: L9 and final L10 were run live; the two labeled audit figures show saved verification output.
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab9-file-calls.jpg}
-\caption{Linux file operations and the six system calls}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab9-file-calls-terminal.png}
+\caption{Native Linux strace: six file calls, ls stdout and openat summary}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab9-stdout.jpg}
-\caption{Writes on standard output}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab9-stdout-terminal.png}
+\caption{Native Linux strace: direct-terminal stdout writes}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-handler.jpg}
-\caption{Kernel trace handler and read filtering}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-masks-terminal.png}
+\caption{Native xv6 execution: read, all-call, open/close and write masks}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-masks.jpg}
-\caption{Dispatcher code and mask experiments}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-fork-start-terminal.png}
+\caption{Native xv6 execution: fork test command and inherited tracing}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-fork.jpg}
-\caption{Mask inheritance and the completed fork test}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-fork-pass-terminal.png}
+\caption{Native xv6 execution: fork test completion and ALL TESTS PASSED}
 \end{figure}
 
 \clearpage
@@ -226,3 +228,149 @@ The following screenshots show the read-only console of saved SSH execution reco
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab9-10/evidence/screenshots/lab10-patch-pass-terminal.png}
 \caption{Native Terminal screenshot of the saved audit record: verified MIT base, patch application checks, and passing fork inheritance test. The head and tail commands display the beginning and end of the complete committed log.}
 \end{figure}
+
+## Source excerpts from the submitted implementation
+
+### Linux file operations
+
+```c
+/* Lab 9: observe open, write, read, and close with strace. */
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+int main(void)
+{
+    const char *msg = "hello, kernel\n";
+    int fd = open("note.txt", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    if (fd < 0) {
+        perror("open for writing");
+        return 1;
+    }
+
+    printf("open returned descriptor %d\n", fd);
+    ssize_t n = write(fd, msg, strlen(msg));
+    if (n < 0 || (size_t)n != strlen(msg)) {
+        perror("write");
+        close(fd);
+        return 1;
+    }
+    printf("write sent %zd bytes\n", n);
+    if (close(fd) < 0) {
+        perror("close after writing");
+        return 1;
+    }
+
+    fd = open("note.txt", O_RDONLY);
+    if (fd < 0) {
+        perror("open for reading");
+        return 1;
+    }
+    char buf[64];
+    n = read(fd, buf, sizeof(buf) - 1);
+    if (n < 0) {
+        perror("read");
+        close(fd);
+        return 1;
+    }
+    buf[n] = '\0';
+    printf("read got %zd bytes: %s", n, buf);
+    if (close(fd) < 0) {
+        perror("close after reading");
+        return 1;
+    }
+    return 0;
+}
+```
+
+### xv6 user utility
+
+```c
+#include "kernel/types.h"
+#include "kernel/stat.h"
+#include "user/user.h"
+
+int
+main(int argc, char *argv[])
+{
+  if (argc < 3) {
+    fprintf(2, "usage: trace mask command [args...]\n");
+    exit(1);
+  }
+  if (trace(atoi(argv[1])) < 0) {
+    fprintf(2, "trace: failed\n");
+    exit(1);
+  }
+  exec(argv[2], argv + 2);
+  fprintf(2, "trace: exec %s failed\n", argv[2]);
+  exit(1);
+}
+```
+
+### Kernel handler
+
+```c
+uint64
+sys_trace(void)
+{
+  int mask;
+  argint(0, &mask);
+  myproc()->trace_mask = mask;
+  return 0;
+}
+```
+
+### Dispatch after the system call returns
+
+```c
+void
+syscall(void)
+{
+  int num;
+  struct proc *p = myproc();
+
+  num = p->trapframe->a7;
+  if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    // Use num to lookup the system call function for num, call it,
+    // and store its return value in p->trapframe->a0
+    p->trapframe->a0 = syscalls[num]();
+    if (num < 32 && (p->trace_mask & (1U << num)))
+      printk("%d: syscall %s -> %ld\n", p->pid, syscallnames[num], p->trapframe->a0);
+  } else {
+    printk("%d %s: unknown sys call %d\n", p->pid, p->name, num);
+    p->trapframe->a0 = -1;
+  }
+}
+```
+
+### Per-process state, initialization and inheritance
+
+These are excerpts from kernel/proc.h and kernel/proc.c respectively; the complete context is in the buildable tree and the validated patch.
+
+```c
+  struct file *ofile[NOFILE];  // Open files
+  struct inode *cwd;           // Current directory
+  char name[16];               // Process name (debugging)
+  int trace_mask;              // System calls selected for tracing
+};
+
+
+found:
+  p->pid = allocpid();
+  p->state = USED;
+  p->trace_mask = 0;
+
+  // Allocate a trapframe page.
+  if ((p->trapframe = (struct trapframe *)kalloc()) == 0) {
+
+    if (p->ofile[i])
+      np->ofile[i] = filedup(p->ofile[i]);
+  np->cwd = idup(p->cwd);
+
+  safestrcpy(np->name, p->name, sizeof(p->name));
+  np->trace_mask = p->trace_mask;
+
+  pid = np->pid;
+
+```

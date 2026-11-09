@@ -47,6 +47,11 @@ values = {
  'L9_SIX': segment(l9, 'SIX FILE CALLS\n', '+ printf').split('\n', 2)[2],
  'L9_PROGRAM_WRITE': '\n'.join(s for s in read('Lab9-10/evidence/syscalls.trace').splitlines() if s.startswith('write(1,')),
  'L9_COUNT': segment(l9, 'OPENAT COUNTS\n', '+ cp').split('\n', 2)[2],
+ 'L9_SOURCE': read('Lab9-10/syscalls.c').strip(),
+ 'L10_USER_SOURCE': read('xv6/user/trace.c').strip(),
+ 'L10_HANDLER_SOURCE': segment(read('xv6/kernel/sysproc.c'), 'uint64\nsys_trace(void)'),
+ 'L10_DISPATCH_SOURCE': segment(read('xv6/kernel/syscall.c'), 'void\nsyscall(void)'),
+ 'L10_PROC_SOURCE': '\n'.join(read('xv6/kernel/proc.h').splitlines()[-5:])+'\n\n'+ '\n'.join(read('xv6/kernel/proc.c').splitlines()[122:130])+'\n\n'+'\n'.join(read('xv6/kernel/proc.c').splitlines()[286:295]),
  'L10_CHECK1': segment(read('Lab9-10/evidence/trace-patch-validation.txt'), 'trace 32 grep hello README', 'CHECK 2:'),
  'L10_READ': segment(l10, '$ trace 32', '$ trace 2147483647'),
  'L10_MASKS': segment(l10, '$ trace 2147483647', '$ trace 2 usertests'),
@@ -92,3 +97,11 @@ with tempfile.TemporaryDirectory(prefix='lab5-prefix-') as temp:
     subprocess.run(['pdfunite', str(ROOT/'Lab5-6/Lab5_TacuIgor_FAF-242.pdf'),
                     str(ROOT/'Lab5-6/Lab6_TacuIgor_FAF-242.pdf'), str(merged)], check=True)
     joint.write_bytes(merged.read_bytes())
+
+# The main Labs 3-4 link must include the same native figures as the Word exports.
+word_exports = [ROOT/'lab3/Lab3_TacuIgor_FAF-242.pdf', ROOT/'lab4/Lab4_TacuIgor_FAF-242.pdf']
+if all(path.exists() for path in word_exports):
+    with tempfile.TemporaryDirectory(prefix='lab34-native-') as temp:
+        merged = Path(temp)/'merged.pdf'
+        subprocess.run(['pdfunite', *(str(path) for path in word_exports), str(merged)], check=True)
+        (ROOT/'Lab3-4/Lab3-4_TacuIgor_FAF-242.pdf').write_bytes(merged.read_bytes())

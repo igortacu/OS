@@ -156,4 +156,3 @@ The complete source is included under xv6/user. These listings are the actual co
 ```c
 @@L7_PIPELINE_SOURCE@@
 ```
-

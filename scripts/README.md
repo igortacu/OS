@@ -1,6 +1,6 @@
 # Reproduce the November 9 experiments
 
-The submitted evidence was collected on Ubuntu 24.04 x86_64 over SSH on 9 November 2026. QEMU executes the integrated RISC-V source in an isolated copy. Lab 5 runs as the unprivileged oslab_igor account. Screenshots show a read-only browser console of saved execution records and code excerpts, rather than a live terminal window; complete raw logs are included.
+The submitted evidence was collected on Ubuntu 24.04 x86_64 over SSH on 9 November 2026. QEMU executes the integrated RISC-V source in an isolated copy. Lab 5 runs as the unprivileged oslab_igor account. Report figures now use author-supplied native Terminal screenshots of direct execution and source inspection. Two labeled patch-audit figures show saved verification output. Earlier raw logs and browser-view assets are retained as provenance, and full source files are included.
 
 The Docker image below provides an alternative reproduction environment. Disk names, inode numbers, PIDs, timing, and locale-dependent syscall counts may differ. For the original handout cases also run `python3 scripts/check-lab3-spec.py`, `python3 scripts/check-broken-pipeline.py`, and, as a non-root user, `bash scripts/run-lab5.sh`.
 

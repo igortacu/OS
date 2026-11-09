@@ -1,0 +1,22 @@
+{
+  "lab9-stdout-terminal.png": {
+    "kind": "live Linux strace execution",
+    "description": "Direct terminal stdout produces three writes of 27,20,33 bytes; first sed six-line excerpt interleaves stdout and is not the six-file-call evidence"
+  },
+  "lab9-file-calls-terminal.png": {
+    "kind": "live Linux strace execution",
+    "description": "Six fd3 file calls, ls write on fd1 returning272, LC_ALL=C summary10 openat calls"
+  },
+  "lab10-masks-terminal.png": {
+    "kind": "live xv6 execution",
+    "description": "Read-only, all, open/close, write masks in live xv6"
+  },
+  "lab10-fork-start-terminal.png": {
+    "kind": "live xv6 execution",
+    "description": "Live forkforkfork command and inherited fork tracing across PIDs7,8,9"
+  },
+  "lab10-fork-pass-terminal.png": {
+    "kind": "live xv6 execution",
+    "description": "Live fork tracing across descendants9,10,11, expected allocation failures, OK and ALL TESTS PASSED"
+  }
+}

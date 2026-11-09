@@ -38,6 +38,8 @@ def picture(name,content):
     parts=display.splitlines()
     if len(parts)>70:display='\n'.join(parts[:30]+['[Middle output omitted here; full recording is committed.]']+parts[-35:])
     CAPTURES[name]={'title':name,'output':display,'source':'Saved SSH execution or source record','sha256':hashlib.sha256(content.encode()).hexdigest()}
+    native=FIG/'native'/(name+'.png')
+    if native.exists():return native
     captured=FIG/'browser'/(name+'.jpg')
     if captured.exists():return captured
     font=ImageFont.truetype('/System/Library/Fonts/Menlo.ttc',19)
@@ -111,7 +113,11 @@ def document(number,topic):
     field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'PAGE');p._p.append(field)
     d.add_page_break()
     head(d,'Purpose and execution record')
-    body(d,'The experiments were repeated on the Ubuntu x86_64 server on 9 November 2026. The xv6 tests use an isolated source copy and fresh generated disk. Figures are browser screenshots of a read-only execution-record console displaying saved SSH output; the exact text logs and source are included in the repository. Predictions were written to predictions.json before each corresponding command was run. The submission was prepared with coding assistance, and MIT xv6 is identified as upstream in the source provenance file.')
+    if number == 4:
+        body(d,'All twelve figures are native Terminal screenshots supplied by the author from direct command execution and source inspection on the Ubuntu server on 9 November 2026. The xv6 tests use an isolated source copy and its generated test disk. The directory d already existed during the directory-handling capture; grep READ limits the displayed listing. Bash comparisons use separate temporary directories. Source files and earlier full execution transcripts accompany the screenshots. The submission was prepared with coding assistance; MIT xv6 is identified as upstream in the source provenance file.')
+    else:
+        body(d,'The experiments were repeated on the Ubuntu x86_64 server on 9 November 2026. Figures are browser screenshots of a read-only execution-record console displaying saved SSH output; the exact text logs and source are included in the repository. Predictions were written to predictions.json before each corresponding command was run. The submission was prepared with coding assistance, and MIT xv6 is identified as upstream in the source provenance file.')
+
     return d
 
 d=document(3,'The command line shell pipes and text filters')
@@ -182,7 +188,7 @@ table(d,['Command','Bash','xv6','Reason'],commands)
 body(d,'There is an important distinction in the last directory case. A cd embedded in a semicolon list is passed through the xv6 execution parser and fails as an external command. Issuing cd d as its own input line does change the parent shell. From there a bare ls fails because xv6 has no PATH search, while /ls .. succeeds. For interactive work, history and completion are valuable additions. Basic quote handling would be a localized tokenizer improvement; full pathname expansion would also require directory traversal.')
 fig(d,'2.1','The original comparison commands in Bash',read('Lab3-4/evidence/bash-comparison.txt'))
 fig(d,'2.2','The same comparison commands in xv6',clip(comp,'$ echo hello','$ mkdir d'))
-fig(d,'2.3','Directory handling and absolute ls',clip(comp,'$ mkdir d'))
+fig(d,'2.3','Directory handling and absolute ls (README-filtered listing)',clip(comp,'$ mkdir d'))
 head(d,'Part 3 Who expands the argument vector')
 body(d,'Both inspectors print only argc and argv. The Linux wildcard experiment in this additional test directory had four C files and one quoted x y operand, giving argc 6 including argv zero. Xv6 passed four arguments: args, the literal *.c, and two values containing the double quote marks. The shell, not the inspector or kernel, is responsible for expansion and syntactic quote removal. Repeated unquoted spaces delimit arguments in both shells; they do not become empty arguments.')
 fig(d,'3.1','Args source and UPROGS entry',read('xv6/user/args.c')+'\n'+clip(inspect,'UPROGS','SHELL_KINDS'))

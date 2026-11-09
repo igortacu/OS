@@ -29,3 +29,5 @@ The [reproduction instructions](scripts/README.md) build a fresh test disk and r
 The original individual Word submissions are [Lab 3](lab3/Lab3_TacuIgor_FAF-242.docx) and [Lab 4](lab4/Lab4_TacuIgor_FAF-242.docx), with screenshot-inclusive PDF exports [L3](lab3/Lab3_TacuIgor_FAF-242.pdf) and [L4](lab4/Lab4_TacuIgor_FAF-242.pdf). Direct per-lab source folders are [lab6](lab6), [lab7](lab7), [lab8](lab8), [lab9](lab9), and [lab10](lab10). The complete buildable xv6 integration remains in [xv6](xv6).
 
 Lab 10 includes [exact-base patch instructions and verification](Lab9-10/PATCH-VALIDATION.md), including the intentionally incomplete Check 1 and the working final implementation.
+
+Lab 4: all twelve figures in the individual Word/PDF report now use author-supplied native Terminal screenshots of direct execution and source inspection. Originals and their figure mapping are in [native captures](Lab3-4/evidence/word-figures/native/manifest.json). Other labs are being updated separately.

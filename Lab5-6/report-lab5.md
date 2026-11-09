@@ -181,11 +181,11 @@ The outputs distinguish names from inode identity, symlink contents from target 
 
 ## Execution captures and code excerpts
 
-The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+The native Terminal screenshot below was supplied by the author from a direct unprivileged permission test. The earlier full raw execution recording remains in the repository. This additional live check uses a separate temporary directory.
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab5-permissions.jpg}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab5-permissions-terminal.png}
 \caption{Unprivileged permission checks}
 \end{figure}

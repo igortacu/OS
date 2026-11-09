@@ -1,0 +1,22 @@
+{
+  "lab6-mystat-source-terminal.png": {
+    "description": "User-supplied native Terminal screenshot: complete mystat source and UPROGS registration",
+    "kind": "source inspection"
+  },
+  "lab5-permissions-terminal.png": {
+    "description": "User-supplied live non-root permission tests: read denial, chmod and umask",
+    "kind": "execution"
+  },
+  "lab6-find-source-terminal.png": {
+    "description": "User-supplied native Terminal screenshot of find recursive traversal, bounds checks, descriptor closure, and Makefile registration",
+    "kind": "source inspection"
+  },
+  "lab6-mystat-execution-terminal.png": {
+    "kind": "live xv6 execution",
+    "description": "README, directory and console metadata; live-test is 10 bytes, inode48 with hard link counts 1/2/1"
+  },
+  "lab6-find-execution-terminal.png": {
+    "kind": "live xv6 execution",
+    "description": "l6live fixture: recursive target matches, directory basename match, missing path and missing arguments"
+  }
+}

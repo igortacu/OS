@@ -72,18 +72,32 @@ Running `scripts/run-xv6.py` rebuilds the image and checks these distinctive lin
 
 ## Execution captures and code excerpts
 
-The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+The following native Terminal screenshots were supplied by the author from direct source inspection and live xv6 execution. They replace the saved-record browser views. This additional run uses l6live_note and l6live_link (inode 48, 10 bytes, link counts 1 then 2 then 1), and a separate l6live directory tree. Earlier measurements in the report refer to the original specimen and tree fixtures retained in the raw transcript; inode numbers and directory link counts depend on filesystem state.
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab6-mystat.jpg}
-\caption{Metadata code and hard link execution}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab6-mystat-execution-terminal.png}
+\caption{Native xv6 execution: metadata and hard links}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab6-find.jpg}
-\caption{Recursive search code and required test tree}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab6-find-execution-terminal.png}
+\caption{Native xv6 execution: recursive basename search and error paths}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab6-mystat-source-terminal.png}
+\caption{Native Terminal: mystat source and Makefile registration}
+\end{figure}
+
+\clearpage
+\begin{figure}[p]
+\centering
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab6-find-source-terminal.png}
+\caption{Native Terminal: find recursive traversal source and Makefile registration}
 \end{figure}

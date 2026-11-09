@@ -41,6 +41,7 @@ values = {
  'L9_SIX': segment(l9, 'SIX FILE CALLS\n', '+ printf').split('\n', 2)[2],
  'L9_PROGRAM_WRITE': '\n'.join(s for s in read('Lab9-10/evidence/syscalls.trace').splitlines() if s.startswith('write(1,')),
  'L9_COUNT': segment(l9, 'OPENAT COUNTS\n', '+ cp').split('\n', 2)[2],
+ 'L10_CHECK1': segment(read('Lab9-10/evidence/trace-patch-validation.txt'), 'trace 32 grep hello README', 'CHECK 2:'),
  'L10_READ': segment(l10, '$ trace 32', '$ trace 2147483647'),
  'L10_MASKS': segment(l10, '$ trace 2147483647', '$ trace 2 usertests'),
  'L10_FORK_END': '\n'.join(l10.splitlines()[-12:]),

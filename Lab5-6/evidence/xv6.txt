@@ -1,0 +1,42 @@
+qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 1 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+xv6 kernel is booting
+
+init: starting sh
+$ mystat . console
+.: type=directory inode=1 links=2 bytes=1024
+console: type=device inode=30 links=1 bytes=0
+$ echo igor-file > specimen
+$ mystat specimen
+specimen: type=file inode=33 links=1 bytes=10
+$ ln specimen alias
+$ mystat specimen alias
+specimen: type=file inode=33 links=2 bytes=10
+alias: type=file inode=33 links=2 bytes=10
+$ rm specimen
+$ mystat alias
+alias: type=file inode=33 links=1 bytes=10
+$ cat alias
+igor-file
+$ mystat missing-path
+mystat: cannot stat missing-path
+$ mkdir tree
+$ mkdir tree/branch
+$ echo root-copy > tree/target
+$ echo nested-copy > tree/branch/target
+$ mkdir tree/branch/targetdir
+$ find tree target
+tree/branch/target
+tree/target
+$ find tree targetdir
+tree/branch/targetdir
+$ find tree branch
+tree/branch
+$ echo edge > tree/abcdefghijklmn
+$ find tree abcdefghijklmn
+tree/abcdefghijklmn
+$ find missing-path target
+find: cannot stat missing-path
+$ find
+usage: find start basename
+$ 

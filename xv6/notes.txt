@@ -1,0 +1,19 @@
+Lab 10 — trace system call (xv6)
+
+1. Mask 32 has only bit 5 set. SYS_read is call number 5, so only read calls are printed; open and close have different numbers.
+
+2. In kernel/proc.c, fork copies the mask with np->trace_mask = p->trace_mask;. Each child therefore keeps tracing its own calls.
+
+3. echo writes "hi" and the newline in separate write calls. The kernel prints a trace line immediately after each call returns, so the first trace line can appear between "hi" and the newline.
+
+4. SYS_open is 15 and SYS_close is 21. The mask is (1 << 15) | (1 << 21) = 32768 + 2097152 = 2129920.
+
+Observed trace 32 output: read -> 1023, 965, 453, 0. These reads total 2441 bytes, followed by EOF.
+
+Observed full mask (2147483647): trace -> 0, exec -> 3, open -> 3, read -> 1023, 965, 453, 0, close -> 0.
+
+Observed write-only mask (65536): echo produced two writes, returning 2 for "hi" and 1 for the newline. Trace output appeared between those writes.
+
+Observed open-and-close mask (2129920): open -> 3 and close -> 0, with no read lines.
+
+Observed fork-only mask (2): forkforkfork printed fork lines from several processes, reached fork -> -1 when the process table filled, and ended with "OK" and "ALL TESTS PASSED".

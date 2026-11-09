@@ -1,0 +1,80 @@
+qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 1 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+xv6 kernel is booting
+
+init: starting sh
+$ sleep 2
+$ sleep
+usage: sleep nonnegative_ticks
+$ sleep -1
+sleep: invalid tick count
+$ args one    two three
+argc=4
+argv[0]=[args]
+argv[1]=[one]
+argv[2]=[two]
+argv[3]=[three]
+$ args *.c "x y"
+argc=4
+argv[0]=[args]
+argv[1]=[*.c]
+argv[2]=["x]
+argv[3]=[y"]
+$ args $HOME
+argc=2
+argv[0]=[args]
+argv[1]=[$HOME]
+$ args 'single quoted'
+argc=3
+argv[0]=[args]
+argv[1]=['single]
+argv[2]=[quoted']
+$ echo hello > l4note; cat < l4note
+hello
+$ (echo alpha; echo beta) | wc
+2 2 11 
+$ echo first; echo second
+first
+second
+$ echo background &
+background
+$ mkdir l4case
+$ cd l4case
+$ ls
+exec ls failed
+$ /ls ..
+.              1 1 1024
+..             1 1 1024
+README         2 2 2441
+pingpong       2 3 35152
+run            2 4 34744
+find           2 5 37528
+mystat         2 6 35048
+sleep          2 7 34592
+args           2 8 34112
+cat            2 9 35456
+echo           2 10 34384
+forktest       2 11 17360
+grep           2 12 42816
+init           2 13 34848
+kill           2 14 34312
+ln             2 15 34120
+ls             2 16 41600
+mkdir          2 17 34360
+rm             2 18 34344
+sh             2 19 56208
+stressfs       2 20 35240
+usertests      2 21 200136
+grind          2 22 50584
+wc             2 23 36416
+zombie         2 24 33728
+trace          2 25 34304
+logstress      2 26 36264
+forphan        2 27 35128
+dorphan        2 28 34576
+sync           2 29 33792
+console        3 30 0
+l4note         2 31 6
+l4case         1 32 32
+$ cd /
+$ 

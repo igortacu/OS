@@ -1,0 +1,6 @@
+# Console recordings retain exact prompts and terminal whitespace.
+**/evidence/* whitespace=-blank-at-eol,-blank-at-eof
+# The embedded MIT source is preserved with its upstream formatting.
+xv6/** whitespace=-blank-at-eol,-blank-at-eof
+# Unified diff context lines must preserve their leading context marker.
+*.patch whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab

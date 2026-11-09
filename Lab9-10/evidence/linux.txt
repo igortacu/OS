@@ -1,0 +1,45 @@
++ mkdir -p /tmp/os-revision.KRUFSC/l9
++ cd /tmp/os-revision.KRUFSC/l9
++ gcc -std=c11 -Wall -Wextra -Werror -o syscalls /work/Lab9-10/syscalls.c
++ strace -o ls.trace -e trace=openat,read,write,close ls -l
+total 20
+-rw-r--r-- 1 root root  1750 Nov  9 13:53 ls.trace
+-rwxr-xr-x 1 root root 70672 Nov  9 13:53 syscalls
++ printf '\nLS STDOUT WRITE\n'
+
+LS STDOUT WRITE
++ grep '^write(1,' ls.trace
+write(1, "total 20\n-rw-r--r-- 1 root root "..., 111) = 111
++ ./syscalls
+open returned descriptor 3
+write sent 14 bytes
+read got 14 bytes: hello, kernel
++ strace -o syscalls.trace -s 200 -e trace=openat,read,write,close ./syscalls
+open returned descriptor 3
+write sent 14 bytes
+read got 14 bytes: hello, kernel
++ printf '\nSIX FILE CALLS\n'
+
+SIX FILE CALLS
++ awk '/openat.*"note.txt"/ {capture=1} capture {print; n++} n==6 {exit}' syscalls.trace
+openat(AT_FDCWD, "note.txt", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 3
+write(3, "hello, kernel\n", 14)         = 14
+close(3)                                = 0
+openat(AT_FDCWD, "note.txt", O_RDONLY)  = 3
+read(3, "hello, kernel\n", 63)          = 14
+close(3)                                = 0
++ printf '\nPROGRAM STDOUT WRITE\n'
+
+PROGRAM STDOUT WRITE
++ grep '^write(1,' syscalls.trace
+write(1, "open returned descriptor 3\nwrite sent 14 bytes\nread got 14 bytes: hello, kernel\n", 80) = 80
++ printf '\nOPENAT COUNTS\n'
+
+OPENAT COUNTS
++ strace -c -e trace=openat ls -l
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000033           3        10           openat
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000033           3        10           total
++ cp ls.trace syscalls.trace /work/Lab9-10/evidence/

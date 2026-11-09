@@ -1,0 +1,57 @@
++ mkdir -p /tmp/os-revision.KRUFSC/l7
++ cd /tmp/os-revision.KRUFSC/l7
++ for name in run zombie redirect pipeline
++ gcc -std=c11 -Wall -Wextra -Werror -o run /work/Lab7-8/linux/run.c
++ for name in run zombie redirect pipeline
++ gcc -std=c11 -Wall -Wextra -Werror -o zombie /work/Lab7-8/linux/zombie.c
++ for name in run zombie redirect pipeline
++ gcc -std=c11 -Wall -Wextra -Werror -o redirect /work/Lab7-8/linux/redirect.c
++ for name in run zombie redirect pipeline
++ gcc -std=c11 -Wall -Wextra -Werror -o pipeline /work/Lab7-8/linux/pipeline.c
++ ./run
+parent: my PID is 6464
+child: my PID is 6465, my parent is 6464
+total 68
+-rwxr-xr-x 1 root root 70920 Nov  9 13:53 pipeline
+-rwxr-xr-x 1 root root 70800 Nov  9 13:53 redirect
+-rwxr-xr-x 1 root root 70840 Nov  9 13:53 run
+-rwxr-xr-x 1 root root 70840 Nov  9 13:53 zombie
+parent: child 6465 ended with status 0
++ ./run date -u +%Y-%m-%d
+parent: my PID is 6466
+child: my PID is 6467, my parent is 6466
+2026-11-09
+parent: child 6467 ended with status 0
++ ./run no_such_igor_program
+parent: my PID is 6468
+child: my PID is 6469, my parent is 6468
+exec: No such file or directory
+parent: child 6469 ended with status 127
++ parent_pid=6470
++ ./zombie
++ sleep 1
++ ps -o pid,ppid,stat,cmd --ppid 6470
+  PID  PPID STAT CMD
+ 6472  6470 Z    [ls] <defunct>
++ wait 6470
++ ps -o pid,ppid,stat,cmd --ppid 6470
+  PID  PPID STAT CMD
++ ./redirect
+open gave descriptor 1
+done: the listing is in out.txt
++ head -3 out.txt
+total 68
+-rw-r--r-- 1 root root     0 Nov  9 13:53 out.txt
+-rwxr-xr-x 1 root root 70920 Nov  9 13:53 pipeline
++ ./pipeline
+116
++ ls /etc
++ wc -l
+116
++ ./pipeline --delay-eof
+parent keeps the write end open for 3 seconds; wc waits for EOF
+116
+
+real	0m3.004s
+user	0m0.000s
+sys	0m0.003s

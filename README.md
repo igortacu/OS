@@ -10,4 +10,18 @@ Laboratory work reports for the Operating Systems course (Technical University o
 | 7 & 8 | Processes, Redirection and a Pipe — the same calls inside your own OS | [PDF](Lab7-8/Lab7-8_TacuIgor_FAF-242.pdf) |
 | 9 & 10 | Watching system calls and adding `trace` to xv6 | [PDF](Lab9-10/Lab9-10_TacuIgor_FAF-242.pdf) |
 
-The Lab 9 [C program](Lab9-10/syscalls.c) and [observations](Lab9-10/report.md) are included. The xv6 implementation is on the [`lab10-trace` branch](https://github.com/igortacu/xv6-riscv/tree/lab10-trace) of the personal fork.
+## Source code and evidence
+
+The complete modified [xv6 tree](xv6) is included in this repository. Its [provenance](xv6/PROVENANCE.md) identifies the MIT source and the additions made for these labs.
+
+| Lab | Review these sources | New execution evidence |
+| --- | --- | --- |
+| 3 | [log pipelines](Lab3-4/linux/oneliners.sh), [report script](Lab3-4/linux/report.sh) | [Linux transcript](Lab3-4/evidence/linux.txt), [completion and history](Lab3-4/evidence/interactive-bash.txt) |
+| 4 | [xv6 args](xv6/user/args.c), [xv6 sleep](xv6/user/sleep.c), [Linux args](Lab3-4/linux/args_linux.c) | [xv6 transcript](Lab3-4/evidence/xv6.txt) |
+| 6 | [mystat.c](xv6/user/mystat.c), [find.c](xv6/user/find.c) | [metadata and search tests](Lab5-6/evidence/xv6.txt) |
+| 7 | [run.c](Lab7-8/linux/run.c), [zombie.c](Lab7-8/linux/zombie.c), [redirect.c](Lab7-8/linux/redirect.c), [pipeline.c](Lab7-8/linux/pipeline.c) | [Linux process tests](Lab7-8/evidence/linux.txt) |
+| 8 | [run.c](xv6/user/run.c), [pingpong.c](xv6/user/pingpong.c) | [xv6 process tests](Lab7-8/evidence/xv6.txt) |
+| 9 | [syscalls.c](Lab9-10/syscalls.c) | [write on fd 1 and six file calls](Lab9-10/evidence/linux.txt), [complete strace](Lab9-10/evidence/syscalls.trace) |
+| 10 | [trace.c](xv6/user/trace.c), [handler](xv6/kernel/sysproc.c), [dispatch](xv6/kernel/syscall.c), [process inheritance](xv6/kernel/proc.c), [mask field](xv6/kernel/proc.h), [number](xv6/kernel/syscall.h), [declaration](xv6/user/user.h), [stub](xv6/user/usys.pl), [registration](xv6/Makefile) | [mask and fork tests](Lab9-10/evidence/xv6.txt), [standalone implementation patch](Lab9-10/trace.patch) |
+
+The [reproduction instructions](scripts/README.md) build a fresh test disk and run the same cases. Revised reports use new November 9 output and case-specific analysis. They do not reuse the previous Labs 3 and 4 screenshots. The Linux portion of Lab 5 remains in the joint report; the Lab 6 section has been replaced with new implementation tests.

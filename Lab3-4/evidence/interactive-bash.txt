@@ -1,0 +1,10 @@
+igor-bash$ cd /usr/share/
+igor-bash$ pwd
+/usr/share
+igor-bash$ echo history-marker
+history-marker
+igor-bash$ (reverse-i-search)`': p': pwdw': pwdd': pwdigor-bash$ pwd              igor-bash$ 
+/usr/share
+igor-bash$ 
+igor-bash$ exit
+exit

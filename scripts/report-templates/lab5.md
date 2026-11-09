@@ -66,8 +66,7 @@ The outputs distinguish names from inode identity, symlink contents from target 
 
 The native Terminal screenshot below was supplied by the author from a direct unprivileged permission test. The earlier full raw execution recording remains in the repository. This additional live check uses a separate temporary directory.
 
-\clearpage
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab5-6/evidence/screenshots/lab5-permissions-terminal.png}
 \caption{Unprivileged permission checks}

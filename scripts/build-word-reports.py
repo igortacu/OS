@@ -18,7 +18,7 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
 ROOT=Path(__file__).resolve().parents[1]
-FIG=ROOT/'Lab3-4/evidence/word-figures'
+FIG=ROOT/'Lab3-4/evidence/screenshots'
 FIG.mkdir(exist_ok=True)
 def read(path):return (ROOT/path).read_text()
 raw=read('Lab3-4/evidence/handout-linux.txt')
@@ -34,36 +34,15 @@ def clip(text,start,end=None):
     return s[:s.index(end)].strip() if end else s.strip()
 
 def picture(name,content):
-    display=content.replace('\b','<BS>').replace('\x1b','<ESC>')
-    parts=display.splitlines()
-    if len(parts)>70:display='\n'.join(parts[:30]+['[Middle output omitted here; full recording is committed.]']+parts[-35:])
-    CAPTURES[name]={'title':name,'output':display,'source':'Saved SSH execution or source record','sha256':hashlib.sha256(content.encode()).hexdigest()}
-    native_manifest=FIG/'native'/'manifest.json'
-    native_map=json.loads(native_manifest.read_text()) if native_manifest.exists() else {}
-    native=FIG/'native'/native_map.get(name,{}).get('file',name+'.png')
-    if native.exists():return native
-    captured=FIG/'browser'/(name+'.jpg')
-    if captured.exists():return captured
-    font=ImageFont.truetype('/System/Library/Fonts/Menlo.ttc',19)
-    lines=[]
-    # Do not replay terminal backspaces into an invented screen. Retain their
-    # visible notation when showing the PTY transcript.
-    content=content.replace('\b','<BS>').replace('\x1b','<ESC>')
-    for line in content.expandtabs(4).splitlines():
-        lines.extend(textwrap.wrap(line,91,replace_whitespace=False,drop_whitespace=False) or [''])
-    if len(lines)>70:
-        lines=lines[:30]+['[Middle output omitted here; full recording is committed.]']+lines[-35:]
-    width=1140; step=27
-    im=Image.new('RGB',(width,max(80,35+step*len(lines))),'white')
-    draw=ImageDraw.Draw(im)
-    for i,line in enumerate(lines):draw.text((18,15+i*step),line,font=font,fill='black')
-    out=FIG/(name+'.png');im.save(out)
-    return out
+    mapping=json.loads((FIG/'manifest.json').read_text())
+    path=FIG/mapping.get(name,{}).get('file',name+'.png')
+    if not path.exists():raise FileNotFoundError('Missing native screenshot: '+str(path))
+    return path
 
 def body(doc,text):doc.add_paragraph(text)
 def head(doc,text):doc.add_heading(text,1)
-def fig(doc,number,title,text):
-    image=picture('lab'+str(doc.core_properties.subject)+'-'+number,text)
+def fig(doc,number,title,text,capture_number=None):
+    image=picture('lab'+str(doc.core_properties.subject)+'-'+(capture_number or number),text)
     p=doc.add_paragraph();p.alignment=WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.keep_with_next=True
     with Image.open(image) as im:w,h=im.size
@@ -163,7 +142,18 @@ head(d,'Part 4 Answers to the eight log questions')
 body(d,'The artificial dataset uses the exact 2026-10-05 generator supplied in the handout. It is shared assignment input rather than real web traffic. All 500 lines were regenerated. The pipelines compare the result field, preserve tied maxima and sort their output. The four page counts sum to 500 and the seven user failure counts sum to 100. In Q8 the long listing has one extra total header line; the entries are otherwise the same.')
 stats=clip(raw,'Q1 failed requests\n')
 sections=re.split(r'\n(?=Q[1-8] )',stats)
-for i,s in enumerate(sections[:8],1):fig(d,'4.'+str(i),'Question '+str(i)+' result',s.strip())
+native_map=json.loads((FIG/'manifest.json').read_text())
+i=1
+while i<=8:
+    current='4.'+str(i)
+    next_number='4.'+str(i+1)
+    same=i<8 and native_map['lab3-'+current]['file']==native_map['lab3-'+next_number]['file']
+    if same:
+        fig(d,current+'–'+next_number,'Questions '+str(i)+' and '+str(i+1)+' results',sections[i-1].strip(),capture_number=current)
+        i+=2
+    else:
+        fig(d,current,'Question '+str(i)+' result',sections[i-1].strip())
+        i+=1
 fig(d,'4.9','Full run of oneliners.sh',stats)
 
 head(d,'Part 5 The report script and its error path')
@@ -173,9 +163,9 @@ fig(d,'5.2','Successful report and execute permission check',clip(raw,'+ chmod 6
 fig(d,'5.3','Missing file diagnostic and status',clip(raw,'+ ./report.sh nope.log','+ bash oneliners.sh'))
 head(d,'Conclusions')
 body(d,'Argument expansion belongs to Bash before program execution. Descriptor duplication explains the order-sensitive redirection result, while status-dependent operators make failure handling explicit. The one-liners were verified against fixed input totals and the reusable script was tested on success and missing input. Source files, predictions and raw recordings accompany this report.')
-(ROOT/'lab3').mkdir(exist_ok=True)
-d.save(ROOT/'lab3/Lab3_TacuIgor_FAF-242.docx')
-for name in ['report.sh','oneliners.sh']:shutil.copy2(ROOT/'Lab3-4/linux'/name,ROOT/'lab3'/name)
+(ROOT/'Lab3-4/word').mkdir(exist_ok=True)
+d.save(ROOT/'Lab3-4/word/Lab3_TacuIgor_FAF-242.docx')
+
 
 d=document(4,'The xv6 shell from the outside')
 head(d,'Part 1 Sleep and the current interface')
@@ -203,30 +193,6 @@ fig(d,'4.2','Dispatch cases',clip(inspect,'SHELL_CASES','CD'))
 fig(d,'4.3','Parent shell implementation of cd',clip(inspect,'CD_IMPLEMENTATION'))
 head(d,'Conclusions')
 body(d,'The two shells share process and descriptor mechanisms but differ before exec in parsing and expansion. The argument inspector isolates those differences. The additional cd-list test also shows why a small shell feature cannot be assumed to compose exactly as in Bash. Both requested programs and the integrated Makefile are submitted with the full xv6 source and raw console evidence.')
-(ROOT/'lab4').mkdir(exist_ok=True)
-d.save(ROOT/'lab4/Lab4_TacuIgor_FAF-242.docx')
-for name in ['sleep.c','args.c']:shutil.copy2(ROOT/'xv6/user'/name,ROOT/'lab4'/name)
-shutil.copy2(ROOT/'Lab3-4/linux/args_linux.c',ROOT/'lab4/args_linux.c')
-shutil.copy2(ROOT/'xv6/Makefile',ROOT/'lab4/Makefile')
-print('Built separate Lab 3 and Lab 4 Word reports')
-
-def extra(name,source,code,output):
-    CAPTURES[name]={'title':name,'source':source,'code':code,'output':output,'sha256':hashlib.sha256(output.encode()).hexdigest()}
-l5=read('Lab5-6/evidence/linux.txt');l6=read('Lab5-6/evidence/xv6.txt')
-l7=read('Lab7-8/evidence/linux.txt');l8=read('Lab7-8/evidence/xv6.txt')
-l9=read('Lab9-10/evidence/linux.txt');l10=read('Lab9-10/evidence/xv6.txt')
-extra('lab5-permissions','scripts/run-lab5.sh','Identity: unprivileged oslab_igor (UID 1001)\nchmod 000 s.txt; cat s.txt\nchmod u+r s.txt; cat s.txt\nchmod u=r,go= box; ls box; cat box/f\nchmod u=x,go= box; ls box; cat box/f',clip(l5,'+ chmod 600','+ ls -l /usr/bin/passwd'))
-extra('lab6-mystat','xv6/user/mystat.c',read('xv6/user/mystat.c'),clip(l6,'$ mystat README . console','$ ln r2 README'))
-extra('lab6-find','xv6/user/find.c',clip(read('xv6/user/find.c'),'static int','  int fd = open'),clip(l6,'$ mkdir a/b','$ rm r2'))
-extra('lab7-run','Lab7-8/linux/run.c','\n'.join(read('Lab7-8/linux/run.c').splitlines()[8:34]),clip(l7,'+ ./run\n','+ parent_pid='))
-extra('lab7-zombie','Lab7-8/linux/zombie.c',clip(read('Lab7-8/linux/zombie.c'),'    sleep(20);','    return 0;'),clip(l7,'+ parent_pid=','+ ./redirect'))
-extra('lab7-redirection','Lab7-8/linux/redirect.c','\n'.join(read('Lab7-8/linux/redirect.c').splitlines()[8:30]),clip(l7,'+ ./redirect','+ ./pipeline'))
-extra('lab7-pipeline','Lab7-8/linux/pipeline.c','\n'.join(read('Lab7-8/linux/pipeline.c').splitlines()[22:49]),clip(l7,'+ ./pipeline\n'))
-extra('lab8-run','xv6/user/run.c',read('xv6/user/run.c'),clip(l8,'$ run\n','$ run ls\n')+'\n'+clip(l8,'$ run no_such','$ pingpong'))
-extra('lab8-pingpong','xv6/user/pingpong.c',read('xv6/user/pingpong.c'),clip(l8,'$ pingpong'))
-extra('lab9-file-calls','Lab9-10/syscalls.c','\n'.join(read('Lab9-10/syscalls.c').splitlines()[7:39]),clip(l9,'SIX FILE CALLS\n','+ printf'))
-extra('lab9-stdout','Lab9-10/syscalls.c','printf prints to fd 1; write(fd, ...) writes to note.txt.','\n'.join(s for s in l9.splitlines() if s.startswith('write(1,')))
-extra('lab10-handler','xv6/kernel/sysproc.c and kernel/proc.c',clip(read('xv6/kernel/sysproc.c'),'uint64\nsys_trace(void)')+'\nInitialization: p->trace_mask = 0;\nInheritance: np->trace_mask = p->trace_mask;',clip(l10,'$ trace 32','$ trace 2147483647'))
-extra('lab10-masks','xv6/kernel/syscall.c',clip(read('xv6/kernel/syscall.c'),'    p->trapframe->a0 = syscalls[num]();','  } else'),clip(l10,'$ trace 2147483647','$ trace 2 usertests'))
-extra('lab10-fork','xv6/kernel/proc.c','np->trace_mask = p->trace_mask;','\n'.join(l10.splitlines()[-15:]))
-(FIG/'captures.json').write_text(json.dumps(CAPTURES,indent=2))
+(ROOT/'Lab3-4/word').mkdir(exist_ok=True)
+d.save(ROOT/'Lab3-4/word/Lab4_TacuIgor_FAF-242.docx')
+print('Built Lab 3 and Lab 4 Word sources under Lab3-4/word')

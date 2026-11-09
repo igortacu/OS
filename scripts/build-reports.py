@@ -73,35 +73,25 @@ header-includes:
 
 '''
 targets = [
- ('lab34', 'Lab3-4', 'Lab3-4_TacuIgor_FAF-242.pdf'),
  ('lab5', 'Lab5-6', 'Lab5_TacuIgor_FAF-242.pdf'),
  ('lab6', 'Lab5-6', 'Lab6_TacuIgor_FAF-242.pdf'),
  ('lab78', 'Lab7-8', 'Lab7-8_TacuIgor_FAF-242.pdf'),
  ('lab910', 'Lab9-10', 'Lab9-10_TacuIgor_FAF-242.pdf'),
 ]
-for template, folder, name in targets:
-    text = read(f'scripts/report-templates/{template}.md')
-    for key, value in values.items(): text = text.replace('@@'+key+'@@', value)
-    if '@@' in text: raise RuntimeError('Unresolved report marker')
-    md = ROOT/folder/('report-'+template+'.md' if template in ('lab5','lab6') else 'report.md')
-    md.write_text('\n'.join(line.rstrip() for line in (header+text).splitlines()).rstrip()+'\n')
-    subprocess.run(['pandoc', str(md), '--pdf-engine=xelatex', '--listings',
-                    '--lua-filter', str(ROOT/'scripts/keep-code.lua'),
-                    '-V', 'mainfont=Arial', '-o', str(ROOT/folder/name)], check=True)
-    print('built', folder+'/'+name)
-
-# Both parts now derive from the original handouts and the native server runs.
-joint = ROOT/'Lab5-6/Lab5-6_TacuIgor_FAF-242.pdf'
-with tempfile.TemporaryDirectory(prefix='lab5-prefix-') as temp:
-    merged = Path(temp)/'merged.pdf'
-    subprocess.run(['pdfunite', str(ROOT/'Lab5-6/Lab5_TacuIgor_FAF-242.pdf'),
-                    str(ROOT/'Lab5-6/Lab6_TacuIgor_FAF-242.pdf'), str(merged)], check=True)
-    joint.write_bytes(merged.read_bytes())
-
-# The main Labs 3-4 link must include the same native figures as the Word exports.
-word_exports = [ROOT/'lab3/Lab3_TacuIgor_FAF-242.pdf', ROOT/'lab4/Lab4_TacuIgor_FAF-242.pdf']
-if all(path.exists() for path in word_exports):
-    with tempfile.TemporaryDirectory(prefix='lab34-native-') as temp:
-        merged = Path(temp)/'merged.pdf'
-        subprocess.run(['pdfunite', *(str(path) for path in word_exports), str(merged)], check=True)
-        (ROOT/'Lab3-4/Lab3-4_TacuIgor_FAF-242.pdf').write_bytes(merged.read_bytes())
+with tempfile.TemporaryDirectory(prefix='os-report-parts-') as temp:
+    temp=Path(temp)
+    for template, folder, name in targets:
+        text=read(f'scripts/report-templates/{template}.md')
+        for key,value in values.items():text=text.replace('@@'+key+'@@',value)
+        if '@@' in text:raise RuntimeError('Unresolved report marker')
+        md=ROOT/folder/('report-'+template+'.md' if template in ('lab5','lab6') else 'report.md')
+        md.write_text('\n'.join(line.rstrip() for line in (header+text).splitlines()).rstrip()+'\n')
+        output=temp/name if template in ('lab5','lab6') else ROOT/folder/name
+        subprocess.run(['pandoc',str(md),'--pdf-engine=xelatex','--listings',
+                        '--lua-filter',str(ROOT/'scripts/keep-code.lua'),
+                        '-V','mainfont=Arial','-o',str(output)],check=True)
+        print('built',name)
+    subprocess.run(['pdfunite',str(temp/'Lab5_TacuIgor_FAF-242.pdf'),
+                    str(temp/'Lab6_TacuIgor_FAF-242.pdf'),
+                    str(temp/'joint.pdf')],check=True)
+    (ROOT/'Lab5-6/Lab5-6_TacuIgor_FAF-242.pdf').write_bytes((temp/'joint.pdf').read_bytes())

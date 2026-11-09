@@ -82,29 +82,25 @@ The runner checks compilation with `-Wall -Wextra -Werror`, verifies the Linux c
 
 All execution screenshots below are native Terminal captures supplied by the author from direct Linux or xv6 execution. Linux tests use a separate temporary directory containing sources and binaries; the xv6 capture includes an additional explicit echo command. PIDs and listing contents identify these later screenshot runs. Earlier full transcripts remain in the repository. Source excerpts are listed as selectable text, and complete source files accompany the report.
 
-\clearpage
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-run-terminal.png}
 \caption{Native Linux run execution}
 \end{figure}
 
-\clearpage
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-zombie-terminal.png}
 \caption{Native Linux zombie state before and after collection}
 \end{figure}
 
-\clearpage
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-redirection-terminal.png}
 \caption{Native Linux descriptor redirection and file output}
 \end{figure}
 
-\clearpage
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-pipeline-terminal.png}
 \caption{Native Linux pipeline comparison and omitted-close experiment}
@@ -112,12 +108,13 @@ All execution screenshots below are native Terminal captures supplied by the aut
 
 
 
-\clearpage
-\begin{figure}[p]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-execution-terminal.png}
 \caption{Native Terminal: live xv6 process replacement, failure status and two-pipe exchange}
 \end{figure}
+
+\clearpage
 
 ## Lab 8 source excerpts
 
@@ -130,6 +127,8 @@ The complete source is included under xv6/user. These listings are the actual co
 ```c
 @@L8_PING_SOURCE@@
 ```
+
+\clearpage
 
 ## Lab 7 source excerpts
 

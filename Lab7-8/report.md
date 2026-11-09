@@ -147,46 +147,227 @@ The runner checks compilation with `-Wall -Wextra -Werror`, verifies the Linux c
 
 ## Execution captures and code excerpts
 
-The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+All execution screenshots below are native Terminal captures supplied by the author from direct Linux or xv6 execution. Linux tests use a separate temporary directory containing sources and binaries; the xv6 capture includes an additional explicit echo command. PIDs and listing contents identify these later screenshot runs. Earlier full transcripts remain in the repository. Source excerpts are listed as selectable text, and complete source files accompany the report.
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-run.jpg}
-\caption{Linux run code and execution}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-run-terminal.png}
+\caption{Native Linux run execution}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-zombie.jpg}
-\caption{Zombie collection code and process table}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-zombie-terminal.png}
+\caption{Native Linux zombie state before and after collection}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-redirection.jpg}
-\caption{Descriptor redirection code and file output}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-redirection-terminal.png}
+\caption{Native Linux descriptor redirection and file output}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-pipeline.jpg}
-\caption{Pipe endpoints and the omitted close experiment}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-pipeline-terminal.png}
+\caption{Native Linux pipeline comparison and omitted-close experiment}
 \end{figure}
+
+
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-run.jpg}
-\caption{xv6 run code and execution}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-execution-terminal.png}
+\caption{Native Terminal: live xv6 process replacement, failure status and two-pipe exchange}
 \end{figure}
 
-\clearpage
-\begin{figure}[p]
-\centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-pingpong.jpg}
-\caption{Two pipes in the code and the ordered reply}
-\end{figure}
+## Lab 8 source excerpts
+
+The complete source is included under xv6/user. These listings are the actual compiled program sources.
+
+```c
+#include "kernel/types.h"
+#include "user/user.h"
+
+int
+main(int argc, char *argv[])
+{
+  printf("parent: my pid is %d\n", getpid());
+  int pid = fork();
+  if(pid < 0){
+    printf("fork failed\n");
+    exit(1);
+  }
+  if(pid == 0){
+    printf("child: my pid is %d\n", getpid());
+    if(argc > 1){
+      exec(argv[1], &argv[1]);
+    } else {
+      char *args[] = { "echo", "hello", "from", "the", "child", 0 };
+      exec("echo", args);
+    }
+    printf("exec failed\n");
+    exit(1);
+  }
+  int status;
+  wait(&status);
+  printf("parent: child %d ended with status %d\n", pid, status);
+  exit(0);
+}
+```
+
+```c
+#include "kernel/types.h"
+#include "user/user.h"
+
+int
+main(void)
+{
+  int p2c[2], c2p[2];
+  char b = 'x';
+  if(pipe(p2c) < 0 || pipe(c2p) < 0){
+    printf("pipe failed\n");
+    exit(1);
+  }
+  int pid = fork();
+  if(pid < 0){
+    printf("fork failed\n");
+    exit(1);
+  }
+  if(pid == 0){
+    close(p2c[1]);
+    close(c2p[0]);
+    if(read(p2c[0], &b, 1) != 1) exit(1);
+    printf("%d: received ping\n", getpid());
+    if(write(c2p[1], &b, 1) != 1) exit(1);
+    close(p2c[0]);
+    close(c2p[1]);
+    exit(0);
+  }
+  close(p2c[0]);
+  close(c2p[1]);
+  if(write(p2c[1], &b, 1) != 1) exit(1);
+  if(read(c2p[0], &b, 1) != 1) exit(1);
+  printf("%d: received pong\n", getpid());
+  close(p2c[1]);
+  close(c2p[0]);
+  wait(0);
+  exit(0);
+}
+```
+
+## Lab 7 source excerpts
+
+### run.c
+
+```c
+    }
+    if (pid == 0) {
+        printf("child: my PID is %d, my parent is %d\n", getpid(), getppid());
+        fflush(stdout);
+        if (argc > 1)
+            execvp(program, &argv[1]);
+        else
+            execlp("ls", "ls", "-l", (char *)NULL);
+        perror("exec");
+        _exit(127);
+    }
+
+    int status;
+    if (waitpid(pid, &status, 0) < 0) {
+        perror("waitpid");
+        return 1;
+    }
+    if (WIFEXITED(status))
+        printf("parent: child %d ended with status %d\n", pid, WEXITSTATUS(status));
+    else if (WIFSIGNALED(status))
+        printf("parent: child %d ended by signal %d\n", pid, WTERMSIG(status));
+    return 0;
+}
+```
+
+### zombie.c
+
+```c
+    }
+    if (pid == 0) {
+        printf("child: my PID is %d, my parent is %d\n", getpid(), getppid());
+        fflush(stdout);
+        execlp("ls", "ls", "-l", (char *)NULL);
+        perror("exec");
+        _exit(127);
+    }
+
+    sleep(20);
+    int status;
+    if (waitpid(pid, &status, 0) < 0) {
+        perror("waitpid");
+        return 1;
+    }
+    if (WIFEXITED(status))
+        printf("parent: child %d ended with status %d\n", pid, WEXITSTATUS(status));
+    return 0;
+```
+
+### redirect.c
+
+```c
+        close(STDOUT_FILENO);
+        int fd = open("out.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd < 0) {
+            perror("open");
+            _exit(1);
+        }
+        fprintf(stderr, "open gave descriptor %d\n", fd);
+        execlp("ls", "ls", "-l", (char *)NULL);
+        perror("exec");
+        _exit(127);
+    }
+
+    int status;
+    if (waitpid(pid, &status, 0) < 0) {
+        perror("waitpid");
+        return 1;
+    }
+```
+
+### pipeline.c
+
+```c
+        close(STDOUT_FILENO);
+        if (dup(p[1]) != STDOUT_FILENO) _exit(1);
+        close(p[0]);
+        close(p[1]);
+        execlp("ls", "ls", "/etc", (char *)NULL);
+        perror("exec ls");
+        _exit(127);
+    }
+
+    pid_t wc_pid = fork();
+    if (wc_pid < 0) {
+        perror("fork");
+        close(p[0]);
+        close(p[1]);
+        waitpid(ls_pid, NULL, 0);
+        return 1;
+    }
+    if (wc_pid == 0) {
+        close(STDIN_FILENO);
+        if (dup(p[0]) != STDIN_FILENO) _exit(1);
+        close(p[0]);
+        close(p[1]);
+        execlp("wc", "wc", "-l", (char *)NULL);
+        perror("exec wc");
+        _exit(127);
+    }
+
+    close(p[0]);
+    if (delay_eof) {
+        fprintf(stderr, "parent keeps the write end open for 3 seconds; wc waits for EOF\n");
+        sleep(3);
+```

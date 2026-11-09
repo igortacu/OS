@@ -1,0 +1,22 @@
+{
+  "lab8-execution-terminal.png": {
+    "kind": "live xv6 execution",
+    "description": "Default run and explicit echo succeed; missing executable status1; child10 receives ping, parent9 receives pong"
+  },
+  "lab7-run-terminal.png": {
+    "kind": "live Linux execution",
+    "description": "Default ls child status0, missing executable child status127; actual PID and PPID shown"
+  },
+  "lab7-zombie-terminal.png": {
+    "kind": "live Linux execution",
+    "description": "Child3322137 is Z/defunct before delayed waitpid; absent after parent completes"
+  },
+  "lab7-redirection-terminal.png": {
+    "kind": "live Linux execution",
+    "description": "open returns descriptor1; out.txt holds ls listing"
+  },
+  "lab7-pipeline-terminal.png": {
+    "kind": "live Linux execution",
+    "description": "215 matches shell count; omitted close variant remains blocked and is stopped by SIGINT"
+  }
+}

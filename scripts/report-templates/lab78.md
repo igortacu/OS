@@ -80,46 +80,80 @@ The runner checks compilation with `-Wall -Wextra -Werror`, verifies the Linux c
 
 ## Execution captures and code excerpts
 
-The following screenshots show the read-only console of saved SSH execution records and source excerpts. They are linked to the raw recordings in the repository and retain an output hash for traceability. The complete source files accompany the report.
+All execution screenshots below are native Terminal captures supplied by the author from direct Linux or xv6 execution. Linux tests use a separate temporary directory containing sources and binaries; the xv6 capture includes an additional explicit echo command. PIDs and listing contents identify these later screenshot runs. Earlier full transcripts remain in the repository. Source excerpts are listed as selectable text, and complete source files accompany the report.
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-run.jpg}
-\caption{Linux run code and execution}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-run-terminal.png}
+\caption{Native Linux run execution}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-zombie.jpg}
-\caption{Zombie collection code and process table}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-zombie-terminal.png}
+\caption{Native Linux zombie state before and after collection}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-redirection.jpg}
-\caption{Descriptor redirection code and file output}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-redirection-terminal.png}
+\caption{Native Linux descriptor redirection and file output}
 \end{figure}
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-pipeline.jpg}
-\caption{Pipe endpoints and the omitted close experiment}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab7-pipeline-terminal.png}
+\caption{Native Linux pipeline comparison and omitted-close experiment}
 \end{figure}
+
+
 
 \clearpage
 \begin{figure}[p]
 \centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-run.jpg}
-\caption{xv6 run code and execution}
+\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-execution-terminal.png}
+\caption{Native Terminal: live xv6 process replacement, failure status and two-pipe exchange}
 \end{figure}
 
-\clearpage
-\begin{figure}[p]
-\centering
-\includegraphics[width=\linewidth,height=0.81\textheight,keepaspectratio]{Lab7-8/evidence/screenshots/lab8-pingpong.jpg}
-\caption{Two pipes in the code and the ordered reply}
-\end{figure}
+## Lab 8 source excerpts
+
+The complete source is included under xv6/user. These listings are the actual compiled program sources.
+
+```c
+@@L8_RUN_SOURCE@@
+```
+
+```c
+@@L8_PING_SOURCE@@
+```
+
+## Lab 7 source excerpts
+
+### run.c
+
+```c
+@@L7_RUN_SOURCE@@
+```
+
+### zombie.c
+
+```c
+@@L7_ZOMBIE_SOURCE@@
+```
+
+### redirect.c
+
+```c
+@@L7_REDIRECT_SOURCE@@
+```
+
+### pipeline.c
+
+```c
+@@L7_PIPELINE_SOURCE@@
+```
+

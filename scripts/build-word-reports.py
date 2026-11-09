@@ -38,7 +38,9 @@ def picture(name,content):
     parts=display.splitlines()
     if len(parts)>70:display='\n'.join(parts[:30]+['[Middle output omitted here; full recording is committed.]']+parts[-35:])
     CAPTURES[name]={'title':name,'output':display,'source':'Saved SSH execution or source record','sha256':hashlib.sha256(content.encode()).hexdigest()}
-    native=FIG/'native'/(name+'.png')
+    native_manifest=FIG/'native'/'manifest.json'
+    native_map=json.loads(native_manifest.read_text()) if native_manifest.exists() else {}
+    native=FIG/'native'/native_map.get(name,{}).get('file',name+'.png')
     if native.exists():return native
     captured=FIG/'browser'/(name+'.jpg')
     if captured.exists():return captured
@@ -116,13 +118,13 @@ def document(number,topic):
     if number == 4:
         body(d,'All twelve figures are native Terminal screenshots supplied by the author from direct command execution and source inspection on the Ubuntu server on 9 November 2026. The xv6 tests use an isolated source copy and its generated test disk. The directory d already existed during the directory-handling capture; grep READ limits the displayed listing. Bash comparisons use separate temporary directories. Source files and earlier full execution transcripts accompany the screenshots. The submission was prepared with coding assistance; MIT xv6 is identified as upstream in the source provenance file.')
     else:
-        body(d,'The experiments were repeated on the Ubuntu x86_64 server on 9 November 2026. Figures are browser screenshots of a read-only execution-record console displaying saved SSH output; the exact text logs and source are included in the repository. Predictions were written to predictions.json before each corresponding command was run. The submission was prepared with coding assistance, and MIT xv6 is identified as upstream in the source provenance file.')
+        body(d,'All twenty-four Lab 3 figures now use native Terminal screenshots supplied by the author from direct execution and source inspection on the Ubuntu server on 9 November 2026. Some screenshots cover two adjacent questions. The initial predictions and their original run are retained in predictions.json; the screenshots document subsequent verification runs. The exact text logs and source are also included in the repository. The submission was prepared with coding assistance, and MIT xv6 is identified as upstream in the source provenance file.')
 
     return d
 
 d=document(3,'The command line shell pipes and text filters')
 head(d,'Part 1 Move fast and find help')
-body(d,'Cd and echo are Bash builtins; ls is an external command. Cd must change the current directory of the persistent shell itself. A child process could change only its own directory. In this run PATH had nine entries and which resolved ls to /usr/bin/ls. A nonexistent command returned 127. The ls option -t sorts by modification time, newest first. Man, man -k, ls --help and help cd supplied local help.')
+body(d,'Cd and echo are Bash builtins. In the interactive capture, ls is an alias for ls --color=auto; which resolves the underlying external executable to /usr/bin/ls. Cd must change the current directory of the persistent shell itself. A child process could change only its own directory. In this run PATH had nine entries and which resolved ls to /usr/bin/ls. A nonexistent command returned 127. The ls option -t sorts by modification time, newest first. Man, man -k, ls --help and help cd supplied local help.')
 interactive=read('Lab3-4/evidence/interactive-bash.txt')
 fig(d,'1.1','Tab completion and reverse history search',interactive)
 fig(d,'1.2','Type and which',clip(raw,'+ type cd','+ echo /usr/local'))

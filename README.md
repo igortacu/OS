@@ -31,3 +31,5 @@ The original individual Word submissions are [Lab 3](lab3/Lab3_TacuIgor_FAF-242.
 Lab 10 includes [exact-base patch instructions and verification](Lab9-10/PATCH-VALIDATION.md), including the intentionally incomplete Check 1 and the working final implementation.
 
 Lab 4: all twelve figures in the individual Word/PDF report now use author-supplied native Terminal screenshots of direct execution and source inspection. Originals and their figure mapping are in [native captures](Lab3-4/evidence/word-figures/native/manifest.json). Other labs are being updated separately.
+
+Lab 3: all twenty-four figure references in the individual Word/PDF report now use author-supplied native Terminal screenshots. Adjacent questions may share a capture; the [manifest](Lab3-4/evidence/word-figures/native/manifest.json) records these mappings. Initial prediction records remain separate from the later screenshot runs.

@@ -75,6 +75,20 @@ The correct programs perform synchronization for every increment. They serialize
 
 In this subsequent capture, all six protected runs returned 2,000,000. The separate two-permit variant returned 1,841,111; 1,812,200; and 1,882,556. Two permits let both threads update the shared counter concurrently, so the semaphore no longer provides mutual exclusion for this critical section. The capture shows the variant being generated and compiled without changing the submitted `sem.c`.
 
+### Native Terminal evidence — execution times
+
+![Figure 3. Native Terminal capture: elapsed, user CPU and system CPU times for the three counter implementations.](evidence/screenshots/lab11-timing-terminal.png)
+
+This subsequent interactive Bash `time` measurement recorded:
+
+| Program | Counter | Real | User | System |
+| --- | ---: | ---: | ---: | ---: |
+| race | 1,154,778 | 0.013 s | 0.018 s | 0.004 s |
+| mutex | 2,000,000 | 0.165 s | 0.231 s | 0.085 s |
+| sem | 2,000,000 | 0.240 s | 0.305 s | 0.156 s |
+
+The protected programs performed all increments correctly. The faster unprotected run lost 845,222 increments. `real` measures elapsed time; `user` and `sys` measure CPU time spent in user mode and kernel mode. Their sum can exceed elapsed time because the threads can execute on different CPUs. These measurements are distinct from the earlier scripted timing run.
+
 ## Part 3 — Signal that the message is ready
 
 Source: [order.c](order.c).

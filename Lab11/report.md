@@ -69,6 +69,12 @@ sem_post(&s);
 
 The correct programs perform synchronization for every increment. They serialize updates and pay the cost of acquiring and releasing the lock or permit, contention, and possible blocking. The fast race program did not produce a valid result. These are single-run measurements on this server, not universal timing guarantees or a reliable benchmark ranking of mutexes versus semaphores.
 
+### Native Terminal evidence — mutual exclusion and two permits
+
+![Figure 2. Native Terminal capture: three mutex runs, three single-permit semaphore runs, and three runs with two permits.](evidence/screenshots/lab11-locks-terminal.png)
+
+In this subsequent capture, all six protected runs returned 2,000,000. The separate two-permit variant returned 1,841,111; 1,812,200; and 1,882,556. Two permits let both threads update the shared counter concurrently, so the semaphore no longer provides mutual exclusion for this critical section. The capture shows the variant being generated and compiled without changing the submitted `sem.c`.
+
 ## Part 3 — Signal that the message is ready
 
 Source: [order.c](order.c).

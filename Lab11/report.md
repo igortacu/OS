@@ -32,6 +32,12 @@ Three consecutive runs produced:
 
 **3. Why runs differ.** The scheduler and the timing of memory accesses change the interleaving. Different overlaps overwrite different amounts of work. These three runs demonstrate the failure; a particular run could also happen to reach the expected value. More precisely, unsynchronized concurrent accesses constitute a data race and have undefined behavior in C. `-O0` helps expose the teaching example; it does not make that program correct.
 
+### Native Terminal evidence — compilation and race
+
+![Figure 1. Native Terminal capture: compilation without optimization and three unsynchronized counter runs.](evidence/screenshots/lab11-race-terminal.png)
+
+The subsequent screenshot run produced 1,610,084; 1,529,423; and 1,546,695, respectively. These lost 389,916; 470,577; and 453,305 increments relative to 2,000,000. The image also shows all five programs compiling with `-O0 -pthread` and no compiler diagnostics. These are separate runs from the initial command trace above; their different values illustrate the variable interleaving.
+
 ## Part 2 — Protect the critical section
 
 Sources: [mutex.c](mutex.c), [sem.c](sem.c).
@@ -124,4 +130,4 @@ The [three-place execution](evidence/parking3.txt) contains six entries and six 
 
 Run `make` to build the five programs, or `bash run-experiments.sh` to repeat all required experiments, including the separate incorrect variants and timing measurements. The script replaces its own evidence files when rerun; retain a copy first if comparing runs.
 
-[Terminal capture commands](CAPTURES.md) split the experiments into readable screenshot-sized blocks. The committed text evidence is the actual execution trace. Native Terminal screenshots will be embedded here as they are captured; no generated terminal panels are used as screenshots.
+[Terminal capture commands](CAPTURES.md) split the experiments into readable screenshot-sized blocks. The committed text evidence is the actual execution trace. Native Terminal screenshots are embedded with captions as they are captured; no generated terminal panels are used as screenshots.

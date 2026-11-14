@@ -9,7 +9,8 @@
 | [5–6](Lab5-6) | Linux and xv6 filesystems | [Open PDF](Lab5-6/Lab5-6_TacuIgor_FAF-242.pdf) |
 | [7–8](Lab7-8) | Processes, redirection and pipes | [Open PDF](Lab7-8/Lab7-8_TacuIgor_FAF-242.pdf) |
 | [9–10](Lab9-10) | System calls, strace and xv6 trace | [Open PDF](Lab9-10/Lab9-10_TacuIgor_FAF-242.pdf) |
+| [11](Lab11) | Race conditions, mutexes and semaphores (Linux) | [Report](Lab11/report.md) |
 
-Each laboratory folder contains one main PDF, supporting files and original Terminal screenshots. Linux programs are stored with their laboratories; the complete xv6 implementation is in [xv6](xv6), with its [MIT license](xv6/LICENSE) and [source provenance](xv6/PROVENANCE.md).
+Laboratories 1–10 each contain one main PDF, supporting files and original Terminal screenshots. Linux programs are stored with their laboratories; the complete xv6 implementation is in [xv6](xv6), with its [MIT license](xv6/LICENSE) and [source provenance](xv6/PROVENANCE.md).
 
 [Reproduction instructions](scripts/README.md) · [Lab 10 patch validation](Lab9-10/PATCH-VALIDATION.md) · [Required Word sources for Labs 3–4](Lab3-4/word)

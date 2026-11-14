@@ -1,0 +1,113 @@
++ date -u '+%Y-%m-%d %H:%M:%S UTC'
+2026-11-14 21:07:05 UTC
++ uname -srmo
+Linux 6.8.0-142-generic x86_64 GNU/Linux
++ gcc --version
++ head -n 1
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
++ make clean all
+rm -f race mutex sem order parking
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o race race.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o mutex mutex.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o sem sem.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o order order.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o parking parking.c
++ for i in 1 2 3
++ ./race
+counter = 1530534 (expected 2000000)
++ for i in 1 2 3
++ ./race
+counter = 1543203 (expected 2000000)
++ for i in 1 2 3
++ ./race
+counter = 1343612 (expected 2000000)
++ for i in 1 2 3
++ ./mutex
+counter = 2000000 (expected 2000000)
++ for i in 1 2 3
++ ./mutex
+counter = 2000000 (expected 2000000)
++ for i in 1 2 3
++ ./mutex
+counter = 2000000 (expected 2000000)
++ for i in 1 2 3
++ ./sem
+counter = 2000000 (expected 2000000)
++ for i in 1 2 3
++ ./sem
+counter = 2000000 (expected 2000000)
++ for i in 1 2 3
++ ./sem
+counter = 2000000 (expected 2000000)
++ /usr/bin/time -p ./race
+counter = 1108963 (expected 2000000)
+real 0.01
+user 0.01
+sys 0.00
++ /usr/bin/time -p ./mutex
+counter = 2000000 (expected 2000000)
+real 0.17
+user 0.22
+sys 0.09
++ /usr/bin/time -p ./sem
+counter = 2000000 (expected 2000000)
+real 0.21
+user 0.27
+sys 0.13
++ sed 's/sem_init(&s, 0, 1)/sem_init(\&s, 0, 2)/' sem.c
++ gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/sem2 variants/sem2.c
++ for i in 1 2 3
++ ./variants/sem2
+counter = 1893244 (expected 2000000)
++ for i in 1 2 3
++ ./variants/sem2
+counter = 1871080 (expected 2000000)
++ for i in 1 2 3
++ ./variants/sem2
+counter = 1900513 (expected 2000000)
++ ./order
+B: waiting for the message...
+A: message written
+B: I read "hello"
++ sed 's/sem_init(&ready, 0, 0)/sem_init(\&ready, 0, 1)/' order.c
++ gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/order1 variants/order1.c
++ ./variants/order1
+B: waiting for the message...
+B: I read ""
+A: message written
++ ./parking
++ tee evidence/parking3.txt
+car 1 enters (inside: 1)
+car 2 enters (inside: 2)
+car 3 enters (inside: 3)
+car 1 leaves (inside: 2)
+car 2 leaves (inside: 1)
+car 5 enters (inside: 2)
+car 4 enters (inside: 3)
+car 3 leaves (inside: 2)
+car 6 enters (inside: 3)
+car 4 leaves (inside: 2)
+car 5 leaves (inside: 1)
+car 6 leaves (inside: 0)
++ sed 's/#define PLACES 3/#define PLACES 1/' parking.c
++ gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/parking1 variants/parking1.c
++ ./variants/parking1
++ tee evidence/parking1.txt
+car 1 enters (inside: 1)
+car 1 leaves (inside: 0)
+car 2 enters (inside: 1)
+car 2 leaves (inside: 0)
+car 5 enters (inside: 1)
+car 5 leaves (inside: 0)
+car 6 enters (inside: 1)
+car 6 leaves (inside: 0)
+car 3 enters (inside: 1)
+car 3 leaves (inside: 0)
+car 4 enters (inside: 1)
+car 4 leaves (inside: 0)
++ sha256sum race.c mutex.c sem.c order.c parking.c
+5dd7bc271860b60fb260b066a414eabc072f2377e416293fd6481f7b4f7cb2b0  race.c
+f2641f6713c0ae0983e3e2cf05dbeb3cc44bb055939a8a687d782fe1d4ba0b6b  mutex.c
+ec74c66d31a45679f4aec3675350ce5c510fa7387d591a8c086e3acd7a17cb9c  sem.c
+2f36da6b33d5bff9daf5a0ca5f6240ceb50486f64e969aef3585fd3e138f668e  order.c
+ae575124b5b99eb20076cdd567da1894b4f2eda3199db4cb7f7c54b30807bf62  parking.c

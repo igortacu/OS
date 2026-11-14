@@ -1,0 +1,2 @@
+parking3: PASS; 6 cars enter and leave once; occupancy matches every event; maximum 3, limit 3; final occupancy 0
+parking1: PASS; 6 cars enter and leave once; occupancy matches every event; maximum 1, limit 1; final occupancy 0

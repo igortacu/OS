@@ -160,6 +160,12 @@ That recorded run printed both `I have both` messages and `done`, and returned 0
 
 **3. Why does the common order prevent this deadlock?** Requiring both threads to acquire A before B eliminates circular wait: a thread waiting for A cannot already hold B in this two-lock protocol. This claim applies to this protocol with distinct mutexes; it does not promise that every possible synchronization error is impossible.
 
+### Native Terminal evidence — deadlock and fixed lock order
+
+![Figure 5. Native Terminal capture: opposite lock order terminated with 124, followed by the fixed A-then-B version completing with zero.](evidence/screenshots/lab12-deadlock-fixed-terminal.png)
+
+In this repeat run, thread two prints that it holds B and wants A, then thread one prints that it holds A and wants B. The incorrect version makes no further progress and the five-second timeout returns 124. The fixed version prints both `I have both` messages, `done`, and exit code 0. Its diagnostics correctly describe both threads acquiring A before B. The reversed order of the first two diagnostic lines relative to the initial saved run does not change the circular wait.
+
 ## Reproduction and evidence
 
 Run `make clean all variants` on Linux, then `python3 run-experiments.py` to reproduce the experiments and checks. The runner overwrites its evidence files with the new results. Deliberately incorrect programs are always run with a timeout. The submitted source `deadlock.c` is the fixed version.

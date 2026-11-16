@@ -152,6 +152,12 @@ The [three-place execution](evidence/parking3.txt) contains six entries and six 
 
 **2. Set `PLACES` to 1.** The [one-place execution](evidence/parking1.txt) has maximum occupancy 1: cars enter and leave one at a time. The semaphore now acts as a binary gate for parking access. It does not guarantee that cars enter in ID order or provide the ownership semantics of a mutex.
 
+### Native Terminal evidence — three parking places
+
+![Figure 5. Native Terminal capture: semaphore and mutex source inspection, followed by all six cars sharing three places.](evidence/screenshots/lab11-parking3-terminal.png)
+
+The capture shows `PLACES` set to 3 and the wait/post operations surrounding parking access. Cars 1, 2 and 4 enter first; after they leave, cars 5, 6 and 3 enter. Each car enters and leaves exactly once. The printed occupancy remains between zero and three and finishes at zero. The different car order from the earlier saved run reflects thread scheduling; admission in car-ID order is not required.
+
 ## Reproduce and inspect the evidence
 
 Run `make` to build the five programs, or `bash run-experiments.sh` to repeat all required experiments, including the separate incorrect variants and timing measurements. The script replaces its own evidence files when rerun; retain a copy first if comparing runs.

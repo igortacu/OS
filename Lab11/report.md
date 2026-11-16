@@ -158,8 +158,14 @@ The [three-place execution](evidence/parking3.txt) contains six entries and six 
 
 The capture shows `PLACES` set to 3 and the wait/post operations surrounding parking access. Cars 1, 2 and 4 enter first; after they leave, cars 5, 6 and 3 enter. Each car enters and leaves exactly once. The printed occupancy remains between zero and three and finishes at zero. The different car order from the earlier saved run reflects thread scheduling; admission in car-ID order is not required.
 
+### Native Terminal evidence — one parking place
+
+![Figure 6. Native Terminal capture: separate one-place parking variant and the complete execution of all six cars.](evidence/screenshots/lab11-parking1-terminal.png)
+
+The capture shows the one-place variant being generated and compiled separately. Cars enter in order 1, 4, 2, 3, 6, 5. Each entry changes the printed occupancy from zero to one, and each departure returns it to zero before another car enters. All six cars complete, and the final occupancy is zero. The submitted `parking.c` keeps three places; the binary-gate experiment is in `variants/parking1.c`.
+
 ## Reproduce and inspect the evidence
 
 Run `make` to build the five programs, or `bash run-experiments.sh` to repeat all required experiments, including the separate incorrect variants and timing measurements. The script replaces its own evidence files when rerun; retain a copy first if comparing runs.
 
-[Terminal capture commands](CAPTURES.md) split the experiments into readable screenshot-sized blocks. The committed text evidence is the actual execution trace. Native Terminal screenshots are embedded with captions as they are captured; no generated terminal panels are used as screenshots.
+[Terminal capture commands](CAPTURES.md) split the experiments into readable screenshot-sized blocks. The committed text evidence is the actual execution trace. All six native Terminal screenshots are embedded above with captions and observations. They show the interactive repeat runs; the initial scripted execution is retained separately in the text logs.

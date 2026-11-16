@@ -20,3 +20,10 @@ For Labs 5–10 PDFs, install Pandoc, XeLaTeX, Arial, and Poppler's `pdfunite`, 
 For Labs 3–4, use the managed document Python runtime to run `scripts/build-word-reports.py`. It writes the two required editable Word files under `Lab3-4/word`, uses only the native images in `Lab3-4/evidence/screenshots`, and fails if an image is missing. Then run `python3 scripts/export-word-reports.py --review-dir /tmp/os-word-review`. This invokes the managed document renderer, saves page PNGs for inspection outside the repository, and combines the two temporary PDF exports into `Lab3-4/Lab3-4_TacuIgor_FAF-242.pdf`. Supply `--python` and `--renderer` if those managed dependencies are installed elsewhere. Individual PDF exports and copied source trees are not published.
 
 The lab log is generated test data, not real traffic. The programs were implemented or revised with coding assistance, and the tests are automated. The source provenance file identifies MIT xv6 as upstream. No originality percentage is asserted; this revision provides new executions, source availability, and explanations that can be checked against those executions.
+
+## Lab 11 PDF
+
+From the repository root, run `python3 scripts/build-lab11-report.py`.
+The builder uses Pandoc and XeLaTeX to combine `Lab11/report.md` with its six
+native Terminal screenshots. It writes `Lab11/Lab11_TacuIgor_FAF-242.pdf`.
+The Markdown report remains the handout's required editable submission.

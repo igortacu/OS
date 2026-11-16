@@ -80,6 +80,12 @@ B: I read "hello"
 
 **3. Why use `while`?** A condition wait may return after a spurious wakeup even though `ready` is still zero. B must recheck the predicate under the mutex and wait again if necessary. The wait atomically releases the mutex while blocking and reacquires it before returning, allowing A to acquire the mutex and publish the state. These semantics and the need to re-evaluate the predicate are specified in the [POSIX condition-wait documentation](https://man7.org/linux/man-pages/man3/pthread_cond_wait.3p.html). In a more general reusable-resource example, another awakened thread can also consume the resource before a waiter reacquires the mutex.
 
+### Native Terminal evidence — condition wait with while and if
+
+![Figure 3. Native Terminal capture: readiness predicate, condition signal and wait, and the while-versus-if repeat runs.](evidence/screenshots/lab12-condvar-terminal.png)
+
+The inspected correct source shows `ready = 1`, `pthread_cond_signal`, and the wait inside `while (!ready)`. Its output shows B sleeping, A writing, and B reading "hello". The separate variant visibly uses `if (!ready)` and produces the same three output lines in this repeat run. No premature wakeup is exposed by this observation, so the successful if run does not establish general correctness. The submitted `condvar.c` retains the while loop to recheck readiness after every return from the wait.
+
 ## Part 3 — Readers and writers
 
 Source: [readers.c](readers.c). Three readers may overlap; each of the two writers must exclude both readers and the other writer.

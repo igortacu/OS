@@ -1,0 +1,149 @@
+Lab 12 execution 2026-11-16T13:20:47.438825+00:00
+$ uname -srmo
+Linux 6.8.0-142-generic x86_64 GNU/Linux
+exit code: 0
+$ gcc --version
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+exit code: 0
+$ make clean all variants
+rm -f prodcons condvar readers deadlock
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o prodcons prodcons.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o condvar condvar.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o readers readers.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o deadlock deadlock.c
+python3 prepare-variants.py
+Created prodcons_bad, condvar_if, deadlock_bad, deadlock_nosleep sources.
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/prodcons_bad variants/prodcons_bad.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/condvar_if variants/condvar_if.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/deadlock_bad variants/deadlock_bad.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o variants/deadlock_nosleep variants/deadlock_nosleep.c
+exit code: 0
+$ ./prodcons
+put 1 (in buffer: 1)
+put 2 (in buffer: 2)
+put 3 (in buffer: 3)
+put 4 (in buffer: 4)
+    take 1 (in buffer: 3)
+put 5 (in buffer: 4)
+    take 2 (in buffer: 3)
+put 6 (in buffer: 4)
+    take 3 (in buffer: 3)
+put 7 (in buffer: 4)
+    take 4 (in buffer: 3)
+put 8 (in buffer: 4)
+    take 5 (in buffer: 3)
+    take 6 (in buffer: 2)
+    take 7 (in buffer: 1)
+    take 8 (in buffer: 0)
+exit code: 0
+$ timeout -k 1 5 ./variants/prodcons_bad
+put 1 (in buffer: 1)
+put 2 (in buffer: 2)
+put 3 (in buffer: 3)
+put 4 (in buffer: 4)
+exit code: 124
+$ ./condvar
+B: not ready, I sleep
+A: message written
+B: I read "hello"
+exit code: 0
+$ ./variants/condvar_if
+B: not ready, I sleep
+A: message written
+B: I read "hello"
+exit code: 0
+$ ./readers
+writer 1 writes 10 (alone)
+reader 1 reads 10 (readers inside: 1)
+reader 2 reads 10 (readers inside: 2)
+reader 3 reads 10 (readers inside: 3)
+writer 2 writes 20 (alone)
+final value: 20; readers inside: 0
+exit code: 0
+$ ./readers
+writer 1 writes 10 (alone)
+reader 1 reads 10 (readers inside: 1)
+reader 2 reads 10 (readers inside: 2)
+reader 3 reads 10 (readers inside: 3)
+writer 2 writes 20 (alone)
+final value: 20; readers inside: 0
+exit code: 0
+$ ./readers
+writer 1 writes 10 (alone)
+reader 1 reads 10 (readers inside: 1)
+reader 2 reads 10 (readers inside: 2)
+reader 3 reads 10 (readers inside: 3)
+writer 2 writes 20 (alone)
+final value: 20; readers inside: 0
+exit code: 0
+$ timeout -k 1 5 ./variants/deadlock_bad
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+$ timeout -k 1 5 ./deadlock
+one: I have A, I want B
+one: I have both
+two: I have A, I want B
+two: I have both
+done
+exit code: 0
+Original lock order, no sleeps: run 1/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+Original lock order, no sleeps: run 2/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+two: I have B, I want A
+one: I have A, I want B
+exit code: 124
+Original lock order, no sleeps: run 3/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+two: I have B, I want A
+one: I have A, I want B
+exit code: 124
+Original lock order, no sleeps: run 4/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+Original lock order, no sleeps: run 5/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+two: I have B, I want A
+one: I have A, I want B
+exit code: 124
+Original lock order, no sleeps: run 6/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+Original lock order, no sleeps: run 7/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+Original lock order, no sleeps: run 8/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+two: I have B, I want A
+one: I have A, I want B
+exit code: 124
+Original lock order, no sleeps: run 9/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+Original lock order, no sleeps: run 10/10
+$ timeout -k 1 1 ./variants/deadlock_nosleep
+one: I have A, I want B
+two: I have B, I want A
+exit code: 124
+$ sha256sum prodcons.c condvar.c readers.c deadlock.c
+53619cae5d332249dbf7425934ceefb068b987324a11cfc376b0d6ad5d14e919  prodcons.c
+03cb6238fd15d56b2f07664155477cde883abdc2db06cfe3cb4041ea015f40d1  condvar.c
+330ba92f5b91ed883d4790feffef0366e15a59acf87a2b3b4c748cdbd1774dda  readers.c
+83889e969af919220a6d8dd8f76823f087ff1090748cc4c404e51840d0f22798  deadlock.c
+exit code: 0
+PASS: FIFO and occupancy checked for all 16 buffer events; condition publication order checked; reader/writer outputs checked in three runs; fixed lock order completed.

@@ -1,0 +1,76 @@
+{
+  "prodcons": {
+    "puts": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "takes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "maximum": 4,
+    "final_count": 0,
+    "fifo_check": "PASS"
+  },
+  "prodcons_bad": {
+    "exit_code": 124,
+    "output": "put 1 (in buffer: 1)\nput 2 (in buffer: 2)\nput 3 (in buffer: 3)\nput 4 (in buffer: 4)\n"
+  },
+  "condvar": {
+    "exit_code": 0,
+    "output": "B: not ready, I sleep\nA: message written\nB: I read \"hello\"\n"
+  },
+  "variants/condvar_if": {
+    "exit_code": 0,
+    "output": "B: not ready, I sleep\nA: message written\nB: I read \"hello\"\n"
+  },
+  "readers": [
+    {
+      "output": "writer 1 writes 10 (alone)\nreader 1 reads 10 (readers inside: 1)\nreader 2 reads 10 (readers inside: 2)\nreader 3 reads 10 (readers inside: 3)\nwriter 2 writes 20 (alone)\nfinal value: 20; readers inside: 0\n",
+      "maximum_printed_readers": 3
+    },
+    {
+      "output": "writer 1 writes 10 (alone)\nreader 1 reads 10 (readers inside: 1)\nreader 2 reads 10 (readers inside: 2)\nreader 3 reads 10 (readers inside: 3)\nwriter 2 writes 20 (alone)\nfinal value: 20; readers inside: 0\n",
+      "maximum_printed_readers": 3
+    },
+    {
+      "output": "writer 1 writes 10 (alone)\nreader 1 reads 10 (readers inside: 1)\nreader 2 reads 10 (readers inside: 2)\nreader 3 reads 10 (readers inside: 3)\nwriter 2 writes 20 (alone)\nfinal value: 20; readers inside: 0\n",
+      "maximum_printed_readers": 3
+    }
+  ],
+  "deadlock_bad": {
+    "exit_code": 124,
+    "output": "one: I have A, I want B\ntwo: I have B, I want A\n"
+  },
+  "deadlock_fixed": {
+    "exit_code": 0,
+    "output": "one: I have A, I want B\none: I have both\ntwo: I have A, I want B\ntwo: I have both\ndone\n"
+  },
+  "deadlock_nosleep": {
+    "exit_codes": [
+      124,
+      124,
+      124,
+      124,
+      124,
+      124,
+      124,
+      124,
+      124,
+      124
+    ],
+    "timeout_seconds_per_run": 1
+  }
+}

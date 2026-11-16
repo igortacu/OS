@@ -46,6 +46,12 @@ The submitted version retains the correct order: reserve a slot first, then acqu
 
 The interactive capture shows the working directory `/root/os-lab12` and all four programs compiling with `-std=c11 -Wall -Wextra -O0 -pthread`, without compiler diagnostics. The producer inserts items 1–8, and the consumer removes them in the same order. The printed occupancy reaches four, stays within zero to four throughout the 16 events, and ends at zero after item 8 is consumed. This is a live repeat run, separate from the saved scripted execution.
 
+### Native Terminal evidence — incorrect producer lock order
+
+![Figure 2. Native Terminal capture: variant generation, incorrect producer lock order, full buffer and timeout exit code 124.](evidence/screenshots/lab12-prodcons-deadlock-terminal.png)
+
+The source excerpt places `pthread_mutex_lock(&lock)` before `sem_wait(&empty)`. The repeat run prints only puts 1–4, reaching occupancy four, and is terminated by the five-second timeout with exit code 124. No take is printed. Together with the inspected source, this supports the full-buffer deadlock: the producer waits for a free-slot permit while holding the mutex, preventing the consumer from removing an item and returning a permit. The correct submitted `prodcons.c` remains unchanged.
+
 ## Part 2 — Condition variable
 
 Source: [condvar.c](condvar.c).

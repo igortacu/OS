@@ -111,6 +111,12 @@ In all three recorded runs, writer 1 wrote 10, the readers printed 10 with reade
 
 **3. What if readers continuously arrive?** This is a reader-preference algorithm. As long as new readers join before the last current reader leaves, the group keeps the room permit and a writer can wait indefinitely: writer starvation. The finite three-reader run does not demonstrate starvation; it illustrates the policy whose limitation becomes relevant with a continuing stream of readers.
 
+### Native Terminal evidence — readers and writers
+
+![Figure 4. Native Terminal capture: first-reader and last-reader protocol, protected diagnostic count, and the complete readers–writers execution.](evidence/screenshots/lab12-readers-terminal.png)
+
+The inspected source protects the reader counter and its diagnostic print with `rlock`; the first reader acquires `room` and the last releases it. In this repeat run, writer 1 writes 10, readers 1–3 read 10 with printed occupancies 1, 2 and 3, and writer 2 writes 20. The final line is `final value: 20; readers inside: 0`. The reading intervals overlap after readers release `rlock`, while their group retains `room`. This finite execution illustrates the protocol; it does not test starvation under a continuous arrival stream.
+
 ## Part 4 — Deadlock and consistent lock order
 
 Submitted source: [deadlock.c](deadlock.c), the fixed version. `variants/deadlock_bad.c` retains opposite lock order for the required failure demonstration.

@@ -40,6 +40,12 @@ consumer needs lock -> cannot remove an item -> cannot return an empty slot
 
 The submitted version retains the correct order: reserve a slot first, then acquire the mutex. A timeout alone is only evidence of non-completion; the source and the full-buffer state explain the deadlock in this experiment.
 
+### Native Terminal evidence — bounded FIFO transfer
+
+![Figure 1. Native Terminal capture: build of all four programs and the complete producer–consumer execution.](evidence/screenshots/lab12-prodcons-terminal.png)
+
+The interactive capture shows the working directory `/root/os-lab12` and all four programs compiling with `-std=c11 -Wall -Wextra -O0 -pthread`, without compiler diagnostics. The producer inserts items 1–8, and the consumer removes them in the same order. The printed occupancy reaches four, stays within zero to four throughout the 16 events, and ends at zero after item 8 is consumed. This is a live repeat run, separate from the saved scripted execution.
+
 ## Part 2 — Condition variable
 
 Source: [condvar.c](condvar.c).
@@ -140,4 +146,4 @@ That recorded run printed both `I have both` messages and `done`, and returned 0
 
 Run `make clean all variants` on Linux, then `python3 run-experiments.py` to reproduce the experiments and checks. The runner overwrites its evidence files with the new results. Deliberately incorrect programs are always run with a timeout. The submitted source `deadlock.c` is the fixed version.
 
-[Terminal capture commands](CAPTURES.md) organize the live repetitions into readable blocks. Native screenshots will be embedded with captions as they are captured; the current text logs preserve the measured execution.
+[Terminal capture commands](CAPTURES.md) organize the live repetitions into readable blocks. Native screenshots are embedded with captions as they are captured; the current text logs preserve the measured execution.

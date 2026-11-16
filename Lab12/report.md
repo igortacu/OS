@@ -135,9 +135,7 @@ The resource-allocation cycle is:
 thread one --waits for--> B --held by--> thread two
     ^                                      |
     |                                      |
-    +---- A <--waits for--------------------+
-          |
-          +-- held by thread one
+    +--held by-- A <--waits for-------------+
 ```
 
 Equivalently, one holds A and waits for B, while two holds B and waits for A. Neither reaches its unlock calls. The five-second timeout terminates the demonstration process; it does not repair the deadlock.
@@ -166,8 +164,14 @@ That recorded run printed both `I have both` messages and `done`, and returned 0
 
 In this repeat run, thread two prints that it holds B and wants A, then thread one prints that it holds A and wants B. The incorrect version makes no further progress and the five-second timeout returns 124. The fixed version prints both `I have both` messages, `done`, and exit code 0. Its diagnostics correctly describe both threads acquiring A before B. The reversed order of the first two diagnostic lines relative to the initial saved run does not change the circular wait.
 
+### Native Terminal evidence — ten runs without sleeps
+
+![Figure 6. Native Terminal capture: absence of sleep calls, ten timeout results, and the first run's opposite-lock diagnostics.](evidence/screenshots/lab12-deadlock-nosleep-terminal.png)
+
+The source search produces no matches for `sleep`. All ten interactive repetitions return code 124 under a one-second timeout. The saved first repetition prints thread two holding B and requesting A, and thread one holding A and requesting B. This repeat experiment therefore reproduces the lock-order deadlock without the deliberate pauses. It does not establish that every possible schedule must deadlock; removing the sleeps leaves the circular-wait path intact.
+
 ## Reproduction and evidence
 
 Run `make clean all variants` on Linux, then `python3 run-experiments.py` to reproduce the experiments and checks. The runner overwrites its evidence files with the new results. Deliberately incorrect programs are always run with a timeout. The submitted source `deadlock.c` is the fixed version.
 
-[Terminal capture commands](CAPTURES.md) organize the live repetitions into readable blocks. Native screenshots are embedded with captions as they are captured; the current text logs preserve the measured execution.
+[Terminal capture commands](CAPTURES.md) organize the live repetitions into readable blocks. All six native Terminal screenshots are embedded above with captions and observations. They document the interactive repeat runs; the initial scripted measurements are retained separately in the text logs.

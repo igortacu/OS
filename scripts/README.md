@@ -27,3 +27,10 @@ From the repository root, run `python3 scripts/build-lab11-report.py`.
 The builder uses Pandoc and XeLaTeX to combine `Lab11/report.md` with its six
 native Terminal screenshots. It writes `Lab11/Lab11_TacuIgor_FAF-242.pdf`.
 The Markdown report remains the handout's required editable submission.
+
+## Lab 12 PDF
+
+From the repository root, run `python3 scripts/build-lab12-report.py`.
+The builder uses Pandoc and XeLaTeX to combine `Lab12/report.md` with its six
+native Terminal screenshots. It writes `Lab12/Lab12_TacuIgor_FAF-242.pdf`.
+The Markdown report remains the handout's required editable submission.

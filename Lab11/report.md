@@ -126,6 +126,12 @@ B consumed the initial permit without waiting for A. The global array initially 
 
 The submitted `order.c` keeps the initial value at zero. The guarantee is that the message read happens after its publication; creation order alone does not guarantee that B's first diagnostic line is printed before A's diagnostic line on every possible schedule.
 
+### Native Terminal evidence — readiness signal
+
+![Figure 4. Native Terminal capture: message ordering with a semaphore initialized to zero and the separate incorrect variant initialized to one.](evidence/screenshots/lab11-order-terminal.png)
+
+The source inspection shows `sem_init(&ready, 0, 0)`. In the correct run, B prints its waiting message, A writes the message, and B reads "hello". The capture then shows the separate one-permit variant being generated, compiled, and run. In that run B reads the empty string before A prints that the message was written. The initial permit lets the reader proceed prematurely; it cannot stand in for the writer's readiness signal. The submitted `order.c` retains the initial value zero.
+
 ## Part 4 — Count the available parking places
 
 Source: [parking.c](parking.c).

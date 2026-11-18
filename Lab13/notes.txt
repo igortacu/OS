@@ -1,0 +1,35 @@
+Lab 13 — Semaphores in Your Own Kernel
+Tacu Igor — FAF-242
+
+1. Why do letters mix without the lock? How many calls per line?
+Each process prints 30 letters plus a newline using write(1, p, 1): 31
+system calls per line. Scheduling can switch processes between these
+individual writes, and three QEMU CPUs can execute them concurrently.
+Console synchronization protects each write's internal work, not the
+whole user-space line, so the two sequences may interleave. A particular
+unlocked line can also happen to remain whole.
+
+2. What makes a whole line a critical section?
+In user/mix.c, sem_down(3) before the character loop and sem_up(3) after
+it delimit the critical section. Semaphore 3 starts at 1. The permit
+covers all 31 writes, including the newline. Another cooperating process
+cannot enter its line loop until the permit is returned. This guarantees
+whole lines, not which process prints first or FIFO fairness.
+
+3. Why while, not if, in sem_down?
+sem_up adds one permit and wakeup(s) wakes all processes registered on s.
+After one awakened process acquires the spinlock and takes the permit,
+another awakened process can reacquire the lock and find value zero.
+It must recheck the condition and sleep again. Being awakened is a reason
+to retry, not a reservation of a permit. sleep_prepare(s) registers the
+channel while the semaphore lock is still held; this tree's wakeup clears
+the registered channel even before sleep() runs, preventing a semaphore
+post in that interval from being lost.
+
+4. Why release the spinlock before sleep?
+A waiting process must let sem_up acquire the semaphore lock to add a
+permit and wake it. Sleeping while holding that lock would prevent the
+operation needed to release the waiter; it also violates xv6 scheduler
+rules for sleeping with unrelated spinlocks held. The protocol registers
+the wait channel first, releases the semaphore lock, sleeps, then acquires
+the semaphore lock again and rechecks the value before decrementing it.

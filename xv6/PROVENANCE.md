@@ -14,3 +14,11 @@ The November 9 revision adds and tests these user programs:
 | 10 | `user/trace.c` and kernel changes | Per-process syscall tracing |
 
 `Makefile` registers all added programs. Linux experiments are outside this tree under the corresponding lab directories. The build outputs and filesystem image are generated files and are excluded by `.gitignore`.
+
+The November 18 Lab 13 addition implements shared kernel semaphores in
+`kernel/sem.c`, registers system calls 24–26 and their user stubs, and adds
+`user/semtest.c`, `user/mix.c`, and the supplemental `user/semcheck.c`.
+The semaphore implementation and required demonstrations follow the Lab 13
+handout, adapted to this tree's two-stage sleep API. `sem_up` additionally
+rejects signed count overflow; syscall names are registered for the existing
+Lab 10 tracer. The canonical tree retains all earlier lab additions.

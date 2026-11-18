@@ -1,0 +1,36 @@
+{
+  "check1": "3 semtest: unknown sys call 24\n4 semtest: unknown sys call 25\nchild: I ran after the parent\nparent: done, I let the child go\n3 semtest: unknown sys call 26\n3 semtest: unknown sys call 24\n3 semtest: unknown sys call 24\n3 semtest: unknown sys call 25\n5 semtest: unknown sys call 25\n  ppiong ng 1\n1\n3 semtest: unknown sys call 26\n3 semtest: unknown sys call 25\n5 semtest: unknown sys call 26\n5 semtest: unknown sys call 25\n p ipng o2n\n3 semtest: unknown sys call 26\n3 semtest: unknown sys cagll 25\n p2\nin5 semtest: unknown sys call 26\n5 semtest: unknown sys call 25\ng  po n3\n3 semtest: unknown sys call 26\ng 3\n5 semtest: unknown sys call 26\nsemtest: OK",
+  "semtest": {
+    "repetitions": 10,
+    "outputs": [
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK",
+      "parent: done, I let the child go\nchild: I ran after the parent\nping 1\n  pong 1\nping 2\n  pong 2\nping 3\n  pong 3\nsemtest: OK"
+    ]
+  },
+  "mix_unlocked": [
+    {
+      "output": "AAbAbAbAAbAAAAAAAbAAAbbbbAbbAbAbbbAbAAAbAAAbAbAbAbbbAbbb\nbbbAbAAAA\nAAbbAAbbAbAbbAAbbAbAbbAbbAbAbAAAbAAbbbbAbbAAbAbAbbAbA\nbbA\nAbAAbbAbAbAbbbAbbAbAAbAbbbAbbAbbAAbAbAAAbbAAbAbbAAbAbAbAbAA\nA\nbAbAAAbAbbAbbbAAAAAAAbAbbbAAAAAAbAAbbAbbAbbbbbbbbAbbAbbb\nAAA\nAAbbAAbbbbAbbAAAAbbbbbbbAbAAAAAAbAbAbAAbbAbAAbAAAAbAbAAb\nbbbb",
+      "mixed_lines": 7
+    },
+    {
+      "output": "AbbbbbbAAbAAbbAAAAbAbbAAbAbAAbAbbbbbbbAAAAbAAAbAAAbAAbAbA\nbAbAAAAbA\nAAbAAbAAAAAAAAAbAAAAAAAAbAbbAAb\nbAAbAAbAbAbAbAAbAbbAAAbAAAbAAAAAAAbbbbbbAbbAbbAbbA\nAbAbAbb\nbbbAbAAAbbAAbAAAAAAAAAbAbbAbAbAbAbbbbbbAbAbbbbbbA\nbbbAbbbbbAbbbbbbbAbbAAAbbA\nAbbAAbAbbbAbAbAbAbAAb\nAbbAbbAAbbAbAAbbAbAbbAbAbbbAbbAbbbAAbAbAbbbbbAbb\nAA",
+      "mixed_lines": 9
+    }
+  ],
+  "mix_locked": [
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  ],
+  "semcheck": "semcheck: bounds and counting OK\nsemcheck: four waiting children released OK\nsemcheck: killed blocked child reaped OK\nsemcheck: OK",
+  "trace_sem_up": "parent: done, I let the child go\n47: syscall sem_up -> 0\nchild: I ran after the parent\nping 1\n47: syscall sem_up -> 0\n  pong 1\n49: syscall sem_up -> 0\nping 2\n47: syscall sem_up -> 0\n  pong 2\n49: syscall sem_up -> 0\nping 3\n47: syscall sem_up -> 0\n  pong 3\n49: syscall sem_up -> 0\nsemtest: OK",
+  "trace_regression": "50: syscall read -> 1023\n50: syscall read -> 965\n50: syscall read -> 453\n50: syscall read -> 0",
+  "fork_regression": "usertests starting\ntest forkforkfork: OK\nALL TESTS PASSED"
+}

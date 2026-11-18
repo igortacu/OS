@@ -1,0 +1,242 @@
+CHECK 1: semaphore stubs present; all three dispatcher entries absent.
+$ cd /root/os-lab13-check1 && make qemu CPUS=3
+qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+xv6 kernel is booting
+
+hart 1 starting
+hart 2 starting
+init: starting sh
+$ 
+semtest
+3 semtest: unknown sys call 24
+4 semtest: unknown sys call 25
+child: I ran after the parent
+parent: done, I let the child go
+3 semtest: unknown sys call 26
+3 semtest: unknown sys call 24
+3 semtest: unknown sys call 24
+3 semtest: unknown sys call 25
+5 semtest: unknown sys call 25
+  ppiong ng 1
+1
+3 semtest: unknown sys call 26
+3 semtest: unknown sys call 25
+5 semtest: unknown sys call 26
+5 semtest: unknown sys call 25
+ p ipng o2n
+3 semtest: unknown sys call 26
+3 semtest: unknown sys cagll 25
+ p2
+in5 semtest: unknown sys call 26
+5 semtest: unknown sys call 25
+g  po n3
+3 semtest: unknown sys call 26
+g 3
+5 semtest: unknown sys call 26
+semtest: OK
+$ 
+CHECK 2: final registered semaphore implementation, three QEMU CPUs.
+$ cd /root/os-lab13 && make qemu CPUS=3
+qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+xv6 kernel is booting
+
+hart 2 starting
+hart 1 starting
+init: starting sh
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+semtest
+parent: done, I let the child go
+child: I ran after the parent
+ping 1
+  pong 1
+ping 2
+  pong 2
+ping 3
+  pong 3
+semtest: OK
+$ 
+mix
+AAbAbAbAAbAAAAAAAbAAAbbbbAbbAbAbbbAbAAAbAAAbAbAbAbbbAbbb
+bbbAbAAAA
+AAbbAAbbAbAbbAAbbAbAbbAbbAbAbAAAbAAbbbbAbbAAbAbAbbAbA
+bbA
+AbAAbbAbAbAbbbAbbAbAAbAbbbAbbAbbAAbAbAAAbbAAbAbbAAbAbAbAbAA
+A
+bAbAAAbAbbAbbbAAAAAAAbAbbbAAAAAAbAAbbAbbAbbbbbbbbAbbAbbb
+AAA
+AAbbAAbbbbAbbAAAAbbbbbbbAbAAAAAAbAbAbAAbbAbAAbAAAAbAbAAb
+bbbb
+$ 
+mix
+AbbbbbbAAbAAbbAAAAbAbbAAbAbAAbAbbbbbbbAAAAbAAAbAAAbAAbAbA
+bAbAAAAbA
+AAbAAbAAAAAAAAAbAAAAAAAAbAbbAAb
+bAAbAAbAbAbAbAAbAbbAAAbAAAbAAAAAAAbbbbbbAbbAbbAbbA
+AbAbAbb
+bbbAbAAAbbAAbAAAAAAAAAbAbbAbAbAbAbbbbbbAbAbbbbbbA
+bbbAbbbbbAbbbbbbbAbbAAAbbA
+AbbAAbAbbbAbAbAbAbAAb
+AbbAbbAAbbAbAAbbAbAbbAbAbbbAbbAbbbAAbAbAbbbbbAbb
+AA
+$ 
+mix lock
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+$ 
+mix lock
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+$ 
+semcheck
+semcheck: bounds and counting OK
+semcheck: four waiting children released OK
+semcheck: killed blocked child reaped OK
+semcheck: OK
+$ 
+trace 67108864 semtest
+parent: done, I let the child go
+47: syscall sem_up -> 0
+child: I ran after the parent
+ping 1
+47: syscall sem_up -> 0
+  pong 1
+49: syscall sem_up -> 0
+ping 2
+47: syscall sem_up -> 0
+  pong 2
+49: syscall sem_up -> 0
+ping 3
+47: syscall sem_up -> 0
+  pong 3
+49: syscall sem_up -> 0
+semtest: OK
+$ 
+trace 32 grep hello README
+50: syscall read -> 1023
+50: syscall read -> 965
+50: syscall read -> 453
+50: syscall read -> 0
+$ 
+usertests forkforkfork
+usertests starting
+test forkforkfork: OK
+ALL TESTS PASSED
+$ 
+PASS: Check 1; 10 ordered semtest runs; two unlocked and two whole-line locked mix runs; bounds/counting/waiters/kill; trace and fork regressions.

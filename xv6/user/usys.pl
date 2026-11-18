@@ -44,3 +44,6 @@ entry("pause");
 entry("uptime");
 entry("sync");
 entry("trace");
+entry("sem_init");
+entry("sem_down");
+entry("sem_up");

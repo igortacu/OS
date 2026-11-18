@@ -34,3 +34,19 @@ From the repository root, run `python3 scripts/build-lab12-report.py`.
 The builder uses Pandoc and XeLaTeX to combine `Lab12/report.md` with its six
 native Terminal screenshots. It writes `Lab12/Lab12_TacuIgor_FAF-242.pdf`.
 The Markdown report remains the handout's required editable submission.
+
+## Lab 13 kernel semaphore checks
+
+The single canonical implementation is in `xv6/`. Build it on Linux with the
+RISC-V toolchain: `cd xv6 && make kernel/kernel fs.img && make qemu CPUS=3`.
+From the repository root, `python3 Lab13/prepare-check1.py /tmp/os-lab13-check1`
+creates a new disposable source tree with only the semaphore dispatcher
+entries omitted. Build it separately for the handout's intermediate failure.
+Do not use this incomplete tree as the final submission.
+
+After building both trees, run
+`python3 Lab13/check-lab13.py /path/to/final/xv6 /tmp/os-lab13-check1 /tmp/os-lab13-evidence`.
+The runner boots QEMU with three CPUs, validates Check 1, repeats `semtest`
+ten times, checks two unlocked and two locked `mix` runs, executes `semcheck`,
+and checks existing trace and fork functionality. It writes actual QEMU
+output and structured results to the selected evidence directory.

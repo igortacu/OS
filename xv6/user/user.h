@@ -26,6 +26,9 @@ int pause(int);
 int uptime(void);
 int sync(void);
 int trace(int);
+int sem_init(int, int);
+int sem_down(int);
+int sem_up(int);
 
 // ulib.c
 int stat(const char *, struct stat *);

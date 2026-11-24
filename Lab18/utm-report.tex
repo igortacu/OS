@@ -131,9 +131,10 @@ contains complete QEMU output for ten runs, and
 {\ttfamily\fontsize{10}{12}\selectfont evidence/res\allowbreak{}ults.json}
 records the checked counts and trace regression. The supplied native
 Terminal captures show context layout, initial register values, the link
-rule and the complete assembly switch. Execution screenshots remain to
-be captured using {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md};
-recorded text output below is distinguished from native images.
+rule and the complete assembly switch. The native execution-final
+capture is also embedded below; the startup capture remains to be added
+using {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}; recorded text
+output below is distinguished from native images.
 
 \subsection{Part 1 --- Context layout and initial
 execution}\label{part-1-context-layout-and-initial-execution}
@@ -303,8 +304,8 @@ this invocation checks an existing executable rather than showing a
 fresh compilation. The actual full build and subsequent QEMU runs are
 retained separately in the evidence logs. This source capture
 establishes initialization and integration; the assembly capture below
-documents the register transfer, while native execution captures are
-still pending.
+documents the register transfer, and the native execution-final capture
+below shows the last rounds and worker termination.
 
 \subsection{Native Terminal evidence --- complete assembly
 switch}\label{native-terminal-evidence-complete-assembly-switch}
@@ -326,7 +327,7 @@ old-context pointer in {\ttfamily\fontsize{10}{12}\selectfont a0}. Lines
 through the restored {\ttfamily\fontsize{10}{12}\selectfont ra}. The
 matching store/load layout agrees with the C context shown in the
 previous capture. This image documents the complete source routine; the
-recorded QEMU runs and forthcoming execution captures demonstrate its
+recorded QEMU runs and native execution-final capture demonstrate its
 behavior.
 
 \subsection{Part 2 --- Actual run and
@@ -392,6 +393,35 @@ cooperative user threads, not three independently runnable kernel
 threads. Even with QEMU CPUS=3, one xv6 process executes one of these
 user contexts at a time.
 
+\subsection{Native Terminal evidence --- final rounds and
+termination}\label{native-terminal-evidence-final-rounds-and-termination}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 3. Native xv6 Terminal: final c–a–b rounds through 99, three exit-after-100 messages and scheduler termination}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab18/evidence/screenshots/lab18-execution-finish-terminal.png}
+\end{minipage}\par\medskip
+
+The supplied execution capture begins with
+{\ttfamily\fontsize{10}{12}\selectfont thread\_b 87} and then shows
+every round from 88 through 99 in the order
+{\ttfamily\fontsize{10}{12}\selectfont thread\_c},
+{\ttfamily\fontsize{10}{12}\selectfont thread\_a},
+{\ttfamily\fontsize{10}{12}\selectfont thread\_b}. The three workers
+each report {\ttfamily\fontsize{10}{12}\selectfont exit after 100},
+followed by
+{\ttfamily\fontsize{10}{12}\selectfont thread\_sched\allowbreak{}ule: no runnable threads}
+and the shell prompt. This confirms the displayed final alternation and
+completion of all three workers. The initial
+{\ttfamily\fontsize{10}{12}\selectfont started} messages and early
+rounds are outside this image; the full automated executions remain
+available in the raw log, and a separate native startup capture will
+document that part visually.
+
+The scheduler diagnostic is the expected terminal path of the supplied
+skeleton after all worker slots become FREE. Together with the three
+completion messages, it indicates that the scheduler exhausted its
+runnable work, rather than demonstrating a failed context switch.
+
 \subsection{Observe --- What is saved, and why does ra transfer
 control?}\label{observe-what-is-saved-and-why-does-ra-transfer-control}
 
@@ -442,7 +472,8 @@ counts/termination.
 Cele zece execuții verificate au păstrat ordinea c--a--b și câte 100 de
 iterații pentru fiecare fir. Contextul și stivele separate permit
 reluarea corectă a apelurilor suspendate, fără modificări în kernel.
-Capturile native vor completa ieșirile reale deja păstrate în jurnal.
+Capturile native documentează contextul, rutina assembly și finalul
+execuției; captura începutului urmează să completeze jurnalul integral.
 
 \end{minipage}\par
 

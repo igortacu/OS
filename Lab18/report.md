@@ -8,7 +8,7 @@ The supplied Lab 18 handout requests completion of `user/uthread.c`, a RISC-V as
 
 The real tree was built and run on the Ubuntu server on 24 November 2026 using the RISC-V cross toolchain and QEMU with three virtual CPUs. The isolated execution copy is `/root/os-lab18/xv6`. The existing Labs 4–13 programs remain registered. The xv6 tree comes from MIT under its included license; the handout supplies the scheduler structure and demonstration, while the context implementation and validation were completed with coding assistance.
 
-`evidence/build.txt` retains the real full-tree build. The build completed; the linker emits the existing RWX LOAD-segment warnings for the kernel and small `forktest` binary. `evidence/execution.txt` contains complete QEMU output for ten runs, and `evidence/results.json` records the checked counts and trace regression. The supplied native Terminal captures show context layout, initial register values, the link rule and the complete assembly switch. Execution screenshots remain to be captured using `CAPTURES.md`; recorded text output below is distinguished from native images.
+`evidence/build.txt` retains the real full-tree build. The build completed; the linker emits the existing RWX LOAD-segment warnings for the kernel and small `forktest` binary. `evidence/execution.txt` contains complete QEMU output for ten runs, and `evidence/results.json` records the checked counts and trace regression. The supplied native Terminal captures show context layout, initial register values, the link rule and the complete assembly switch. The native execution-final capture is also embedded below; the startup capture remains to be added using `CAPTURES.md`; recorded text output below is distinguished from native images.
 
 ## Part 1 — Context layout and initial execution
 
@@ -109,13 +109,13 @@ $U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB) $U/user.ld
 
 The capture shows `ra`, `sp`, and `s0–s11` in the required order, followed by the thread context and 16-byte-aligned stack declaration. Lines 70–73 clear the saved context, set `ra` to the entry function, set `sp` to the stack top, and mark the slot RUNNABLE. The explicit Makefile rule links both `uthread.o` and `uthread_switch.o` with the user library and linker script.
 
-The final `make` message is `user/_uthread is up to date`: this invocation checks an existing executable rather than showing a fresh compilation. The actual full build and subsequent QEMU runs are retained separately in the evidence logs. This source capture establishes initialization and integration; the assembly capture below documents the register transfer, while native execution captures are still pending.
+The final `make` message is `user/_uthread is up to date`: this invocation checks an existing executable rather than showing a fresh compilation. The actual full build and subsequent QEMU runs are retained separately in the evidence logs. This source capture establishes initialization and integration; the assembly capture below documents the register transfer, and the native execution-final capture below shows the last rounds and worker termination.
 
 ## Native Terminal evidence — complete assembly switch
 
 ![Native Terminal: fourteen register stores, fourteen matching loads and ret in uthread_switch.S](evidence/screenshots/lab18-switch-assembly-terminal.png)
 
-The native source capture shows all fourteen stores at lines 5–18: `ra`, `sp`, and `s0–s11` are saved through the old-context pointer in `a0`. Lines 20–33 restore the same registers through the next-context pointer in `a1`, using identical offsets from 0 to 104 in steps of eight bytes. Line 34 executes `ret`, which transfers control through the restored `ra`. The matching store/load layout agrees with the C context shown in the previous capture. This image documents the complete source routine; the recorded QEMU runs and forthcoming execution captures demonstrate its behavior.
+The native source capture shows all fourteen stores at lines 5–18: `ra`, `sp`, and `s0–s11` are saved through the old-context pointer in `a0`. Lines 20–33 restore the same registers through the next-context pointer in `a1`, using identical offsets from 0 to 104 in steps of eight bytes. Line 34 executes `ret`, which transfers control through the restored `ra`. The matching store/load layout agrees with the C context shown in the previous capture. This image documents the complete source routine; the recorded QEMU runs and native execution-final capture demonstrate its behavior.
 
 ## Part 2 — Actual run and validation
 
@@ -151,6 +151,14 @@ These are the actual beginning and end excerpts; the omitted middle is retained 
 `check-lab18.py` verified ten complete runs: each had exactly three start lines, 300 count lines in `c,a,b` rounds from 0 through 99, three exit-after-100 lines and one final scheduler diagnostic. Each run therefore had 307 output lines. Every run matched the entire expected sequence, rather than merely containing a success substring. All ten passed. A subsequent `trace 32 grep hello README` still logged the read system calls, checking the retained Lab 10 functionality.
 
 The final diagnostic is the handout's expected no-runnable case. The process calls `exit(-1)` there after the three workers have finished; the checker requires their complete output before accepting this terminal condition. These are cooperative user threads, not three independently runnable kernel threads. Even with QEMU CPUS=3, one xv6 process executes one of these user contexts at a time.
+
+## Native Terminal evidence — final rounds and termination
+
+![Native xv6 Terminal: final c–a–b rounds through 99, three exit-after-100 messages and scheduler termination](evidence/screenshots/lab18-execution-finish-terminal.png)
+
+The supplied execution capture begins with `thread_b 87` and then shows every round from 88 through 99 in the order `thread_c`, `thread_a`, `thread_b`. The three workers each report `exit after 100`, followed by `thread_schedule: no runnable threads` and the shell prompt. This confirms the displayed final alternation and completion of all three workers. The initial `started` messages and early rounds are outside this image; the full automated executions remain available in the raw log, and a separate native startup capture will document that part visually.
+
+The scheduler diagnostic is the expected terminal path of the supplied skeleton after all worker slots become FREE. Together with the three completion messages, it indicates that the scheduler exhausted its runnable work, rather than demonstrating a failed context switch.
 
 ## Observe — What is saved, and why does ra transfer control?
 

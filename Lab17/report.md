@@ -8,7 +8,7 @@ The supplied Lab 17 handout asks for an unprotected shared counter, a four-threa
 
 Real runs were executed on 24 November 2026 on the Ubuntu server: x86-64 Linux 6.8.0-142-generic, glibc 2.39, GCC 13.3.0. Both variants were built with `-std=c11 -Wall -Wextra -O0 -pthread`, without compiler diagnostics. Ten executions of each variant were recorded by `run-experiments.py`. The raw commands and output are in `evidence/execution.txt`; all twenty observations are in `evidence/results.json`.
 
-The implementation and checks were prepared with coding assistance. These are actual automated terminal executions. The supplied native Terminal capture documents compilation and three subsequent two-thread runs. Four-thread and source captures are still pending; `CAPTURES.md` contains their live capture commands.
+The implementation and checks were prepared with coding assistance. These are actual automated terminal executions. The supplied native Terminal capture documents compilation and three subsequent two-thread runs. The four-thread capture is also embedded below; the source capture is still pending; `CAPTURES.md` contains their live capture commands.
 
 ## Part 1 — One shared counter, two threads
 
@@ -75,6 +75,14 @@ Four workers should collectively perform 4,000,000 increments. The first four-wo
 | 10 | 1,626,304 | 373,696 | 1,414,598 | 2,585,402 |
 
 The two-thread mean was 1,310,634.2, corresponding to 689,365.8 missing increments or 34.47% of the target. The four-thread mean was 2,362,838.8, corresponding to 1,637,161.2 missing increments or 40.93%. Both absolute and relative mean loss increased in these ten-run samples. The first four-thread run happened to have a lower relative loss than some two-thread runs; the experiment does not establish monotonic loss for every individual execution or other machines.
+
+## Native Terminal evidence — four-thread race
+
+![Native Terminal: three four-thread executions with a target of four million increments](evidence/screenshots/lab17-four-threads-terminal.png)
+
+The three captured four-thread totals are 1,779,179; 2,099,796; and 2,221,323. They lost 2,220,821; 1,900,204; and 1,778,677 increments, respectively, relative to 4,000,000. These are subsequent interactive runs, separate from the ten-run sample in the table. Their mean loss is 1,966,567.3, or 49.16% of the target; the earlier three captured two-thread runs lost 29.44% on average. The captured samples therefore also show greater relative loss with four workers, without establishing a per-run guarantee.
+
+In the first captured run, thread 4 prints a non-zero initial value of 135,909 while other workers print zero. Their output order does not identify the exact order of the underlying counter reads: a worker may read an argument to printf and then wait before printing. In the following two runs all four initial diagnostics are zero, yet both totals remain well below the target. The conflicting accesses occur throughout the increment loops, not only at startup.
 
 **Observe 3 — One-sentence fix.** Make the complete increment a mutually exclusive critical section, for example by having every worker lock the same mutex before `counter++` and unlock it afterwards.
 

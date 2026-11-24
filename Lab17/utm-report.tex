@@ -125,9 +125,9 @@ all twenty observations are in
 The implementation and checks were prepared with coding assistance.
 These are actual automated terminal executions. The supplied native
 Terminal capture documents compilation and three subsequent two-thread
-runs. Four-thread and source captures are still pending;
-{\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md} contains their live
-capture commands.
+runs. The four-thread capture is also embedded below; the source capture
+is still pending; {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}
+contains their live capture commands.
 
 \subsection{Part 1 --- One shared counter, two
 threads}\label{part-1-one-shared-counter-two-threads}
@@ -263,6 +263,31 @@ Both absolute and relative mean loss increased in these ten-run samples.
 The first four-thread run happened to have a lower relative loss than
 some two-thread runs; the experiment does not establish monotonic loss
 for every individual execution or other machines.
+
+\subsection{Native Terminal evidence --- four-thread
+race}\label{native-terminal-evidence-four-thread-race}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 2. Native Terminal: three four-thread executions with a target of four million increments}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab17/evidence/screenshots/lab17-four-threads-terminal.png}
+\end{minipage}\par\medskip
+
+The three captured four-thread totals are 1,779,179; 2,099,796; and
+2,221,323. They lost 2,220,821; 1,900,204; and 1,778,677 increments,
+respectively, relative to 4,000,000. These are subsequent interactive
+runs, separate from the ten-run sample in the table. Their mean loss is
+1,966,567.3, or 49.16\% of the target; the earlier three captured
+two-thread runs lost 29.44\% on average. The captured samples therefore
+also show greater relative loss with four workers, without establishing
+a per-run guarantee.
+
+In the first captured run, thread 4 prints a non-zero initial value of
+135,909 while other workers print zero. Their output order does not
+identify the exact order of the underlying counter reads: a worker may
+read an argument to printf and then wait before printing. In the
+following two runs all four initial diagnostics are zero, yet both
+totals remain well below the target. The conflicting accesses occur
+throughout the increment loops, not only at startup.
 
 \textbf{Observe 3 --- One-sentence fix.} Make the complete increment a
 mutually exclusive critical section, for example by having every worker

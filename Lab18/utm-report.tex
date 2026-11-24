@@ -129,10 +129,11 @@ the existing RWX LOAD-segment warnings for the kernel and small
 {\ttfamily\fontsize{10}{12}\selectfont evidence/exe\allowbreak{}cution.txt}
 contains complete QEMU output for ten runs, and
 {\ttfamily\fontsize{10}{12}\selectfont evidence/res\allowbreak{}ults.json}
-records the checked counts and trace regression. Native Terminal
-screenshots are still to be captured using
-{\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}; text output below
-is identified as recorded execution, not as a screenshot.
+records the checked counts and trace regression. The supplied native
+Terminal capture shows context layout, initial register values and the
+link rule. Assembly and execution screenshots remain to be captured
+using {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}; recorded text
+output below is distinguished from native images.
 
 \subsection{Part 1 --- Context layout and initial
 execution}\label{part-1-context-layout-and-initial-execution}
@@ -275,6 +276,34 @@ $U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB) $U/user.ld
 in UPROGS, so {\ttfamily\fontsize{10}{12}\selectfont make fs.img} places
 it in the xv6 filesystem. The required changes are limited to two new
 user source files and the Makefile.
+
+\subsection{Native Terminal evidence --- context initialization and link
+rule}\label{native-terminal-evidence-context-initialization-and-link-rule}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 1. Native Terminal: context fields, aligned thread stack, initial ra and sp, and explicit uthread link rule}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab18/evidence/screenshots/lab18-context-build-terminal.png}
+\end{minipage}\par\medskip
+
+The capture shows {\ttfamily\fontsize{10}{12}\selectfont ra},
+{\ttfamily\fontsize{10}{12}\selectfont sp}, and
+{\ttfamily\fontsize{10}{12}\selectfont s0–s11} in the required order,
+followed by the thread context and 16-byte-aligned stack declaration.
+Lines 70--73 clear the saved context, set
+{\ttfamily\fontsize{10}{12}\selectfont ra} to the entry function, set
+{\ttfamily\fontsize{10}{12}\selectfont sp} to the stack top, and mark
+the slot RUNNABLE. The explicit Makefile rule links both
+{\ttfamily\fontsize{10}{12}\selectfont uthread.o} and
+{\ttfamily\fontsize{10}{12}\selectfont uthread\_swit\allowbreak{}ch.o}
+with the user library and linker script.
+
+The final {\ttfamily\fontsize{10}{12}\selectfont make} message is
+{\ttfamily\fontsize{10}{12}\selectfont user/\_uthrea\allowbreak{}d is up to date}:
+this invocation checks an existing executable rather than showing a
+fresh compilation. The actual full build and subsequent QEMU runs are
+retained separately in the evidence logs. This source capture
+establishes initialization and integration; the assembly and execution
+captures provide the remaining visual evidence.
 
 \subsection{Part 2 --- Actual run and
 validation}\label{part-2-actual-run-and-validation}

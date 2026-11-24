@@ -131,10 +131,12 @@ contains complete QEMU output for ten runs, and
 {\ttfamily\fontsize{10}{12}\selectfont evidence/res\allowbreak{}ults.json}
 records the checked counts and trace regression. The supplied native
 Terminal captures show context layout, initial register values, the link
-rule and the complete assembly switch. The native execution-final
-capture is also embedded below; the startup capture remains to be added
-using {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}; recorded text
-output below is distinguished from native images.
+rule and the complete assembly switch. The native startup and
+execution-final captures are also embedded below, completing the
+four-image evidence set.
+{\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md} retains the live
+reproduction commands; recorded text output below is distinguished from
+native images.
 
 \subsection{Part 1 --- Context layout and initial
 execution}\label{part-1-context-layout-and-initial-execution}
@@ -393,11 +395,39 @@ cooperative user threads, not three independently runnable kernel
 threads. Even with QEMU CPUS=3, one xv6 process executes one of these
 user contexts at a time.
 
+\subsection{Native Terminal evidence --- startup and first
+round}\label{native-terminal-evidence-startup-and-first-round}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 3. Native xv6 Terminal: boot, uthread command, three started messages and the first c–a–b round}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab18/evidence/screenshots/lab18-execution-start-terminal.png}
+\end{minipage}\par\medskip
+
+The supplied capture shows xv6 booting, both additional harts starting,
+the shell launching, and the command
+{\ttfamily\fontsize{10}{12}\selectfont uthread}. The workers announce
+startup in the order A, B, C. The complete first counting round is
+{\ttfamily\fontsize{10}{12}\selectfont thread\_c 0},
+{\ttfamily\fontsize{10}{12}\selectfont thread\_a 0},
+{\ttfamily\fontsize{10}{12}\selectfont thread\_b 0}, followed by visible
+{\ttfamily\fontsize{10}{12}\selectfont thread\_c 1} and
+{\ttfamily\fontsize{10}{12}\selectfont thread\_a 1}. The next line is
+cut by the bottom of the supplied image, so it is not used as evidence
+of a complete second round. The full execution logs retain all rounds,
+while the final native capture below shows the last rounds and
+termination.
+
+This startup agrees with the flag-wait logic: A and B yield until the
+other workers have started; C sets the last flag and begins counting
+first. The boot messages demonstrate the three-hart QEMU environment,
+but these user contexts still execute cooperatively inside a single xv6
+process.
+
 \subsection{Native Terminal evidence --- final rounds and
 termination}\label{native-terminal-evidence-final-rounds-and-termination}
 
 \par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
-\captionof*{figure}{Figura 3. Native xv6 Terminal: final c–a–b rounds through 99, three exit-after-100 messages and scheduler termination}
+\captionof*{figure}{Figura 4. Native xv6 Terminal: final c–a–b rounds through 99, three exit-after-100 messages and scheduler termination}
 \centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab18/evidence/screenshots/lab18-execution-finish-terminal.png}
 \end{minipage}\par\medskip
 
@@ -414,8 +444,8 @@ and the shell prompt. This confirms the displayed final alternation and
 completion of all three workers. The initial
 {\ttfamily\fontsize{10}{12}\selectfont started} messages and early
 rounds are outside this image; the full automated executions remain
-available in the raw log, and a separate native startup capture will
-document that part visually.
+available in the raw log, and the separate native startup capture above
+documents that part visually.
 
 The scheduler diagnostic is the expected terminal path of the supplied
 skeleton after all worker slots become FREE. Together with the three
@@ -472,8 +502,8 @@ counts/termination.
 Cele zece execuții verificate au păstrat ordinea c--a--b și câte 100 de
 iterații pentru fiecare fir. Contextul și stivele separate permit
 reluarea corectă a apelurilor suspendate, fără modificări în kernel.
-Capturile native documentează contextul, rutina assembly și finalul
-execuției; captura începutului urmează să completeze jurnalul integral.
+Cele patru capturi native documentează contextul, rutina assembly,
+începutul și finalul execuției, completând jurnalul integral.
 
 \end{minipage}\par
 

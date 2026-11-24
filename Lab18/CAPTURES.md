@@ -2,7 +2,7 @@
 
 The completed tree is prepared at `/root/os-lab18/xv6` on the Ubuntu server.
 It is an isolated copy of the submitted `xv6/`, with all earlier lab additions.
-The context/build-rule and complete assembly native captures are embedded in the report. The final execution capture is also embedded. Only the startup/first-rounds native capture is pending; full real QEMU text evidence is already retained.
+All four native captures are embedded in the report: context/build rule, complete assembly, startup/first round, and final rounds/termination. Full real QEMU text evidence is also retained.
 
 ## 1. Context, initial registers and build rule (Linux)
 

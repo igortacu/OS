@@ -155,7 +155,7 @@
         "Verificarea alternării celor trei fire până la 99 și explicarea rolului registrului ra."
       ],
       "theory": "Un apel de funcție are registre păstrate de apelat și registre pe care apelantul le poate considera modificate. O comutare cooperativă păstrează ra, sp și registrele s, apoi ret continuă în contextul selectat. Firele user partajează un proces și cedează explicit controlul prin yield.",
-      "conclusion": "Cele zece execuții verificate au păstrat ordinea c–a–b și câte 100 de iterații pentru fiecare fir. Contextul și stivele separate permit reluarea corectă a apelurilor suspendate, fără modificări în kernel. Capturile native documentează contextul, rutina assembly și finalul execuției; captura începutului urmează să completeze jurnalul integral."
+      "conclusion": "Cele zece execuții verificate au păstrat ordinea c–a–b și câte 100 de iterații pentru fiecare fir. Contextul și stivele separate permit reluarea corectă a apelurilor suspendate, fără modificări în kernel. Cele patru capturi native documentează contextul, rutina assembly, începutul și finalul execuției, completând jurnalul integral."
     }
   }
 }

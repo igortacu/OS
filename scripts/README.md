@@ -69,5 +69,5 @@ Build with `make -C xv6 kernel/kernel fs.img`, then run
 The checker verifies ten full cooperative schedules and a trace-read regression.
 `Lab18/notes.txt` contains the required Observe answer.
 Native screenshot blocks are in each lab's `CAPTURES.md`; the reports currently
-identify the real automated text evidence separately from pending screenshots.
+include all supplied native captures alongside the real automated text evidence.
 Build the UTM PDFs with `python3 scripts/build-utm-reports.py --only 17,18`.

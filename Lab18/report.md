@@ -8,7 +8,7 @@ The supplied Lab 18 handout requests completion of `user/uthread.c`, a RISC-V as
 
 The real tree was built and run on the Ubuntu server on 24 November 2026 using the RISC-V cross toolchain and QEMU with three virtual CPUs. The isolated execution copy is `/root/os-lab18/xv6`. The existing Labs 4–13 programs remain registered. The xv6 tree comes from MIT under its included license; the handout supplies the scheduler structure and demonstration, while the context implementation and validation were completed with coding assistance.
 
-`evidence/build.txt` retains the real full-tree build. The build completed; the linker emits the existing RWX LOAD-segment warnings for the kernel and small `forktest` binary. `evidence/execution.txt` contains complete QEMU output for ten runs, and `evidence/results.json` records the checked counts and trace regression. The supplied native Terminal captures show context layout, initial register values, the link rule and the complete assembly switch. The native execution-final capture is also embedded below; the startup capture remains to be added using `CAPTURES.md`; recorded text output below is distinguished from native images.
+`evidence/build.txt` retains the real full-tree build. The build completed; the linker emits the existing RWX LOAD-segment warnings for the kernel and small `forktest` binary. `evidence/execution.txt` contains complete QEMU output for ten runs, and `evidence/results.json` records the checked counts and trace regression. The supplied native Terminal captures show context layout, initial register values, the link rule and the complete assembly switch. The native startup and execution-final captures are also embedded below, completing the four-image evidence set. `CAPTURES.md` retains the live reproduction commands; recorded text output below is distinguished from native images.
 
 ## Part 1 — Context layout and initial execution
 
@@ -152,11 +152,19 @@ These are the actual beginning and end excerpts; the omitted middle is retained 
 
 The final diagnostic is the handout's expected no-runnable case. The process calls `exit(-1)` there after the three workers have finished; the checker requires their complete output before accepting this terminal condition. These are cooperative user threads, not three independently runnable kernel threads. Even with QEMU CPUS=3, one xv6 process executes one of these user contexts at a time.
 
+## Native Terminal evidence — startup and first round
+
+![Native xv6 Terminal: boot, uthread command, three started messages and the first c–a–b round](evidence/screenshots/lab18-execution-start-terminal.png)
+
+The supplied capture shows xv6 booting, both additional harts starting, the shell launching, and the command `uthread`. The workers announce startup in the order A, B, C. The complete first counting round is `thread_c 0`, `thread_a 0`, `thread_b 0`, followed by visible `thread_c 1` and `thread_a 1`. The next line is cut by the bottom of the supplied image, so it is not used as evidence of a complete second round. The full execution logs retain all rounds, while the final native capture below shows the last rounds and termination.
+
+This startup agrees with the flag-wait logic: A and B yield until the other workers have started; C sets the last flag and begins counting first. The boot messages demonstrate the three-hart QEMU environment, but these user contexts still execute cooperatively inside a single xv6 process.
+
 ## Native Terminal evidence — final rounds and termination
 
 ![Native xv6 Terminal: final c–a–b rounds through 99, three exit-after-100 messages and scheduler termination](evidence/screenshots/lab18-execution-finish-terminal.png)
 
-The supplied execution capture begins with `thread_b 87` and then shows every round from 88 through 99 in the order `thread_c`, `thread_a`, `thread_b`. The three workers each report `exit after 100`, followed by `thread_schedule: no runnable threads` and the shell prompt. This confirms the displayed final alternation and completion of all three workers. The initial `started` messages and early rounds are outside this image; the full automated executions remain available in the raw log, and a separate native startup capture will document that part visually.
+The supplied execution capture begins with `thread_b 87` and then shows every round from 88 through 99 in the order `thread_c`, `thread_a`, `thread_b`. The three workers each report `exit after 100`, followed by `thread_schedule: no runnable threads` and the shell prompt. This confirms the displayed final alternation and completion of all three workers. The initial `started` messages and early rounds are outside this image; the full automated executions remain available in the raw log, and the separate native startup capture above documents that part visually.
 
 The scheduler diagnostic is the expected terminal path of the supplied skeleton after all worker slots become FREE. Together with the three completion messages, it indicates that the scheduler exhausted its runnable work, rather than demonstrating a failed context switch.
 

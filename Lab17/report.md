@@ -8,7 +8,7 @@ The supplied Lab 17 handout asks for an unprotected shared counter, a four-threa
 
 Real runs were executed on 24 November 2026 on the Ubuntu server: x86-64 Linux 6.8.0-142-generic, glibc 2.39, GCC 13.3.0. Both variants were built with `-std=c11 -Wall -Wextra -O0 -pthread`, without compiler diagnostics. Ten executions of each variant were recorded by `run-experiments.py`. The raw commands and output are in `evidence/execution.txt`; all twenty observations are in `evidence/results.json`.
 
-The implementation and checks were prepared with coding assistance. These are actual automated terminal executions. The supplied native Terminal capture documents compilation and three subsequent two-thread runs. The four-thread capture is also embedded below; the source capture is still pending; `CAPTURES.md` contains their live capture commands.
+The implementation and checks were prepared with coding assistance. These are actual automated terminal executions. Three supplied native Terminal captures document compilation and two-thread runs, four-thread runs, and the source/build configuration. All three are embedded below; `CAPTURES.md` retains the reproduction commands.
 
 ## Part 1 — One shared counter, two threads
 
@@ -95,6 +95,12 @@ pthread_mutex_unlock(&counter_lock);
 ```
 
 The mutex must be initialized before starting workers and shared by all of them. Reads during worker execution also need the same protection if they access a counter being changed. The final read after all joins is already sequenced after worker completion. The handout asks for the fix as a proposal; the submitted `fire` and `fire4` intentionally retain the race for observation.
+
+## Native Terminal evidence — source and build configuration
+
+![Native Terminal: shared counter, unprotected increment, pthread lifecycle and both Makefile targets](evidence/screenshots/lab17-source-terminal.png)
+
+The source capture shows the default `THREADS=2`, one million loop iterations per worker, the single global `long counter`, and the deliberately unprotected `counter++`. It also shows one `pthread_create` and one `pthread_join` per worker, with stable ID addresses passed into the worker. The Makefile compiles the same source twice: the `fire4` target overrides only the worker count with `-DTHREADS=4`; both targets retain `-O0 -pthread`. Thus the comparison uses the same counter operation and loop length per worker. The excerpt confirms the absence of a lock in the experimental loop; the mutex snippet above is a proposed fix, not the submitted racy baseline.
 
 ## Reproduction and native captures
 

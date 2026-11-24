@@ -3,7 +3,7 @@
 The actual sources and compiled programs are in `/root/os-lab17` on the Ubuntu
 server. Run each block in the SSH terminal and take a screenshot of the real
 commands and output. Counters will differ from the recorded experiments.
-The build/two-thread and four-thread screenshots are embedded in the report. The source screenshot is pending.
+All three native screenshots (build/two-thread, four-thread and source) are embedded in the report.
 
 ## 1. Build and two threads
 

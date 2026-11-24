@@ -123,11 +123,11 @@ all twenty observations are in
 {\ttfamily\fontsize{10}{12}\selectfont evidence/res\allowbreak{}ults.json}.
 
 The implementation and checks were prepared with coding assistance.
-These are actual automated terminal executions. The supplied native
-Terminal capture documents compilation and three subsequent two-thread
-runs. The four-thread capture is also embedded below; the source capture
-is still pending; {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}
-contains their live capture commands.
+These are actual automated terminal executions. Three supplied native
+Terminal captures document compilation and two-thread runs, four-thread
+runs, and the source/build configuration. All three are embedded below;
+{\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md} retains the
+reproduction commands.
 
 \subsection{Part 1 --- One shared counter, two
 threads}\label{part-1-one-shared-counter-two-threads}
@@ -315,6 +315,31 @@ as a proposal; the submitted
 {\ttfamily\fontsize{10}{12}\selectfont fire} and
 {\ttfamily\fontsize{10}{12}\selectfont fire4} intentionally retain the
 race for observation.
+
+\subsection{Native Terminal evidence --- source and build
+configuration}\label{native-terminal-evidence-source-and-build-configuration}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 3. Native Terminal: shared counter, unprotected increment, pthread lifecycle and both Makefile targets}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab17/evidence/screenshots/lab17-source-terminal.png}
+\end{minipage}\par\medskip
+
+The source capture shows the default
+{\ttfamily\fontsize{10}{12}\selectfont THREADS=2}, one million loop
+iterations per worker, the single global
+{\ttfamily\fontsize{10}{12}\selectfont long counter}, and the
+deliberately unprotected
+{\ttfamily\fontsize{10}{12}\selectfont counter++}. It also shows one
+{\ttfamily\fontsize{10}{12}\selectfont pthread\_crea\allowbreak{}te} and
+one {\ttfamily\fontsize{10}{12}\selectfont pthread\_join} per worker,
+with stable ID addresses passed into the worker. The Makefile compiles
+the same source twice: the {\ttfamily\fontsize{10}{12}\selectfont fire4}
+target overrides only the worker count with
+{\ttfamily\fontsize{10}{12}\selectfont -DTHREADS=4}; both targets retain
+{\ttfamily\fontsize{10}{12}\selectfont -O0 -pthread}. Thus the
+comparison uses the same counter operation and loop length per worker.
+The excerpt confirms the absence of a lock in the experimental loop; the
+mutex snippet above is a proposed fix, not the submitted racy baseline.
 
 \subsection{Reproduction and native
 captures}\label{reproduction-and-native-captures}

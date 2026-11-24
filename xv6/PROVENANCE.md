@@ -22,3 +22,11 @@ The semaphore implementation and required demonstrations follow the Lab 13
 handout, adapted to this tree's two-stage sleep API. `sem_up` additionally
 rejects signed count overflow; syscall names are registered for the existing
 Lab 10 tracer. The canonical tree retains all earlier lab additions.
+
+The November 24 Lab 18 addition completes the supplied user-thread skeleton
+in `user/uthread.c`, adds `user/uthread_switch.S` with the same integer register
+layout as MIT's existing `kernel/swtch.S`, and registers/links `_uthread`.
+No kernel source is changed for Lab 18. The scheduler and demonstration follow
+the course handout; the completed context code and automated checks were
+prepared with coding assistance. Real execution logs and the Observe answer
+are stored in `../Lab18/`.

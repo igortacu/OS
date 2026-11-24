@@ -1,0 +1,105 @@
+{
+  "uthread": [
+    {
+      "run": 1,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 2,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 3,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 4,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 5,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 6,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 7,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 8,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 9,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    },
+    {
+      "run": 10,
+      "iterations": {
+        "a": 100,
+        "b": 100,
+        "c": 100
+      },
+      "order": "c,a,b",
+      "output_lines": 307
+    }
+  ],
+  "trace_read": "PASS"
+}

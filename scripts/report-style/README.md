@@ -15,7 +15,7 @@ retain their bytes and aspect ratio, with captions above them. No execution
 output is regenerated or altered by the formatting pass.
 
 Run `python3 scripts/build-utm-reports.py` from the repository root to rebuild
-all eight main PDFs. Use `--only 11,12,13` to select reports. Requirements:
+all ten main PDFs. Use `--only 11,12,13` to select reports. Requirements:
 Python 3, Pandoc, XeLaTeX, Times New Roman, Arial and Courier New. A basic TeX
 installation with fontspec, Babel locale support, setspace, graphicx, listings,
 caption, float, subcaption, longtable, fancyhdr and hyperref is sufficient;

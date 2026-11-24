@@ -17,7 +17,7 @@ The xv6 runner recreates only the generated `xv6/fs.img` test disk. Do not use i
 
 For all report PDFs, run `python3 scripts/build-utm-reports.py`. The shared
 UTM layout and dependencies are documented in [report-style](report-style/README.md).
-`--only 1-2,3-4,5-6,7-8,9-10,11,12,13` selects groups. The existing lab-specific
+`--only 1-2,3-4,5-6,7-8,9-10,11,12,13,17,18` selects groups. The existing lab-specific
 build commands now delegate to this same style rather than publishing older layouts.
 
 For Labs 3–4, use the managed document Python runtime to run
@@ -57,3 +57,17 @@ The runner boots QEMU with three CPUs, validates Check 1, repeats `semtest`
 ten times, checks two unlocked and two locked `mix` runs, executes `semcheck`,
 and checks existing trace and fork functionality. It writes actual QEMU
 output and structured results to the selected evidence directory.
+
+## Labs 17–18
+
+Lab 17 sources are in `Lab17/`. On Linux run `make -C Lab17 clean all`,
+then `python3 Lab17/run-experiments.py` for ten real runs of each worker count.
+The runner replaces that lab's evidence with the new observed values.
+Lab 18's two user sources and its link rule are in the canonical `xv6/` tree.
+Build with `make -C xv6 kernel/kernel fs.img`, then run
+`python3 Lab18/check-lab18.py xv6 /tmp/os-lab18-evidence`.
+The checker verifies ten full cooperative schedules and a trace-read regression.
+`Lab18/notes.txt` contains the required Observe answer.
+Native screenshot blocks are in each lab's `CAPTURES.md`; the reports currently
+identify the real automated text evidence separately from pending screenshots.
+Build the UTM PDFs with `python3 scripts/build-utm-reports.py --only 17,18`.

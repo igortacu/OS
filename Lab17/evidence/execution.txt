@@ -1,0 +1,127 @@
+Host: Linux-6.8.0-142-generic-x86_64-with-glibc2.39
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+$ make clean all
+rm -f fire fire4
+gcc -std=c11 -Wall -Wextra -O0 -pthread -o fire fire.c
+gcc -std=c11 -Wall -Wextra -O0 -pthread -DTHREADS=4 -o fire4 fire.c
+$ ./fire  # run 1
+thread 1 sees counter = 0
+thread 2 sees counter = 4593
+expected: 2000000
+counter: 1258330    (lost updates: the race)
+$ ./fire  # run 2
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+expected: 2000000
+counter: 1073256    (lost updates: the race)
+$ ./fire  # run 3
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+expected: 2000000
+counter: 1361266    (lost updates: the race)
+$ ./fire  # run 4
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+expected: 2000000
+counter: 1440973    (lost updates: the race)
+$ ./fire  # run 5
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+expected: 2000000
+counter: 1270174    (lost updates: the race)
+$ ./fire  # run 6
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+expected: 2000000
+counter: 1277940    (lost updates: the race)
+$ ./fire  # run 7
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+expected: 2000000
+counter: 1093547    (lost updates: the race)
+$ ./fire  # run 8
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+expected: 2000000
+counter: 1090006    (lost updates: the race)
+$ ./fire  # run 9
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+expected: 2000000
+counter: 1614546    (lost updates: the race)
+$ ./fire  # run 10
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+expected: 2000000
+counter: 1626304    (lost updates: the race)
+$ ./fire4  # run 1
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+thread 3 sees counter = 182518
+thread 4 sees counter = 371091
+expected: 4000000
+counter: 2721928    (lost updates: the race)
+$ ./fire4  # run 2
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+thread 3 sees counter = 0
+thread 4 sees counter = 85975
+expected: 4000000
+counter: 2220999    (lost updates: the race)
+$ ./fire4  # run 3
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+thread 3 sees counter = 0
+thread 4 sees counter = 546900
+expected: 4000000
+counter: 2930129    (lost updates: the race)
+$ ./fire4  # run 4
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+thread 4 sees counter = 0
+thread 3 sees counter = 412334
+expected: 4000000
+counter: 2400952    (lost updates: the race)
+$ ./fire4  # run 5
+thread 2 sees counter = 0
+thread 1 sees counter = 0
+thread 3 sees counter = 0
+thread 4 sees counter = 0
+expected: 4000000
+counter: 3081305    (lost updates: the race)
+$ ./fire4  # run 6
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+thread 3 sees counter = 498969
+thread 4 sees counter = 685948
+expected: 4000000
+counter: 2802551    (lost updates: the race)
+$ ./fire4  # run 7
+thread 1 sees counter = 0
+thread 3 sees counter = 0
+thread 2 sees counter = 0
+thread 4 sees counter = 737862
+expected: 4000000
+counter: 2816857    (lost updates: the race)
+$ ./fire4  # run 8
+thread 1 sees counter = 0
+thread 2 sees counter = 3568
+thread 3 sees counter = 193979
+thread 4 sees counter = 188301
+expected: 4000000
+counter: 1559066    (lost updates: the race)
+$ ./fire4  # run 9
+thread 1 sees counter = 0
+thread 2 sees counter = 22639
+thread 3 sees counter = 182797
+thread 4 sees counter = 185863
+expected: 4000000
+counter: 1680003    (lost updates: the race)
+$ ./fire4  # run 10
+thread 1 sees counter = 0
+thread 2 sees counter = 0
+thread 3 sees counter = 189627
+thread 4 sees counter = 288158
+expected: 4000000
+counter: 1414598    (lost updates: the race)
+Observed data saved; races are undefined behavior, not a guaranteed numeric bound.

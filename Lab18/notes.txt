@@ -1,0 +1,25 @@
+Lab 18 — Observe: what is saved/loaded, and why ra transfers execution
+
+thread_switch(old, next) stores 14 integer registers into old and restores
+those same 14 from next: ra at offset 0, sp at 8, and s0..s11 at offsets
+16..104 (eight bytes per field). The C struct uses the identical order.
+The s registers are callee-saved under the RISC-V calling convention;
+callers already treat argument and temporary registers as call-clobbered.
+The stack pointer selects the other thread's stack, including its saved
+call frames and local variables. Each initial stack top is 16-byte aligned.
+
+The call to thread_switch puts the scheduler's continuation address in ra.
+Saving it lets a suspended thread return to the instruction after that call
+when it is selected again. Loading another saved ra and executing ret
+jumps to that thread's continuation. A never-run context instead starts
+with ra = its thread function and sp = the top of its own 8192-byte stack,
+so its first ret enters that function. No separate program-counter field
+is needed for this cooperative call/return switch.
+
+All these threads share one xv6 user address space and one kernel process.
+They cooperate through thread_yield; they are not independently scheduled
+kernel threads. This exercise uses integer contexts, not floating-point
+thread state. Functions explicitly mark themselves FREE and schedule again
+at their end: this tiny library has no general return trampoline or join.
+The handout terminates the process with exit(-1) once no thread is runnable;
+the final diagnostic is expected after all three exit-after-100 messages.

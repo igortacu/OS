@@ -132,6 +132,7 @@ mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 .PRECIOUS: %.o
 
 UPROGS=\
+	$U/_uthread\
 	$U/_pingpong\
 	$U/_run\
 	$U/_find\
@@ -214,3 +215,8 @@ check-qemu-version:
 .PHONY: fmt
 fmt:
 	clang-format -i $(wildcard kernel/*.[ch] user/*.[ch] mkfs/*.c)
+
+# Lab 18 links the user-space context switch with its scheduler.
+$U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB) $U/user.ld
+	$(LD) $(LDFLAGS) -T $U/user.ld -o $@ $U/uthread.o $U/uthread_switch.o $(ULIB)
+	$(OBJDUMP) -S $@ > $U/uthread.asm

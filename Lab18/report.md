@@ -8,7 +8,7 @@ The supplied Lab 18 handout requests completion of `user/uthread.c`, a RISC-V as
 
 The real tree was built and run on the Ubuntu server on 24 November 2026 using the RISC-V cross toolchain and QEMU with three virtual CPUs. The isolated execution copy is `/root/os-lab18/xv6`. The existing Labs 4–13 programs remain registered. The xv6 tree comes from MIT under its included license; the handout supplies the scheduler structure and demonstration, while the context implementation and validation were completed with coding assistance.
 
-`evidence/build.txt` retains the real full-tree build. The build completed; the linker emits the existing RWX LOAD-segment warnings for the kernel and small `forktest` binary. `evidence/execution.txt` contains complete QEMU output for ten runs, and `evidence/results.json` records the checked counts and trace regression. The supplied native Terminal capture shows context layout, initial register values and the link rule. Assembly and execution screenshots remain to be captured using `CAPTURES.md`; recorded text output below is distinguished from native images.
+`evidence/build.txt` retains the real full-tree build. The build completed; the linker emits the existing RWX LOAD-segment warnings for the kernel and small `forktest` binary. `evidence/execution.txt` contains complete QEMU output for ten runs, and `evidence/results.json` records the checked counts and trace regression. The supplied native Terminal captures show context layout, initial register values, the link rule and the complete assembly switch. Execution screenshots remain to be captured using `CAPTURES.md`; recorded text output below is distinguished from native images.
 
 ## Part 1 — Context layout and initial execution
 
@@ -109,7 +109,13 @@ $U/_uthread: $U/uthread.o $U/uthread_switch.o $(ULIB) $U/user.ld
 
 The capture shows `ra`, `sp`, and `s0–s11` in the required order, followed by the thread context and 16-byte-aligned stack declaration. Lines 70–73 clear the saved context, set `ra` to the entry function, set `sp` to the stack top, and mark the slot RUNNABLE. The explicit Makefile rule links both `uthread.o` and `uthread_switch.o` with the user library and linker script.
 
-The final `make` message is `user/_uthread is up to date`: this invocation checks an existing executable rather than showing a fresh compilation. The actual full build and subsequent QEMU runs are retained separately in the evidence logs. This source capture establishes initialization and integration; the assembly and execution captures provide the remaining visual evidence.
+The final `make` message is `user/_uthread is up to date`: this invocation checks an existing executable rather than showing a fresh compilation. The actual full build and subsequent QEMU runs are retained separately in the evidence logs. This source capture establishes initialization and integration; the assembly capture below documents the register transfer, while native execution captures are still pending.
+
+## Native Terminal evidence — complete assembly switch
+
+![Native Terminal: fourteen register stores, fourteen matching loads and ret in uthread_switch.S](evidence/screenshots/lab18-switch-assembly-terminal.png)
+
+The native source capture shows all fourteen stores at lines 5–18: `ra`, `sp`, and `s0–s11` are saved through the old-context pointer in `a0`. Lines 20–33 restore the same registers through the next-context pointer in `a1`, using identical offsets from 0 to 104 in steps of eight bytes. Line 34 executes `ret`, which transfers control through the restored `ra`. The matching store/load layout agrees with the C context shown in the previous capture. This image documents the complete source routine; the recorded QEMU runs and forthcoming execution captures demonstrate its behavior.
 
 ## Part 2 — Actual run and validation
 

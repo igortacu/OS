@@ -130,10 +130,10 @@ the existing RWX LOAD-segment warnings for the kernel and small
 contains complete QEMU output for ten runs, and
 {\ttfamily\fontsize{10}{12}\selectfont evidence/res\allowbreak{}ults.json}
 records the checked counts and trace regression. The supplied native
-Terminal capture shows context layout, initial register values and the
-link rule. Assembly and execution screenshots remain to be captured
-using {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md}; recorded text
-output below is distinguished from native images.
+Terminal captures show context layout, initial register values, the link
+rule and the complete assembly switch. Execution screenshots remain to
+be captured using {\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md};
+recorded text output below is distinguished from native images.
 
 \subsection{Part 1 --- Context layout and initial
 execution}\label{part-1-context-layout-and-initial-execution}
@@ -302,8 +302,32 @@ The final {\ttfamily\fontsize{10}{12}\selectfont make} message is
 this invocation checks an existing executable rather than showing a
 fresh compilation. The actual full build and subsequent QEMU runs are
 retained separately in the evidence logs. This source capture
-establishes initialization and integration; the assembly and execution
-captures provide the remaining visual evidence.
+establishes initialization and integration; the assembly capture below
+documents the register transfer, while native execution captures are
+still pending.
+
+\subsection{Native Terminal evidence --- complete assembly
+switch}\label{native-terminal-evidence-complete-assembly-switch}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 2. Native Terminal: fourteen register stores, fourteen matching loads and ret in uthread\_switch.S}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab18/evidence/screenshots/lab18-switch-assembly-terminal.png}
+\end{minipage}\par\medskip
+
+The native source capture shows all fourteen stores at lines 5--18:
+{\ttfamily\fontsize{10}{12}\selectfont ra},
+{\ttfamily\fontsize{10}{12}\selectfont sp}, and
+{\ttfamily\fontsize{10}{12}\selectfont s0–s11} are saved through the
+old-context pointer in {\ttfamily\fontsize{10}{12}\selectfont a0}. Lines
+20--33 restore the same registers through the next-context pointer in
+{\ttfamily\fontsize{10}{12}\selectfont a1}, using identical offsets from
+0 to 104 in steps of eight bytes. Line 34 executes
+{\ttfamily\fontsize{10}{12}\selectfont ret}, which transfers control
+through the restored {\ttfamily\fontsize{10}{12}\selectfont ra}. The
+matching store/load layout agrees with the C context shown in the
+previous capture. This image documents the complete source routine; the
+recorded QEMU runs and forthcoming execution captures demonstrate its
+behavior.
 
 \subsection{Part 2 --- Actual run and
 validation}\label{part-2-actual-run-and-validation}

@@ -123,10 +123,11 @@ all twenty observations are in
 {\ttfamily\fontsize{10}{12}\selectfont evidence/res\allowbreak{}ults.json}.
 
 The implementation and checks were prepared with coding assistance.
-These are actual automated terminal executions. Native Terminal
-screenshots have not yet been supplied for this lab;
-{\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md} contains the
-prepared live capture commands.
+These are actual automated terminal executions. The supplied native
+Terminal capture documents compilation and three subsequent two-thread
+runs. Four-thread and source captures are still pending;
+{\ttfamily\fontsize{10}{12}\selectfont CAPTURES.md} contains their live
+capture commands.
 
 \subsection{Part 1 --- One shared counter, two
 threads}\label{part-1-one-shared-counter-two-threads}
@@ -190,6 +191,31 @@ would not prove the program correct.
 read--modify--write experiment; it does not repair it, and
 {\ttfamily\fontsize{10}{12}\selectfont volatile} would not repair it
 either.
+
+\subsection{Native Terminal evidence --- build and two-thread
+race}\label{native-terminal-evidence-build-and-two-thread-race}
+
+\par\medskip\noindent\begin{minipage}{\linewidth}\setstretch{1.0}
+\captionof*{figure}{Figura 1. Native Terminal: working directory, compilation and three two-thread executions}
+\centering\includegraphics[width=\linewidth,height=0.67\textheight,keepaspectratio]{Lab17/evidence/screenshots/lab17-two-threads-terminal.png}
+\end{minipage}\par\medskip
+
+The supplied capture shows
+{\ttfamily\fontsize{10}{12}\selectfont /root/os-lab\allowbreak{}17},
+compilation of both executables with
+{\ttfamily\fontsize{10}{12}\selectfont -O0 -pthread}, and three
+two-thread totals: 1,638,915; 1,333,656; and 1,260,748. Relative to
+2,000,000, these runs lost 361,085; 666,344; and 739,252 increments.
+They are subsequent interactive observations, separate from the ten-run
+series below.
+
+In the first captured run, thread 2 initially reads 3,932 after thread 1
+reads zero. In the next two runs, both initial reads are zero, yet the
+final totals still lose updates. Thus the initial diagnostic may precede
+the conflicting loop updates; two zero starting reads do not imply
+separate memory or an absence of a race. Thread 2 prints before thread 1
+in the second run, illustrating that creation order does not fix their
+execution order.
 
 \subsection{Part 2 --- Four workers and the observed
 loss}\label{part-2-four-workers-and-the-observed-loss}

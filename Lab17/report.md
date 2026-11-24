@@ -8,7 +8,7 @@ The supplied Lab 17 handout asks for an unprotected shared counter, a four-threa
 
 Real runs were executed on 24 November 2026 on the Ubuntu server: x86-64 Linux 6.8.0-142-generic, glibc 2.39, GCC 13.3.0. Both variants were built with `-std=c11 -Wall -Wextra -O0 -pthread`, without compiler diagnostics. Ten executions of each variant were recorded by `run-experiments.py`. The raw commands and output are in `evidence/execution.txt`; all twenty observations are in `evidence/results.json`.
 
-The implementation and checks were prepared with coding assistance. These are actual automated terminal executions. Native Terminal screenshots have not yet been supplied for this lab; `CAPTURES.md` contains the prepared live capture commands.
+The implementation and checks were prepared with coding assistance. These are actual automated terminal executions. The supplied native Terminal capture documents compilation and three subsequent two-thread runs. Four-thread and source captures are still pending; `CAPTURES.md` contains their live capture commands.
 
 ## Part 1 — One shared counter, two threads
 
@@ -41,6 +41,14 @@ counter: 1258330    (lost updates: the race)
 **Observe 2 — Why are updates lost and results different?** Conceptually, `counter++` reads the old value, adds one, and writes the result. If both workers read 100, compute 101, and then both write 101, two increments leave only one visible update. Scheduling changes the overlap between these steps, so the measured totals vary. `pthread_join` ensures that main waits for both workers to finish; it does not make their preceding increments mutually exclusive.
 
 The C language gives a data race undefined behavior. Therefore, the handout's “always less than two million” describes its intended demonstration, not a universal bound. A run reaching the expected value would not prove the program correct. `-O0` helps expose the intended read–modify–write experiment; it does not repair it, and `volatile` would not repair it either.
+
+## Native Terminal evidence — build and two-thread race
+
+![Native Terminal: working directory, compilation and three two-thread executions](evidence/screenshots/lab17-two-threads-terminal.png)
+
+The supplied capture shows `/root/os-lab17`, compilation of both executables with `-O0 -pthread`, and three two-thread totals: 1,638,915; 1,333,656; and 1,260,748. Relative to 2,000,000, these runs lost 361,085; 666,344; and 739,252 increments. They are subsequent interactive observations, separate from the ten-run series below.
+
+In the first captured run, thread 2 initially reads 3,932 after thread 1 reads zero. In the next two runs, both initial reads are zero, yet the final totals still lose updates. Thus the initial diagnostic may precede the conflicting loop updates; two zero starting reads do not imply separate memory or an absence of a race. Thread 2 prints before thread 1 in the second run, illustrating that creation order does not fix their execution order.
 
 ## Part 2 — Four workers and the observed loss
 

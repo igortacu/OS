@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the separate Word deliverables required by the original L3/L4 sheets.
 
-Figures render the saved terminal output without inventing terminal messages.
+Figures embed the unchanged native Terminal screenshots supplied by the author.
 Use the bundled workspace Python with python-docx and Pillow.
 """
 from pathlib import Path
@@ -16,6 +16,7 @@ from docx.shared import Cm, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from utm_report_style import word_cover_and_intro
 
 ROOT=Path(__file__).resolve().parents[1]
 FIG=ROOT/'Lab3-4/evidence/screenshots'
@@ -40,18 +41,20 @@ def picture(name,content):
     return path
 
 def body(doc,text):doc.add_paragraph(text)
-def head(doc,text):doc.add_heading(text,1)
+def head(doc,text):doc.add_heading('Concluzie' if text == 'Conclusions' else text,1 if text == 'Conclusions' else 2)
 def fig(doc,number,title,text,capture_number=None):
     image=picture('lab'+str(doc.core_properties.subject)+'-'+(capture_number or number),text)
-    p=doc.add_paragraph();p.alignment=WD_ALIGN_PARAGRAPH.CENTER
+    p=doc.add_paragraph('Figura '+number+' – '+title)
     p.paragraph_format.keep_with_next=True
-    with Image.open(image) as im:w,h=im.size
-    width=min(16.4,20.2*w/h)
-    p.add_run().add_picture(str(image),width=Cm(width))
-    p=doc.add_paragraph('Figure '+number+' – '+title)
-    p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    p.paragraph_format.keep_together=True
+    p.paragraph_format.line_spacing=1
+    p.paragraph_format.space_after=Pt(5)
     for r in p.runs:r.font.size=Pt(10)
+    p=doc.add_paragraph();p.alignment=WD_ALIGN_PARAGRAPH.CENTER
+    p.paragraph_format.keep_together=True
+    p.paragraph_format.line_spacing=1
+    with Image.open(image) as im:w,h=im.size
+    width=min(16.0,19.0*w/h)
+    p.add_run().add_picture(str(image),width=Cm(width))
 
 def table(doc,headers,rows,widths=None):
     t=doc.add_table(rows=1,cols=len(headers));t.style='Table Grid'
@@ -68,31 +71,13 @@ def table(doc,headers,rows,widths=None):
             for p in c.paragraphs:
                 p.paragraph_format.space_after=Pt(4)
                 for r in p.runs:
-                    r.font.size=Pt(9)
+                    r.font.size=Pt(10)
                     if i==0:r.bold=True
 
 def document(number,topic):
     d=Document();d.core_properties.author='Tacu Igor';d.core_properties.subject=str(number)
-    d.core_properties.title='Report on laboratory work '+str(number)
-    sec=d.sections[0];sec.page_width=Cm(21);sec.page_height=Cm(29.7)
-    sec.top_margin=sec.bottom_margin=Cm(2);sec.left_margin=sec.right_margin=Cm(2.2)
-    normal=d.styles['Normal'];normal.font.name='Arial';normal.font.size=Pt(11)
-    normal.paragraph_format.space_after=Pt(7)
-    for name in ['Title','Heading 1','Heading 2']:
-        d.styles[name].font.name='Arial';d.styles[name].font.color.rgb=RGBColor(0,0,0)
-    for s in ['MINISTRY OF EDUCATION AND RESEARCH OF THE REPUBLIC OF MOLDOVA','Technical University of Moldova','Faculty of Computers Informatics and Microelectronics','Department of Software Engineering and Automation']:
-        p=d.add_paragraph(s);p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    d.add_paragraph('\n\n')
-    p=d.add_paragraph('Report on laboratory work '+str(number),'Title');p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    p=d.add_paragraph(topic);p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    p=d.add_paragraph('Course Operating Systems');p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    d.add_paragraph('\n\n')
-    p=d.add_paragraph('Done by: st. gr. FAF-242, Tacu Igor\nChecked by: Reițman Patricia');p.alignment=WD_ALIGN_PARAGRAPH.RIGHT
-    d.add_paragraph('\n\n\n')
-    p=d.add_paragraph('Chișinău, 2026');p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    p=sec.footer.paragraphs[0];p.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'PAGE');p._p.append(field)
-    d.add_page_break()
+    d.core_properties.title='Raport de laborator '+str(number)+' — Sisteme de operare'
+    word_cover_and_intro(d,number)
     head(d,'Purpose and execution record')
     if number == 4:
         body(d,'All twelve figures are native Terminal screenshots supplied by the author from direct command execution and source inspection on the Ubuntu server on 9 November 2026. The xv6 tests use an isolated source copy and its generated test disk. The directory d already existed during the directory-handling capture; grep READ limits the displayed listing. Bash comparisons use separate temporary directories. Source files and earlier full execution transcripts accompany the screenshots. The submission was prepared with coding assistance; MIT xv6 is identified as upstream in the source provenance file.')
@@ -120,7 +105,6 @@ explanations=[
  'Brace expansion lists values; arithmetic expansion computes 42.',
  'Command substitution supplies the current weekday and identity.', 'Brace expansion creates three filenames.'
 ]
-d.add_page_break()
 table(d,['Command','Prediction before run','Observed output and status','Explanation'],[
  (v['command'],v['prediction'],(v['stdout']+v['stderr']).strip()+'\nstatus '+str(v['status']),e)
  for v,e in zip(pred,explanations)])

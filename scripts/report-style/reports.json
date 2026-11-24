@@ -1,0 +1,76 @@
+{
+  "author": "Tacu Igor",
+  "group": "FAF-242",
+  "verifier": "Reițman Patricia",
+  "year": "2026",
+  "reports": {
+    "1-2": {
+      "folder": "Lab1-2", "number": "1 și 2", "topic": "Sistemul de operare ca gestionar de resurse. Introducere în xv6",
+      "purpose": "Observarea modului în care un sistem de operare gestionează fișierele, procesele, memoria și dispozitivele, prin experimente în Linux și prin compilarea și explorarea sistemului xv6.",
+      "tasks": ["Executarea comenzilor Linux pentru fișiere, procese, memorie și dispozitive și interpretarea ieșirilor.", "Compilarea și pornirea xv6 în QEMU, explorarea comenzilor și a separării kernel–user.", "Implementarea și verificarea unui program user pentru temporizare; documentarea codului și a capturilor reale."],
+      "theory": "Sistemul de operare mediază accesul la resurse prin procese, memorie virtuală, sistem de fișiere și drivere. Un apel de sistem trece din spațiul user în kernel, unde este verificată și executată operația solicitată. Linux permite observarea acestor mecanisme din exterior; xv6 oferă un arbore de surse restrâns în care traseul poate fi urmărit direct.",
+      "conclusion": "Experimentele Linux și xv6 leagă comenzile user de resursele administrate de kernel. Explorarea surselor și adaptarea programului de temporizare la apelul pause arată că un program trebuie să respecte interfața efectivă a sistemului pe care rulează."
+    },
+    "3-4": {
+      "folder": "Lab3-4", "number": "3 și 4", "topic": "Shell, redirecționări, pipe-uri și interpretarea argumentelor în Linux și xv6",
+      "purpose": "Analiza interpretării comenzilor și a argumentelor în Bash și în shell-ul xv6, folosind exemple executate, predicții verificabile și scripturi reutilizabile.",
+      "tasks": ["Verificarea expansiunilor, citării, redirecționărilor, operatorilor și proceselor de fundal în Bash.", "Rezolvarea interogărilor pe fișierul de log și testarea scriptului report.sh pe succes și eroare.", "Compararea comportamentului shell-urilor și verificarea programelor args și sleep în xv6."],
+      "theory": "Shell-ul interpretează o linie de comandă înainte de lansarea programelor. Bash poate extinde nume de fișiere și variabile și poate elimina ghilimelele sintactice; shell-ul xv6 implementează un subset mai mic. Redirecționările modifică descriptorii, iar un pipe conectează ieșirea unui proces la intrarea altuia. Codurile de terminare permit controlul condiționat al execuției.",
+      "conclusion": "Capturile și scripturile evidențiază distincția dintre transformările efectuate de shell și argumentele primite de program. Rezultatele agregării sunt verificabile pe datele de intrare, iar comparația cu xv6 explică de ce aceeași linie poate produce rezultate diferite în două shell-uri."
+    },
+    "3": {
+      "number": "3", "topic": "Linia de comandă Bash, pipe-uri și filtre text",
+      "purpose": "Studierea modului în care Bash interpretează comenzile, extinde argumentele și conectează programele pentru prelucrarea textului.",
+      "tasks": ["Verificarea ajutorului, PATH, expansiunilor și citării.", "Executarea redirecționărilor, operatorilor și comenzilor de fundal.", "Analiza logului și verificarea scripturilor pe succes și eroare."],
+      "theory": "Expansiunea argumentelor și configurarea descriptorilor precedă execuția programului. Pipe-urile transportă octeți între procese, iar codurile de terminare permit tratarea erorilor în scripturi."
+    },
+    "4": {
+      "number": "4", "topic": "Shell-ul xv6 și comparația cu Bash",
+      "purpose": "Înțelegerea shell-ului xv6 prin programe user, inspecția surselor și comparații executate cu Bash.",
+      "tasks": ["Verificarea programului sleep și a interfeței pause.", "Compararea comenzilor, redirecționărilor și argumentelor în Bash și xv6.", "Urmărirea tipurilor de comenzi și a tratării lui cd în sursa shell-ului."],
+      "theory": "Un shell construiește și execută structuri de comenzi folosind fork, exec, wait și descriptori. Comanda cd trebuie tratată de procesul shell persistent pentru a-i modifica directorul curent."
+    },
+    "5-6": {
+      "folder": "Lab5-6", "number": "5 și 6", "topic": "Sisteme de fișiere, permisiuni, legături și metadate în Linux și xv6",
+      "purpose": "Investigarea relației dintre numele de fișier, inode, legături, permisiuni și alocarea spațiului, urmată de implementarea unor utilitare de metadate și căutare în xv6.",
+      "tasks": ["Identificarea tipurilor de fișiere, a legăturilor și a structurii stocării în Linux.", "Testarea permisiunilor și a umask cu un utilizator fără privilegii.", "Implementarea și verificarea programelor mystat și find, inclusiv tratarea erorilor și a limitelor."],
+      "theory": "Un director asociază nume cu inode-uri. Legăturile dure pot desemna același inode, iar o legătură simbolică păstrează o cale. Biții de permisiune controlează accesul utilizatorilor; umask elimină permisiuni la creare. Metadatele și conținutul au roluri diferite, iar parcurgerea directoarelor trebuie să evite intrările punct și punct-punct și să respecte limitele căilor.",
+      "conclusion": "Testele separă numele, inode-ul și datele fișierului și arată efectul legăturilor și al permisiunilor. Utilitarele xv6 reproduc aceste observații prin apeluri de sistem, cu rezultate și erori verificabile în surse și capturi."
+    },
+    "7-8": {
+      "folder": "Lab7-8", "number": "7 și 8", "topic": "Procese, execuție de programe, redirecționare și comunicare prin pipe-uri",
+      "purpose": "Urmărirea ciclului de viață al proceselor și a descriptorilor moșteniți, prin exemple Linux și programe xv6 de execuție și comunicare.",
+      "tasks": ["Compilarea și executarea programelor run, zombie, redirect și pipeline pe Linux.", "Observarea stării zombie, a codurilor de terminare și a efectului descriptorilor de pipe rămași deschiși.", "Verificarea programelor run și pingpong în xv6, pe căi de succes și eroare."],
+      "theory": "fork creează un proces copil, exec înlocuiește imaginea programului, iar wait colectează starea de terminare. Un copil terminat rămâne zombie până la colectare. Descriptorii sunt păstrați peste exec dacă nu sunt configurați altfel, iar cititorul unui pipe vede EOF numai după închiderea tuturor capetelor de scriere.",
+      "conclusion": "Experimentele explică execuția și comunicarea prin starea proceselor și a descriptorilor. Colectarea copilului și închiderea corectă a capetelor de pipe sunt necesare atât pentru rezultate corecte, cât și pentru terminarea programelor."
+    },
+    "9-10": {
+      "folder": "Lab9-10", "number": "9 și 10", "topic": "Observarea apelurilor de sistem în Linux și implementarea trace în xv6",
+      "purpose": "Corelarea operațiilor user cu apelurile de sistem observate și implementarea unui mecanism de trasare selectivă în kernel-ul xv6.",
+      "tasks": ["Observarea apelurilor lui ls și ale programului syscalls, inclusiv scrierile pe stdout.", "Explicarea descriptorilor, a celor șase apeluri pe fișier și a numărului de apeluri openat.", "Implementarea trace, reproducerea etapei unknown sys call și verificarea patch-ului, măștilor și moștenirii la fork."],
+      "theory": "Un apel de sistem folosește o interfață numerotată între user și kernel. Descriptorul 1 este ieșirea standard a procesului, indiferent de destinația sa concretă. Trasarea arată numele, argumentele sau rezultatul apelurilor; o mască de biți selectează apelurile urmărite. Starea de trasare a procesului trebuie inițializată și transmisă corect la fork.",
+      "conclusion": "Înregistrările strace separă operațiile pe fișier de afișarea diagnosticului și de efectele buffering-ului. Implementarea trace și validarea pe baza xv6 declarată fac traseul apelului și efectul măștilor verificabile prin cod, patch și execuție."
+    },
+    "11": {
+      "folder": "Lab11", "number": "11", "topic": "Condiții de cursă, mutexuri și semafoare în Linux",
+      "purpose": "Observarea unei condiții de cursă și utilizarea semaforului ca mecanism de excludere mutuală, semnal de disponibilitate și contor de resurse.",
+      "tasks": ["Compararea contorului neprotejat cu variantele mutex și semafor și măsurarea timpilor.", "Testarea semaforului cu două permise și a inițializării incorecte a semnalului de disponibilitate.", "Executarea parcării cu trei locuri și cu un singur loc și interpretarea ocupării observate."],
+      "theory": "O incrementare obișnuită nu este o operație atomică și poate pierde actualizări concurente. Un mutex serializează secțiunea critică. Un semafor păstrează un număr de permise: valoarea unu poate asigura acces exclusiv, zero poate reprezenta un eveniment încă neprodus, iar o valoare mai mare poate limita accesul la o capacitate finită.",
+      "conclusion": "Rulările protejate păstrează cele două milioane de incrementări, iar semaforul inițializat cu două permise nu mai asigură excludere mutuală. Ordonarea mesajului și ocuparea parcării demonstrează că aceeași primitivă îndeplinește roluri diferite în funcție de valoarea inițială și de protocol."
+    },
+    "12": {
+      "folder": "Lab12", "number": "12", "topic": "Producător–consumator, variabile de condiție, cititori–scriitori și deadlock",
+      "purpose": "Combinarea primitivelor de sincronizare pentru transfer FIFO, notificarea unei condiții, acces partajat la date și prevenirea așteptării circulare.",
+      "tasks": ["Verificarea bufferului de patru elemente și reproducerea blocajului cu ordinea greșită a așteptărilor.", "Compararea așteptării pe condiție cu while și if și explicarea re-verificării predicatului.", "Executarea soluției cititori–scriitori și analiza starvation.", "Reproducerea deadlock-ului, repararea ordinii mutexurilor și zece rulări fără pauzele deliberate."],
+      "theory": "Semafoarele unui buffer limitează sloturile libere și ocupate, iar mutexul protejează structura. O variabilă de condiție notifică schimbarea unei stări păstrate separat și verificate sub mutex. Politica cititori–scriitori stabilește cine poate partaja resursa. Achiziția mutexurilor în ordine opusă poate produce un ciclu de așteptare; o ordine comună elimină acel ciclu pentru protocolul testat.",
+      "conclusion": "Bufferul păstrează ordinea și limitele de capacitate, iar variabila de condiție cere re-verificarea stării după trezire. Ordinea comună A–B permite terminarea celor două fire, în timp ce eliminarea pauzelor din varianta greșită nu înlătură defectul de sincronizare."
+    },
+    "13": {
+      "folder": "Lab13", "number": "13", "topic": "Implementarea semafoarelor în kernel-ul xv6",
+      "purpose": "Implementarea operațiilor sem_init, sem_down și sem_up în xv6 și verificarea lor pentru ordonarea proceselor și protejarea liniilor afișate.",
+      "tasks": ["Înregistrarea apelurilor 24–26, a declarațiilor și a stub-urilor user și reproducerea Check 1.", "Implementarea contorului, a spinlock-ului și a protocolului sleep_prepare–sleep–wakeup.", "Verificarea semtest și compararea mix fără blocare și cu blocare; păstrarea rezultatelor și a capturilor disponibile."],
+      "theory": "Semaforul din kernel combină un contor protejat de spinlock cu o coadă logică de așteptare identificată printr-un canal. Un proces fără permis trebuie să înregistreze canalul și să elibereze spinlock-ul înainte de somn. Trezirea este o invitație de a reîncerca; contorul se verifică într-o buclă deoarece alți competitori pot consuma permisul.",
+      "conclusion": "Testele automate ale implementării finale au verificat ordinea părinte–copil, alternarea ping/pong și liniile întregi cu semafor. Captura Check 1 documentează etapa incompletă și nu trebuie confundată cu probele native ale etapei finale, care urmează să fie adăugate."
+    }
+  }
+}

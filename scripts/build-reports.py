@@ -78,20 +78,13 @@ targets = [
  ('lab78', 'Lab7-8', 'Lab7-8_TacuIgor_FAF-242.pdf'),
  ('lab910', 'Lab9-10', 'Lab9-10_TacuIgor_FAF-242.pdf'),
 ]
-with tempfile.TemporaryDirectory(prefix='os-report-parts-') as temp:
-    temp=Path(temp)
-    for template, folder, name in targets:
-        text=read(f'scripts/report-templates/{template}.md')
-        for key,value in values.items():text=text.replace('@@'+key+'@@',value)
-        if '@@' in text:raise RuntimeError('Unresolved report marker')
-        md=ROOT/folder/('report-'+template+'.md' if template in ('lab5','lab6') else 'report.md')
-        md.write_text('\n'.join(line.rstrip() for line in (header+text).splitlines()).rstrip()+'\n')
-        output=temp/name if template in ('lab5','lab6') else ROOT/folder/name
-        subprocess.run(['pandoc',str(md),'--pdf-engine=xelatex','--listings',
-                        '--lua-filter',str(ROOT/'scripts/keep-code.lua'),
-                        '-V','mainfont=Arial','-o',str(output)],check=True)
-        print('built',name)
-    subprocess.run(['pdfunite',str(temp/'Lab5_TacuIgor_FAF-242.pdf'),
-                    str(temp/'Lab6_TacuIgor_FAF-242.pdf'),
-                    str(temp/'joint.pdf')],check=True)
-    (ROOT/'Lab5-6/Lab5-6_TacuIgor_FAF-242.pdf').write_bytes((temp/'joint.pdf').read_bytes())
+for template, folder, name in targets:
+    text=read(f'scripts/report-templates/{template}.md')
+    for key,value in values.items():text=text.replace('@@'+key+'@@',value)
+    if '@@' in text:raise RuntimeError('Unresolved report marker')
+    md=ROOT/folder/('report-'+template+'.md' if template in ('lab5','lab6') else 'report.md')
+    md.write_text('\n'.join(line.rstrip() for line in (header+text).splitlines()).rstrip()+'\n')
+
+import sys
+subprocess.run([sys.executable,str(ROOT/'scripts/build-utm-reports.py'),
+                '--only','5-6,7-8,9-10'],check=True)

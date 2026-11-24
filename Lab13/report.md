@@ -46,6 +46,12 @@ parent: done, I let the child go
 
 The child did not block because `sem_down` was unrecognized. Subsequent ping/pong text is interleaved with unknown syscall errors. The handout's `semtest` prints `semtest: OK` even at this stage, since it does not check the return values; therefore that final string alone is insufficient evidence of correct semaphores. The validation runner checks the errors and the child-before-parent ordering in Check 1, then checks the entire expected ordered output in Check 2.
 
+### Native Terminal evidence — Check 1
+
+![Figure 1. Native Terminal capture: boot of the intermediate Check 1 tree, unregistered semaphore calls and the child running before the parent.](evidence/screenshots/lab13-check1-terminal.png)
+
+The supplied capture shows `/root/os-lab13-check1` booting with three CPUs. Calls 24 and 25 are initially rejected, and the child's line appears before the parent's line. Later unknown-call diagnostics and ping/pong text interleave because the operations do not synchronize either process. The trailing `semtest: OK` is printed by the utility despite these failures and is not evidence of the final kernel implementation. This capture documents the deliberately incomplete stage only; the final implementation's separate automated validation is retained in the execution log.
+
 ## Part 2 — Kernel semaphore operations
 
 Source: [kernel/sem.c](../xv6/kernel/sem.c). Each slot has a protected integer count and a spinlock. The static array begins zeroed, as permitted by the handout's spinlock representation.

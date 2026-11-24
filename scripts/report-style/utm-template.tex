@@ -1,0 +1,46 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+\usepackage[provide=*,english,romanian]{babel}
+\usepackage{amsmath,amssymb,graphicx,geometry,setspace}
+\usepackage{fancyhdr,caption,float,listings,xcolor,booktabs,longtable,array,calc}
+\usepackage{subcaption,etoolbox,upquote}
+\usepackage[unicode,hidelinks]{hyperref}
+\geometry{top=2cm,bottom=2cm,left=2.5cm,right=2.5cm}
+\setstretch{1.5}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{0pt}{16pt}{7pt}{\normalfont\Large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{0pt}{12pt}{5pt}{\normalfont\large\bfseries}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{0pt}{9pt}{4pt}{\normalfont\normalsize\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{-1}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+\captionsetup{font=small,labelfont=bf,skip=6pt,justification=raggedright,singlelinecheck=false}
+\captionsetup[figure]{position=above}
+\lstset{language=C,basicstyle=\ttfamily\fontsize{9.5}{11.5}\selectfont,
+  columns=fullflexible,showstringspaces=false,tabsize=2,numbersep=8pt,
+  frame=single,rulecolor=\color{black!35},breaklines=true,keepspaces=true,
+  xleftmargin=4pt,xrightmargin=4pt,aboveskip=8pt,belowskip=8pt}
+\AtBeginEnvironment{lstlisting}{\singlespacing}
+\AtBeginEnvironment{longtable}{\small\singlespacing}
+\setlength{\emergencystretch}{3em}
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\passthrough}[1]{#1}
+\providecommand{\pandocbounded}[1]{#1}
+\hypersetup{pdftitle={$report-title$},pdfauthor={Tacu Igor}}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\begin{document}
+$utm-cover$
+\setcounter{page}{1}
+$body$
+\end{document}

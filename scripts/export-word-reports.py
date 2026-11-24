@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the two Word sources and publish only the joint Labs 3-4 PDF."""
 from pathlib import Path
-import argparse,subprocess,tempfile
+import argparse,subprocess,tempfile,sys
 ROOT=Path(__file__).resolve().parents[1]
 parser=argparse.ArgumentParser()
 parser.add_argument('--python',type=Path,default=Path.home()/'.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3')
@@ -22,9 +22,7 @@ with tempfile.TemporaryDirectory(prefix='os-word-export-') as temp:
         subprocess.run([str(args.python),str(args.renderer),str(ROOT/'Lab3-4/word'/(name+'.docx')),
                         '--output_dir',str(output),'--emit_pdf'],check=True)
         pdfs.append(output/(name+'.pdf'))
-    joint=Path(temp)/'joint.pdf'
-    subprocess.run(['pdfunite',*(str(p) for p in pdfs),str(joint)],check=True)
-    target=ROOT/'Lab3-4/Lab3-4_TacuIgor_FAF-242.pdf'
-    target.write_bytes(joint.read_bytes())
-    print('Published',target)
+    subprocess.run([sys.executable,str(ROOT/'scripts/build-utm-reports.py'),
+                    '--only','3-4'],check=True)
+    print('Published the joint UTM Labs 3–4 PDF')
     if args.review_dir:print('Review pages:',review)

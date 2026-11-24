@@ -15,9 +15,16 @@ docker run --rm -v "$PWD:/work" os-lab-reproduction python3 scripts/run-xv6.py
 
 The xv6 runner recreates only the generated `xv6/fs.img` test disk. Do not use it with a generated disk containing files you want to keep. It compiles the kernel and user programs, boots one hart, and verifies distinctive output in Labs 4, 6, 8, and 10. The Linux runner uses temporary directories so it does not alter the user's own lab files.
 
-For Labs 5–10 PDFs, install Pandoc, XeLaTeX, Arial, and Poppler's `pdfunite`, then run `python3 scripts/build-reports.py`. Individual Lab 5/6 PDF parts are built in a temporary directory and only their combined report is published. Templates are under `scripts/report-templates`; generated Markdown remains with its report.
+For all report PDFs, run `python3 scripts/build-utm-reports.py`. The shared
+UTM layout and dependencies are documented in [report-style](report-style/README.md).
+`--only 1-2,3-4,5-6,7-8,9-10,11,12,13` selects groups. The existing lab-specific
+build commands now delegate to this same style rather than publishing older layouts.
 
-For Labs 3–4, use the managed document Python runtime to run `scripts/build-word-reports.py`. It writes the two required editable Word files under `Lab3-4/word`, uses only the native images in `Lab3-4/evidence/screenshots`, and fails if an image is missing. Then run `python3 scripts/export-word-reports.py --review-dir /tmp/os-word-review`. This invokes the managed document renderer, saves page PNGs for inspection outside the repository, and combines the two temporary PDF exports into `Lab3-4/Lab3-4_TacuIgor_FAF-242.pdf`. Supply `--python` and `--renderer` if those managed dependencies are installed elsewhere. Individual PDF exports and copied source trees are not published.
+For Labs 3–4, use the managed document Python runtime to run
+`scripts/build-word-reports.py` for the two required editable Word files.
+Then run `python3 scripts/export-word-reports.py --review-dir /tmp/os-word-review`.
+It renders both DOCX files for visual inspection and publishes the joint UTM
+PDF. Temporary individual exports and page images remain outside the repository.
 
 The lab log is generated test data, not real traffic. The programs were implemented or revised with coding assistance, and the tests are automated. The source provenance file identifies MIT xv6 as upstream. No originality percentage is asserted; this revision provides new executions, source availability, and explanations that can be checked against those executions.
 

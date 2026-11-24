@@ -11,8 +11,8 @@
 | [9–10](Lab9-10) | System calls, strace and xv6 trace | [Open PDF](Lab9-10/Lab9-10_TacuIgor_FAF-242.pdf) |
 | [11](Lab11) | Race conditions, mutexes and semaphores (Linux) | [Open PDF](Lab11/Lab11_TacuIgor_FAF-242.pdf) |
 | [12](Lab12) | Producer–consumer, condition variables, readers–writers and deadlock | [Open PDF](Lab12/Lab12_TacuIgor_FAF-242.pdf) |
-| [13](Lab13) | Kernel semaphores, process ordering and line locking (xv6) | [Report](Lab13/report.md) |
+| [13](Lab13) | Kernel semaphores, process ordering and line locking (xv6) | [Open PDF](Lab13/Lab13_TacuIgor_FAF-242.pdf) |
 
-Laboratories 1–12 each contain one main PDF, supporting files and original Terminal screenshots. Lab 13 includes its Markdown report, required notes, integrated xv6 implementation and execution logs while native captures are collected. Linux programs are stored with their laboratories; the complete xv6 implementation is in [xv6](xv6), with its [MIT license](xv6/LICENSE) and [source provenance](xv6/PROVENANCE.md).
+Each report follows the UTM structure: title page, purpose, tasks, theory, practical results and conclusion. Each laboratory folder contains one main PDF, supporting sources and original Terminal evidence. Lab 13 currently includes the native Check 1 capture; its final-stage native captures are still to be added. Linux programs are stored with their laboratories; the complete xv6 implementation is in [xv6](xv6), with its [MIT license](xv6/LICENSE) and [source provenance](xv6/PROVENANCE.md).
 
 [Reproduction instructions](scripts/README.md) · [Lab 10 patch validation](Lab9-10/PATCH-VALIDATION.md) · [Required Word sources for Labs 3–4](Lab3-4/word)
